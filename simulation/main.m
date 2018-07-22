@@ -6,7 +6,8 @@ addpath('auxiliary','control','controllers','dynamics','physical_params',...
     'config','plot','trajectories','trajectory_planning');
 
 % Pick your config function
-[physics_p control_p traj_p plot_p] = nested2d_config();
+% [physics_p control_p traj_p plot_p] = nested2d_config();
+[physics_p control_p traj_p plot_p] = nested2d_slung_config();
 
 [t,x] = ode45(@(t,x) ode_fun(t,x,physics_p,control_p,traj_p), traj_p.tt, traj_p.x0);
 
