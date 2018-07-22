@@ -1,0 +1,58 @@
+function [q_ddot] = quadrotor3d(q,qdot,u,physics_p)
+%        1
+%        |
+%   2 -- o -- 4
+%        |
+%        3
+%
+%
+% q:     [x y z phi theta psi]'
+% u:     [w1 w2 w4 w4]' (input)
+% physics_p: physical parameters
+
+% param remapping
+M = physics_p.M;
+g = physics_p.g;
+Ix = physics_p.Ix;
+Iy = physics_p.Iy;
+Iz = physics_p.Iz;
+I  = physics_p.I;
+Iinv = physics_p.Iinv;
+kt = physics_p.kt;
+km = physics_p.km;
+r = physics_p.r;
+
+% state remapping
+xyz     = q(1:3);
+rpy     = q(4:6);
+xyz_dot = qdot(1:3);
+rpy_dot = qdot(4:6);
+
+phi = rpy(1);
+theta = rpy(2);
+psi = rpy(3);
+
+phidot = rpy_dot(1);
+thetadot = rpy_dot(2);
+
+Tib = Ti2b(phi,theta);
+Tbi_dot = Tb2i_dot(phi,theta,phidot,thetadot);
+pqr = Tib*rpy_dot;
+
+% input remapping
+U = zeros(4,1);
+U(1) = kt*(u'*u);
+wr2 = (u.*u);
+U(2) = kt*r*[0 1 0 -1]*wr2;
+U(3) = kt*r*[-1 0 1 0]*wr2;
+U(4) = km*[ 1 -1 1 -1]*wr2;
+
+% dynamics
+xyz_ddot = [0;0;-g] + eul2rotm([psi theta phi])*[0;0;U(1)]/M;
+pqr_dot = Iinv*(U(2:4) + cross(pqr,I*pqr));
+rpy_ddot = Tib*(pqr_dot-Tbi_dot*rpy_dot);
+
+% output remapping
+q_ddot = [xyz_ddot; rpy_ddot];
+
+end
