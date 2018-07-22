@@ -14,7 +14,7 @@ To simulate a controlled system, you need to define:
 
 The system must be written in the form:
 
-$
+```math
 \begin{cases}
 \dot{x}_ 1= x_{n_{/2}+1} \\
 ...\\
@@ -27,18 +27,18 @@ $
 ... \\
 \dot{x}_{n}=f_n(x,u,t) 
 \end{cases}
-$
+```
 
 For a 2 DOF system:
 
-$
+```math
 \begin{cases}
 \dot{x}_ 1 = x_3 \\
 \dot{x}_ 2 = x_4 \\
 \dot{x}_ 3 = f_1(x,u,t) \\
 \dot{x}_ 4 = f_2(x,u,t)
 \end{cases}
-$
+```
 
 ## Folder Description
 
