@@ -10,7 +10,7 @@ xd = qd(:,1);
 zd = qd(:,2);
 
 figure('units','normalized','outerposition',[0 0 1 1]);
-axis equal;
+% axis equal;
 
 dt = t(2)-t(1);
 xlim_values = [min(x)-2*r max(x)+2*r];
@@ -24,6 +24,7 @@ for i=1:length(t)
     plot(xd,zd,'g-',x(i),z(i),'*k',rotor_x,rotor_z,'b-');
     xlim(xlim_values);
     ylim(ylim_values);
+    axis equal
     time = toc;
     pause(dt-time);
     
