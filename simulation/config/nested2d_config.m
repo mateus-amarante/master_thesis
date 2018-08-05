@@ -14,11 +14,13 @@ control_p.kd_z = 10;
 control_p.kp_theta = 80;
 control_p.kd_theta = 20;
 
+control_p.n_input = 6;
+
 control_p.control_fun = @nested2d_controller;
 
 % Trajectory parameters
 xd = 5;
-zd = 4;
+zd = 0;
 T = 3;
 steady_time = 3;
 dt = .01;

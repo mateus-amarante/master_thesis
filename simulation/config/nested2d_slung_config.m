@@ -5,24 +5,29 @@ physics_p = quadrotor2d_slung_physics();
 physics_p.dyn_fun = @quadrotor2d_slung;
 
 % Control parameters
-control_p.kp_x = 50;
-control_p.kd_x = 10;
+% 73.5951   87.9026   99.7530   84.6533   99.5703   13.5317
 
-control_p.kp_z = 50;
-control_p.kd_z = 10;
 
-control_p.kp_theta = 80;
-control_p.kd_theta = 20;
+control_p.kp_x = 73.5951;
+control_p.kd_x = 87.9026;
+
+control_p.kp_z = 99.7530;
+control_p.kd_z = 84.6533;
+
+control_p.kp_theta = 99.5703;
+control_p.kd_theta = 13.5317;
+
+control_p.n_input = 6;
 
 control_p.control_fun = @nested2d_controller;
 
 % Trajectory parameters
 xd = 5;
-zd = 4;
+zd = 2;
 T = 3;
-steady_time = 3;
+steady_time = 10;
 dt = .05;
-traj_p = simple2d_trajectory(xd,zd,T,steady_time,dt);
+traj_p = simple2d_shaped_trajectory(xd,zd,T,steady_time,dt,physics_p);
 traj_p.x0 = zeros(8,1);
 
 % Plot parameters
