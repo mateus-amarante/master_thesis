@@ -20,7 +20,7 @@ control_p.control_fun = @nested2d_controller;
 
 % Trajectory parameters
 xd = 5;
-zd = 0;
+zd = 3;
 T = 3;
 steady_time = 3;
 dt = .01;

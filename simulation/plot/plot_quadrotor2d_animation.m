@@ -15,16 +15,21 @@ figure('units','normalized','outerposition',[0 0 1 1]);
 dt = t(2)-t(1);
 xlim_values = [min(x)-2*r max(x)+2*r];
 ylim_values = [min(z)-2*r max(z)+2*r];
+xlim(xlim_values);
+ylim(ylim_values);
+axis equal
+
 
 for i=1:length(t)
     rotor_x = [x(i) x(i)] + r*[ cos(theta(i)) -cos(theta(i))];
     rotor_z = [z(i) z(i)] + r*[-sin(theta(i))  sin(theta(i))];
     
+    cla
     tic;
-    plot(xd,zd,'g-',x(i),z(i),'*k',rotor_x,rotor_z,'b-');
-    xlim(xlim_values);
-    ylim(ylim_values);
-    axis equal
+    line(xd,zd,'Color','g')
+    line(x(1:i),z(1:i),'Color','r')
+    line(rotor_x,rotor_z,'Color','k','LineWidth',1)
+    
     time = toc;
     pause(dt-time);
     
