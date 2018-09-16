@@ -32,7 +32,7 @@ psidot_d = qd(:,8);
 % Plot
 figure;
 plot(t,[x y z phi theta psi],t,[xd yd zd psid]);
-legend('x','y','z','\phi','\theta','\psi','x_d','y_d','z_d','\psi_d');
+legend('x','y','z','$$\phi$$','$$\theta$$','$$\psi$$','$$x_d$$','$$y_d$$','$$z_d$$','$$\psi_d$$');
 title('Full State + Full Desired Trajectory');
 xlabel('Time [s]');
 
@@ -44,7 +44,7 @@ xlabel('Time [s]');
 
 figure;
 plot(t,u);
-legend('U_1','U_2','U_3','U_4');
+legend('$$U_1$$','$$U_2$$','$$U_3$$','$$U_4$$');
 title('Control Input');
 xlabel('Time [s]');
 end

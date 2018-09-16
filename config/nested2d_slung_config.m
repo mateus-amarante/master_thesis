@@ -25,9 +25,10 @@ control_p.control_fun = @nested2d_controller;
 xd = 5;
 zd = 2;
 T = 3;
-steady_time = 10;
+steady_time = 3;
 dt = .05;
-traj_p = simple2d_shaped_trajectory(xd,zd,T,steady_time,dt,physics_p);
+traj_p = simple2d_trajectory(xd,zd,T,steady_time,dt);
+% traj_p = simple2d_shaped_trajectory(xd,zd,T,steady_time,dt,physics_p);
 traj_p.x0 = zeros(8,1);
 
 % Plot parameters
