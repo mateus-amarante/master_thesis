@@ -32,12 +32,14 @@ phi = rpy(1);
 theta = rpy(2);
 psi = rpy(3);
 
-phidot = rpy_dot(1);
+phidot   = rpy_dot(1);
 thetadot = rpy_dot(2);
+psidot   = rpy_dot(3);
 
-Tib = Ti2b(phi,theta);
-Tbi_dot = Tb2i_dot(phi,theta,phidot,thetadot);
-pqr = Tib*rpy_dot;
+% Tib = Ti2b(phi,theta);
+% Tbi_dot = Tb2i_dot(phi,theta,phidot,thetadot);
+% pqr = Tib*rpy_dot;
+% pqr = rpy_dot;
 
 % input remapping
 U = zeros(4,1);
@@ -48,9 +50,21 @@ U(3) = kt*r*[-1 0 1 0]*wr2;
 U(4) = km*[ 1 -1 1 -1]*wr2;
 
 % dynamics
-xyz_ddot = [0;0;-g] + eul2rotm([psi theta phi])*[0;0;U(1)]/M;
-pqr_dot = Iinv*(U(2:4) + cross(pqr,I*pqr));
-rpy_ddot = Tib*(pqr_dot-Tbi_dot*rpy_dot);
+% xyz_ddot = [0;0;-g] + eul2rotm([psi theta phi])*[0;0;U(1)]/M;
+% pqr_dot = Iinv*(U(2:4) + cross(pqr,I*pqr));
+% rpy_ddot = pqr_dot;
+% rpy_ddot = Tib*(pqr_dot-Tbi_dot*rpy_dot);
+
+xddot = 1/M*(cos(phi)*sin(theta)*cos(psi) + sin(phi)*sin(psi))*U(1);
+yddot = 1/M*(cos(phi)*sin(theta)*sin(psi) - sin(phi)*cos(psi))*U(1);
+zddot = -g + 1/M*cos(phi)*cos(theta)*U(1);
+
+phiddot   = (Iy-Iz)/Ix*thetadot*psidot + U(2)/Ix;
+thetaddot = (Iz-Ix)/Iy*phidot*psidot   + U(3)/Iy;
+psiddot   = (Ix-Iy)/Iz*phidot*thetadot + U(4)/Iz;
+
+xyz_ddot = [xddot; yddot; zddot];
+rpy_ddot = [phiddot; thetaddot; psiddot];
 
 % output remapping
 q_ddot = [xyz_ddot; rpy_ddot];
