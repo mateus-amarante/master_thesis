@@ -29,22 +29,37 @@ ydot_d = qd(:,6);
 zdot_d = qd(:,7);
 psidot_d = qd(:,8);
 
-% Plot
-figure;
-plot(t,[x y z phi theta psi],t,[xd yd zd psid]);
-legend('x','y','z','$$\phi$$','$$\theta$$','$$\psi$$','$$x_d$$','$$y_d$$','$$z_d$$','$$\psi_d$$');
-title('Full State + Full Desired Trajectory');
-xlabel('Time [s]');
 
-% figure;
-% plot(t,[xdot zdot],t,[xdot_d zdot_d]);
-% legend('x\dot','z\dot','x\dot_d','z\dot_d');
-% title('Velocities');
-% xlabel('Time [s]');
-
+%% Plot Robot State
 figure;
-plot(t,u);
-legend('$$U_1$$','$$U_2$$','$$U_3$$','$$U_4$$');
-title('Control Input');
+subplot(2,1,1);
+plot(t,[x y z xd yd zd]);
+ylabel('Position [m]'); %xlabel('Time [s]');
+legend('x','y','z','$$x_d$$','$$y_d$$','$$z_d$$');
+
+subplot(2,1,2);
+plot(t,[phi theta psi psid]);
+legend('$$\phi$$','$$\theta$$','$$\psi$$','$$\psi_d$$');
+ylabel('Orientation [rad]');
+
 xlabel('Time [s]');
+fig = gcf;
+title(fig.Children(end), 'Robot State');
+
+
+%% Plot Control Input
+figure;
+subplot(2,1,1);
+plot(t,u(:,1));
+ylabel('Thrust Force $$U_1$$ [N]');
+
+subplot(2,1,2);
+plot(t,u(:,2:end));
+ylabel('Input Torque [N$$\cdot$$m]');
+legend('$$U_2$$','$$U_3$$','$$U_4$$');
+
+xlabel('Time [s]');
+fig = gcf;
+title(fig.Children(end), 'Control Input');
+
 end
