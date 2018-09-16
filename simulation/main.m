@@ -1,12 +1,6 @@
-clear all;
-close all;
-clc;
+startup
 
-addpath('auxiliary','control','controllers','dynamics','physical_params',...
-    'config','plot','trajectories','trajectory_planning');
-
-% Pick your config function
-
+% PICK YOUR CONFIG FUNCTION
 % [physics_p control_p traj_p plot_p] = nested2d_config();
 % [physics_p control_p traj_p plot_p] = smc2d_config();
 % [physics_p control_p traj_p plot_p] = nested2d_slung_config();
