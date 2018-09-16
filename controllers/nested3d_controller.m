@@ -74,13 +74,15 @@ if U(1) > maxThrust
     U(1) = maxThrust;
 end
 
-% Rotors velocities calculation
-M = [
-    kt*[1 1 1 1];
-    kt*r*[0 1 0 -1];
-    kt*r*[-1 0 1 0];
-    km*[1 -1 1 -1]];
+u = U;
 
-u = sqrt(M\U);
+% Rotors velocities calculation
+% M = [
+%     kt*[1 1 1 1];
+%     kt*r*[0 1 0 -1];
+%     kt*r*[-1 0 1 0];
+%     km*[1 -1 1 -1]];
+% 
+% u = sqrt(M\U);
 
 end

@@ -83,7 +83,9 @@ b = [0 btheta]';
 lambda = [lambda_x lambda_theta lambda_xdot lambda_thetadot]';
 U2 = smcu([e;edot],[xddot_d 0]',f,b,lambda,kappa_xtheta,eta_xtheta);
 
+u = [U1;U2];
+
 % Rotors velocities calculation
-u = sqrt([kt kt; -r*kt r*kt]\[U1; U2]);
+% u = sqrt([kt kt; -r*kt r*kt]\[U1; U2]);
 
 end

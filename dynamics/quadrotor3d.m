@@ -42,12 +42,13 @@ Tbi_dot = Tb2i_dot(phi,theta,phidot,thetadot);
 pqr = Tib*rpy_dot;
 
 % input remapping
-U = zeros(4,1);
-U(1) = kt*(u'*u);
-wr2 = (u.*u);
-U(2) = kt*r*[0 1 0 -1]*wr2;
-U(3) = kt*r*[-1 0 1 0]*wr2;
-U(4) = km*[ 1 -1 1 -1]*wr2;
+% U = zeros(4,1);
+% U(1) = kt*(u'*u);
+% wr2 = (u.*u);
+% U(2) = kt*r*[0 1 0 -1]*wr2;
+% U(3) = kt*r*[-1 0 1 0]*wr2;
+% U(4) = km*[ 1 -1 1 -1]*wr2;
+U = u;
 
 % dynamics
 xyz_ddot = [0;0;-g] + eul2rotm([psi theta phi])*[0;0;U(1)]/M;

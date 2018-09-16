@@ -35,8 +35,9 @@ alpha = q(4);
 alpha_dot = q(4);
 
 % Input remapping
-U(1,1) = kt*(u'*u);
-U(2,1) = r*kt*[-1 1]*(u.*u);
+% U(1,1) = kt*(u'*u);
+% U(2,1) = r*kt*[-1 1]*(u.*u);
+U = u;
 
 % DYNAMICS
 

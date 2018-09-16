@@ -52,12 +52,13 @@ psidot = rpy_dot(3);
 
 
 % input remapping
-U = zeros(4,1);
-U(1) = kt*(u'*u);
-wr2 = (u.*u);
-U(2) = kt*r*[0 1 0 -1]*wr2;
-U(3) = kt*r*[-1 0 1 0]*wr2;
-U(4) = km*[ 1 -1 1 -1]*wr2;
+% U = zeros(4,1);
+% U(1) = kt*(u'*u);
+% wr2 = (u.*u);
+% U(2) = kt*r*[0 1 0 -1]*wr2;
+% U(3) = kt*r*[-1 0 1 0]*wr2;
+% U(4) = km*[ 1 -1 1 -1]*wr2;
+U = u;
 
 % Linear Dynamics
 salpha = sin(alpha);

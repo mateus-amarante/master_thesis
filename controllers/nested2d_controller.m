@@ -51,7 +51,9 @@ thetadot_c = (kp_x*(xdot_d - xdot) +kd_x*(xddot_d - xddot))/g;
 
 U2 = Itheta*(kp_theta*(theta_c - theta) + kd_theta*(thetadot_c - thetadot));
 
+u = [U1; U2];
+
 % Rotors velocities calculation
-u = sqrt([kt kt; -r*kt r*kt]\[U1; U2]);
+% u = sqrt([kt kt; -r*kt r*kt]\[U1; U2]);
 
 end
