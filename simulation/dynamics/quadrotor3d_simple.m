@@ -36,12 +36,13 @@ phidot = rpy_dot(1);
 thetadot = rpy_dot(2);
 
 % input remapping
-U = zeros(4,1);
-U(1) = kt*(u'*u);
-wr2 = (u.*u);
-U(2) = kt*r*[0 1 0 -1]*wr2;
-U(3) = kt*r*[-1 0 1 0]*wr2;
-U(4) = km*[ 1 -1 1 -1]*wr2;
+% U = zeros(4,1);
+% U(1) = kt*(u'*u);
+% wr2 = (u.*u);
+% U(2) = kt*r*[0 1 0 -1]*wr2;
+% U(3) = kt*r*[-1 0 1 0]*wr2;
+% U(4) = km*[ 1 -1 1 -1]*wr2;
+U = u;
 
 % dynamics
 xddot = 1/M*(cos(phi)*sin(theta)*cos(psi) + sin(phi)*sin(psi))*U(1);

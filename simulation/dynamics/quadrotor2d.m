@@ -21,8 +21,10 @@ r = physics_p.r;
 theta = q(3);
 
 % input remapping
-Fn = kt*(u'*u);
-My = r*kt*[-1 1]*(u.*u);
+% Fn = kt*(u'*u);
+% My = r*kt*[-1 1]*(u.*u);
+Fn = u(1);
+My = u(2);
 
 % dynamics
 x_ddot = Fn*sin(theta)/M;
