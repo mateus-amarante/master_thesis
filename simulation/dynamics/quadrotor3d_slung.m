@@ -32,17 +32,17 @@ Iinv = physics_p.Iinv;
 % r = physics_p.r;
 
 % state remapping
-xyz     = q(1:3);
+% xyz     = q(1:3);
 rpy     = q(4:6);
-beta_alpha = q(7:8);
+load_rp = q(7:8);
 xyz_dot = qdot(1:3);
 rpy_dot = qdot(4:6);
-beta_alpha_dot = qdot(7:8);
+load_rp_dot= qdot(7:8);
 
-alpha = beta_alpha(1);
-beta = beta_alpha(2);
-alphadot = beta_alpha_dot(1);
-betadot = beta_alpha_dot(2);
+phiL      = load_rp(1);
+thetaL    = load_rp(2);
+phiLdot   = load_rp_dot(1);
+thetaLdot = load_rp_dot(2);
 
 phi = rpy(1);
 theta = rpy(2);
@@ -61,50 +61,52 @@ thetadot = rpy_dot(2);
 % U(4) = km*[ 1 -1 1 -1]*wr2;
 U = u;
 
-% Linear Dynamics
-salpha = sin(alpha);
-calpha = cos(alpha);
-sbeta = sin(beta);
-cbeta = cos(beta);
+%% Translation Dynamics
+sphiL = sin(phiL); sthetaL = sin(thetaL);
+cphiL = cos(phiL); cthetaL = cos(thetaL);
 
-m14 =  m*L*calpha*cbeta; m41 = m14;
-m15 = -m*L*salpha*sbeta; m51 = m15;
-m24 =  m*L*calpha*sbeta; m42 = m24;
-m25 =  m*L*salpha*cbeta; m52 = m25;
-m34 =  m*L*salpha; m43 = m34;
+m15 = -m*L*cthetaL;       m51 = m15;
+
+m24 =  m*L*cphiL*cthetaL; m42 = m24;
+m25 = -m*L*sphiL*sthetaL; m52 = m25;
+
+m34 =  m*L*sphiL*cthetaL; m43 = m34;
+m35 =  m*L*cphiL*sthetaL; m53 = m35;
 
 Mq = [
-    M+m  0    0    m14    m15;
-    0    M+m  0    m24    m25;
-    0    0    M+m  m34    0;
-    m41  m42  m43  m*L^2  0;
-    m51  m52  0    0,     m*L^2*salpha^2];
+    M+m  0    0    0                m15;
+    0    M+m  0    m24              m25;
+    0    0    M+m  m34              m35;
+    0    m42  m43  m*L^2*cthetaL^2  0;
+    m51  m52  m53    0,             m*L^2];
 
-c14 = -m*L*(calpha*sbeta*betadot  + salpha*cbeta*alphadot);
-c15 = -m*L*(calpha*sbeta*alphadot + salpha*cbeta*betadot);
-c24 =  m*L*(calpha*cbeta*betadot  - salpha*sbeta*alphadot);
-c25 =  m*L*(calpha*cbeta*alphadot - salpha*sbeta*betadot);
-c34 =  m*L*calpha*alphadot;
-c45 = -m*L^2*salpha*calpha*betadot;
+
+c15 =  m*L*sthetaL*thetaLdot;
+c24 = -m*L*(sphiL*cthetaL*phiLdot   + cphiL*sthetaL*thetaLdot);
+c25 = -m*L*(sphiL*cthetaL*thetaLdot + cphiL*sthetaL*phiLdot);
+c34 =  m*L*(cphiL*cthetaL*phiLdot   - sphiL*sthetaL*thetaLdot);
+c35 =  m*L*(cphiL*cthetaL*thetaLdot - sphiL*sthetaL*phiLdot);
+c44 = -m*L^2*sthetaL*cthetaL*thetaLdot;
+c45 = -m*L^2*sthetaL*cthetaL*phiLdot;
 c54 = -c45;
-c55 = m*L^2*salpha*calpha*alphadot;
 
 Cq = [
-    0 0 0 c14 c15;
+    0 0 0 0   c15;
     0 0 0 c24 c25;
-    0 0 0 c34 0;
-    0 0 0 0   c45;
-    0 0 0 c54 c55];
+    0 0 0 c34 c35;
+    0 0 0 c44 c45;
+    0 0 0 c54 0];
 
-Gq = [0; 0; (M+m)*g; m*g*L*salpha; 0];
+Gq = [0; 0; (M+m)*g; m*g*L*sphiL*cthetaL; m*g*L*cphiL*sthetaL];
 
 ux = cos(phi)*sin(theta)*cos(psi) + sin(phi)*sin(psi);
 uy = cos(phi)*sin(theta)*sin(psi) - sin(phi)*cos(psi);
+uz = cos(phi)*cos(theta);
 
-bq = [ux uy cos(phi)*cos(theta) 0 0]';
+bq = [ux uy uz 0 0]';
 
 
-linear_acc = Mq\(-Cq*[xyz_dot;beta_alpha_dot] -Gq + bq*U(1));
+linear_acc = Mq\(-Cq*[xyz_dot;load_rp_dot] -Gq + bq*U(1));
 
 
 % Angular Dynamics

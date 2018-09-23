@@ -28,14 +28,11 @@ end
 
 xyz_d = qd(:,1:3);
 
-
-figure('units','normalized','outerposition',[0 0 1 1]);
-
 dt = t(2)-t(1);
-
-xlim_values = [min(xyz_load(:,1))-1 max(xyz(:,1))+1];
-ylim_values = [min(xyz_load(:,2))-1 max(xyz(:,2))+1];
-zlim_values = [min(xyz_load(:,3))-1 max(xyz(:,3))+1];
+offset = .5;
+xlim_values = [min(xyz_load(:,1))-offset max(xyz(:,1))+offset];
+ylim_values = [min(xyz_load(:,2))-offset max(xyz(:,2))+offset];
+zlim_values = [min(xyz_load(:,3))-offset max(xyz(:,3))+offset];
 
 xd=xyz_d(:,1);
 yd=xyz_d(:,2);
@@ -46,6 +43,7 @@ zd=xyz_d(:,3);
 xe = xe*r_l; ye = ye*r_l; ze = ze*r_l;
 
 figure('units','normalized','outerposition',[0 0 1 1]);
+grid on;
 xlim(xlim_values);
 ylim(ylim_values);
 zlim(zlim_values);
