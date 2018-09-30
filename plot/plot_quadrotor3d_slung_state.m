@@ -13,16 +13,16 @@ phiL = q(:,7);
 thetaL = q(:,8);
 
 % Robot Velocity
-xdot = qdot(:,1);
-ydot = qdot(:,2);
-zdot = qdot(:,3);
-
-phidot = qdot(:,4);
-thetadot = qdot(:,5);
-psidot = qdot(:,6);
-
-phiLdot = qdot(:,7);
-thetaLdot = qdot(:,8);
+% xdot = qdot(:,1);
+% ydot = qdot(:,2);
+% zdot = qdot(:,3);
+% 
+% phidot = qdot(:,4);
+% thetadot = qdot(:,5);
+% psidot = qdot(:,6);
+% 
+% phiLdot = qdot(:,7);
+% thetaLdot = qdot(:,8);
 
 % Desired State
 xd = qd(:,1);
@@ -30,10 +30,10 @@ yd = qd(:,2);
 zd = qd(:,3);
 psid = qd(:,4);
 
-xdot_d = qd(:,5);
-ydot_d = qd(:,6);
-zdot_d = qd(:,7);
-psidot_d = qd(:,8);
+% xdot_d = qd(:,5);
+% ydot_d = qd(:,6);
+% zdot_d = qd(:,7);
+% psidot_d = qd(:,8);
 
 
 %% Plot Robot State

@@ -12,7 +12,7 @@ control_p.kd_theta = x(6);
 
 
 try
-    [t,x] = ode45(@(t,x) ode_fun(t,x,physics_p,control_p,traj_p), traj_p.t, traj_p.x0);
+    [~,x] = ode45(@(t,x) ode_fun(t,x,physics_p,control_p,traj_p), traj_p.t, traj_p.x0);
 catch ME
     disp(ME.identifier);
     F = 1000;

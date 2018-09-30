@@ -1,4 +1,4 @@
-clear all;
+% clear all;
 close all;
 clc;
 
@@ -6,10 +6,10 @@ addpath('auxiliary','control','controllers','dynamics','physical_params',...
     'config','plot','trajectories','trajectory_planning','optimization_functions');
 
 % Pick your config function
-% [physics_p control_p traj_p plot_p] = nested2d_config();
-% [physics_p control_p traj_p plot_p] = smc2d_config();
-% [physics_p control_p traj_p plot_p] = nested2d_slung_config();
-[physics_p control_p traj_p plot_p] = smc2d_slung_config();
+% [physics_p, control_p, traj_p, plot_p] = nested2d_config();
+% [physics_p, control_p, traj_p, plot_p] = smc2d_config();
+% [physics_p, control_p, traj_p, plot_p] = nested2d_slung_config();
+[physics_p, control_p, traj_p, plot_p] = smc2d_slung_config();
 % optimization_function = @nested2d_xzerror_optfun;
 optimization_function = @smc2d_xzerror_optfun;
  

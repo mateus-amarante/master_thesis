@@ -1,13 +1,13 @@
 startup
 
 % PICK YOUR CONFIG FUNCTION
-% [physics_p control_p traj_p plot_p] = nested2d_config();
-% [physics_p control_p traj_p plot_p] = smc2d_config();
-% [physics_p control_p traj_p plot_p] = nested2d_slung_config();
-% [physics_p control_p traj_p plot_p] = smc2d_slung_config();
+% [physics_p, control_p, traj_p, plot_p] = nested2d_config();
+% [physics_p, control_p, traj_p, plot_p] = smc2d_config();
+% [physics_p, control_p, traj_p, plot_p] = nested2d_slung_config();
+% [physics_p, control_p, traj_p, plot_p] = smc2d_slung_config();
 
-% [physics_p control_p traj_p plot_p] = nested3d_config();
-[physics_p control_p traj_p plot_p] = nested3d_slung_config();
+% [physics_p, control_p, traj_p, plot_p] = nested3d_config();
+[physics_p, control_p, traj_p, plot_p] = nested3d_slung_config();
 
 [t,x] = ode23(@(t,x) ode_fun(t,x,physics_p,control_p,traj_p), traj_p.t, traj_p.x0);
 

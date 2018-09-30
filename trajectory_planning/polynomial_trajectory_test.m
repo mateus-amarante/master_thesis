@@ -5,7 +5,7 @@ tt = (-2:.2:12)'; % Sample times
 
 % Waypoints positions
 x1_d = [0 3 1]'; x2_d = [3 0 2]';
-x_d = [x1_d, x2_d];   
+x_d = [x1_d, x2_d];
 
 % Waypoints velocities and accelerations
 xdot_d  = [0 0; 0 0; 0 0];

@@ -18,7 +18,7 @@ legend('pos1','pos2','vel1','vel1','acc1','acc1');
 q0 = [0 0; 1 0]'; % Initial positions and velocities
 qf = [1 0; 0 0]'; % Final positions and velocities
 
-A = plan_trajectory(tspan,q0,qf)  % Coeficient matrix
+A = plan_trajectory(tspan,q0,qf);  % Coeficient matrix
 qd = sample_trajectory(A,t); % Desired trajectory
 
 figure;
@@ -29,7 +29,7 @@ legend('pos1','pos2','vel1','vel1','acc1','acc1');
 q0 = [0 0 0; 1 0 0]'; % Initial positions, velocities and accelerations
 qf = [1 0 0; 0 0 0]'; % Final positions, velocities and accelerations
 
-A = plan_trajectory(tspan,q0,qf) % Coeficient matrix
+A = plan_trajectory(tspan,q0,qf); % Coeficient matrix
 qd = sample_trajectory(A,t); % Desired trajectory
 
 figure;

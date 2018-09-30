@@ -4,11 +4,11 @@ x = q(:,1);
 z = q(:,2);
 theta = q(:,3);
 
-xdot = qdot(:,1);
-zdot = qdot(:,2);
+% xdot = qdot(:,1);
+% zdot = qdot(:,2);
 
-xdot_d = qd(:,3);
-zdot_d = qd(:,4);
+% xdot_d = qd(:,3);
+% zdot_d = qd(:,4);
 
 xd = qd(:,1);
 zd = qd(:,2);

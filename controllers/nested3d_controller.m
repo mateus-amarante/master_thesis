@@ -5,13 +5,13 @@ function u = nested3d_controller(q,qdot,xref,physics_p,control_p)
 % Params renaming
 M = physics_p.M;
 g = physics_p.g;
-I = physics_p.I;
-Ix = physics_p.Ix;
-Iy = physics_p.Iy;
-Iz = physics_p.Iz;
-kt = physics_p.kt;
-km = physics_p.km;
-r = physics_p.r;
+% I = physics_p.I;
+% Ix = physics_p.Ix;
+% Iy = physics_p.Iy;
+% Iz = physics_p.Iz;
+% kt = physics_p.kt;
+% km = physics_p.km;
+% r = physics_p.r;
 maxThrust = physics_p.maxThrust;
 
 kp_xyz = control_p.kp_xyz;
@@ -30,7 +30,7 @@ xyzddot_d = qddot_d(1:3);
 
 psi_d = qd(4);
 psidot_d = qdot_d(4);
-psiddot_d = qddot_d(4);
+% psiddot_d = qddot_d(4);
 
 % State renaming
 xyz = q(1:3);
@@ -67,7 +67,7 @@ U(1) = M*(g+xyz_c(3));
 try
 U(2:4) = kp_rpy.*(rpy_c-rpy) + kd_rpy.*(rpydot_c-rpy_dot);
 catch ME
-    ME
+    disp(ME);
 end
 
 if U(1) > maxThrust
