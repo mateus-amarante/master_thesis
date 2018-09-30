@@ -1,4 +1,4 @@
-function coef = calc_polysegment_coef(tspan, q0, qf, output_deriv)
+function coef = calc_polysegment_coef(tspan, q0, qf)
 % Plan linear/cubic/quintic trajectories for 'ncols' variables
 
 % tspan = [t0 tf]

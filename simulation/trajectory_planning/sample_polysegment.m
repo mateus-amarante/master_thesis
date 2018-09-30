@@ -5,7 +5,7 @@ function [qq_d, q_d, qdot_d, qddot_d] = sample_polysegment(coef,t)
 %      vel1 vel2 ... veln,
 %      acc1 acc2 ... accn] per time (line) for 'n' variables
 
-nvar    = size(coef, 2);
+% nvar    = size(coef, 2);
 n_coefs = size(coef, 1);
 
 t1 = t(:)';
@@ -26,7 +26,7 @@ if n_coefs >= 4
         t_pos = [t0;      t1;   t2;   t3;    t4;    t5];
         t_vel = [ zero;   t0; 2*t1; 3*t2;  4*t3;  5*t4];
         t_acc = [ zero; zero; 2*t0; 6*t1; 12*t2; 20*t3];
-
+        
         qddot_d = (coef'*t_acc)'; % acceleration
         
     else % CUBIC

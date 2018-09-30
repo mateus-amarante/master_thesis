@@ -1,4 +1,4 @@
-function [u s ueq usw] = smcu(e,xddot_d,f,b,lambda,kappa,eta)
+function [u, s, ueq, usw] = smcu(e,xddot_d,f,b,lambda,kappa,eta)
 % First Order Sliding-Mode Control of Underactuated Systems
 
 % Variable renaming

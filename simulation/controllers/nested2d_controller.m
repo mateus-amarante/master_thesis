@@ -6,8 +6,8 @@ function u = nested2d_controller(q,qdot,xref,physics_p,control_p)
 M = physics_p.M;
 g = physics_p.g;
 Itheta = physics_p.Itheta;
-kt = physics_p.kt;
-r = physics_p.r;
+% kt = physics_p.kt;
+% r = physics_p.r;
 maxThrust = physics_p.maxThrust;
 
 kp_x = control_p.kp_x;

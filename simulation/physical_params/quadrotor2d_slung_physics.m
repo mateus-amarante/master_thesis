@@ -1,4 +1,4 @@
-function [physics_p dyn_fun] = quadrotor2d_slung_physics()
+function [physics_p, dyn_fun] = quadrotor2d_slung_physics()
 
 % Physical parameters
 physics_p.M = 0.18;

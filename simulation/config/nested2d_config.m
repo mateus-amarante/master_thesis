@@ -1,4 +1,4 @@
-function [physics_p control_p traj_p plot_p] = nested2d_config()
+function [physics_p, control_p, traj_p, plot_p] = nested2d_config()
 
 % Physical parameters
 physics_p = quadrotor2d_slung_physics();

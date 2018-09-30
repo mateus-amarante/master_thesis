@@ -20,8 +20,8 @@ m = params.m;
 M = params.M;
 Itheta = params.Itheta;
 L = params.L;
-kt = params.kt;
-r = params.r;
+% kt = params.kt;
+% r = params.r;
 
 % State remapping
 % x = q(1);
