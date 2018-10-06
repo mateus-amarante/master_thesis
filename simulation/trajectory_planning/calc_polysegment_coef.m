@@ -1,41 +1,32 @@
-function coef = calc_polysegment_coef(tspan, q0, qf)
-% Plan linear/cubic/quintic trajectories for 'ncols' variables
+function coef = calc_polysegment_coef(tspan, q0, qf, n_vars, n_deriv_out)
+% Plan polynomial trajectories for 'ncols' variables
 
 % tspan = [t0 tf]
-% q0 = [pos [vel0] [acc0]]' por coluna # Initial Point
-% qf = [pos [velf] [accf]]' por coluna # End Point
-% Velocities and accelerations are optional
+% q0 = [pos1 pos2 ... vel1 vel2 ... acc1 acc2 ...] # Initial State
+% qf = [pos1 pos2 ... vel1 vel2 ... acc1 acc2 ...] # Final State
+% n_vars: number of variables
+% n_deriv_out: number of derivatives to output + 1(n_deriv_out = 1 for position-only output)
 
-% coef = [a0 a1 a2 a3 a4 a5]' por coluna # a0 + a1*t + a2*t² + a3*t³ + a4*t? + a5*t?
+% Input anguments analysis
+n_deriv_in = length(q0)/n_vars;
 
-n_deriv = size(q0,1);
-
-
-t0 = tspan(1);
-tf = tspan(2);
-
-if n_deriv == 1 % LINEAR
-    
-    M = [1 t0; 1 tf];
-    
-elseif n_deriv == 2 % CUBIC
-    
-    M = [1 t0   t0^2   t0^3;
-        0 1  2*t0   3*t0^2;
-        1 tf   tf^2   tf^3;
-        0 1  2*tf   3*tf^2];
-    
-elseif n_deriv == 3 % QUINTIC
-    
-    M = [1 t0   t0^2   t0^3    t0^4    t0^5;
-        0 1  2*t0   3*t0^2  4*t0^3  5*t0^4;
-        0 0  2      6*t0   12*t0^2 20*t0^3;
-        1 tf   tf^2   tf^3    tf^4    tf^5;
-        0 1  2*tf   3*tf^2  4*tf^3  5*tf^4;
-        0 0  2      6*tf   12*tf^2 20*tf^3];
-    
+if nargin < 4 || isempty(n_deriv_out)
+    n_deriv_out = n_deriv_in;
 end
 
-coef = M\[q0;qf];
+n_deriv_out = max([n_deriv_in, n_deriv_out]);
+
+q0 = reshape(q0(:), n_vars, n_deriv_in)'; 
+qf = reshape(qf(:), n_vars, n_deriv_in)';
+
+qq = zeros(n_deriv_in*2, n_vars);
+qq(1:2:end, :) = q0;
+qq(2:2:end, :) = qf;
+
+M = calc_polysegment_matrix(n_deriv_in, tspan);
+
+coef = zeros(n_deriv_out*2, n_vars);
+
+coef(1:n_deriv_in*2, :) = M\qq;
 
 end

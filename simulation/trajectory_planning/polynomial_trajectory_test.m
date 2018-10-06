@@ -1,39 +1,43 @@
 % SIMPLE TEST OF plan_polynomial_trajectory function
 
 t = [0 5 10]'; % Waypoints times
-tt = (-2:.2:12)'; % Sample times
+tt = (-2:.01:12)'; % Sample times
 
 % Waypoints positions
-x1_d = [0 3 1]'; x2_d = [3 0 2]';
-x_d = [x1_d, x2_d];
+pos = [3 0;
+       0 3;
+       2 1];
 
-% Waypoints velocities and accelerations
-xdot_d  = [0 0; 0 0; 0 0];
-xddot_d = [0 0; 0 0; 0 0];
+vel = zeros(size(pos));
+
+accel = vel;
 
 % LINEAR
-sample_fun = plan_polynomial_trajectory(t, x_d);
+x_d = pos;
+sample_fun = plan_polynomial_trajectory(t, x_d, 2, 3);
 
 qqd = sample_fun(tt);
 
 figure;
 plot(tt,qqd);
-legend('pos1','pos2');
+legend('pos1', 'pos2', 'vel1', 'vel2', 'acc1', 'acc2');
 
 % CUBIC
-sample_fun = plan_polynomial_trajectory(t, x_d, xdot_d);
+x_d = [pos vel];
+sample_fun = plan_polynomial_trajectory(t, x_d, 2, 2);
 
 qqd = sample_fun(tt);
 
 figure;
 plot(tt,qqd);
-legend('pos1','pos2','vel1','vel2');
+legend('pos1', 'pos2', 'vel1', 'vel2');
 
 % QUINTIC
-sample_fun = plan_polynomial_trajectory(t, x_d, xdot_d, xddot_d);
+x_d = [pos vel accel];
+sample_fun = plan_polynomial_trajectory(t, x_d, 2, 1);
 
 qqd = sample_fun(tt);
 
 figure;
 plot(tt,qqd);
-legend('pos1','pos2','vel1','vel2','acc1','acc2');
+legend('pos1', 'pos2');
