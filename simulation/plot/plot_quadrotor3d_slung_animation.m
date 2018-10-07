@@ -11,15 +11,17 @@ x = q(:,1);
 y = q(:,2);
 z = q(:,3);
 
-phi   = q(:,4);
-theta = q(:,5);
-psi   = q(:,6);
+% phi   = q(:,4);
+% theta = q(:,5);
+% psi   = q(:,6);
 
 xyz = q(:,1:3);
 rpy = q(:,4:6);
 
 phiL   = q(:,7);
 thetaL = q(:,8);
+
+xyz_load = zeros(length(phiL), 3);
 
 for i=1:length(phiL)
     % TODO: chedk this transformation
@@ -39,7 +41,7 @@ yd=xyz_d(:,2);
 zd=xyz_d(:,3);
 
 
-[xe ye ze] = sphere();
+[xe, ye, ze] = sphere();
 xe = xe*r_l; ye = ye*r_l; ze = ze*r_l;
 
 figure('units','normalized','outerposition',[0 0 1 1]);

@@ -1,4 +1,4 @@
-function [q_ddot] = quadrotor3d(q,qdot,u,physics_p)
+function [q_ddot] = quadrotor3d_simple(q,qdot,u,physics_p)
 %        1
 %        |
 %   2 -- o -- 4
@@ -34,6 +34,7 @@ psi = rpy(3);
 
 phidot = rpy_dot(1);
 thetadot = rpy_dot(2);
+psidot = rpy_dot(3);
 
 % input remapping
 % U = zeros(4,1);

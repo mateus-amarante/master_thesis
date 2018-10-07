@@ -57,11 +57,11 @@ bx = (-m*cos(alpha)*sin(alpha-theta) + M*sin(theta))/(M*(M+m));
 fz = -m*L*cos(alpha)*alphadot^2/(M+m) - g;
 bz = (m*sin(alpha)*sin(alpha-theta) + M*cos(theta))/(M*(M+m));
 
-ftheta = 0;
+% ftheta = 0;
 btheta = 1/Itheta;
 
-falpha = 0;
-balpha = -sin(alpha-theta)/(M*L);
+% falpha = 0;
+% balpha = -sin(alpha-theta)/(M*L);
 
 % CONTROL CALCULATION
 U1 = smc(z_d-z,zdot_d-zdot,zddot_d,fz,bz,lambda_z,kappa_z,eta_z);

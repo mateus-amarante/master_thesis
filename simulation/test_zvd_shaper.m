@@ -1,4 +1,4 @@
-clear all;
+% clear all;
 close all;
 clc;
 
@@ -20,7 +20,7 @@ g = 9.81;
 L = 1;
 wn = sqrt((M+m)*g/(M*L));
 zeta = 0;
-[u ts A] = zvd_shaper(traj_p.t,traj_p.qd,wn,zeta);
+[u, ts, A] = zvd_shaper(traj_p.t,traj_p.qd,wn,zeta);
 plot(traj_p.qd(:,1))
 hold on
 plot(u(:,1))

@@ -1,4 +1,4 @@
-function [physics_p control_p traj_p plot_p] = nested3d_config()
+function [physics_p, control_p, traj_p, plot_p] = nested3d_config()
 
 % Physical parameters
 physics_p = quadrotor3d_slung_physics();
@@ -15,7 +15,7 @@ control_p.control_fun = @nested3d_controller;
 
 % Trajectory parameters
 xd = 2;
-yd = 1;
+yd = 4;
 zd = 3;
 psid = -pi/6;
 T = 3;

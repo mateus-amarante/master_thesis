@@ -14,8 +14,8 @@ function [q_ddot] = quadrotor2d(q,qdot,u,physics_p)
 M = physics_p.M;
 g = physics_p.g;
 Itheta = physics_p.Itheta;
-kt = physics_p.kt;
-r = physics_p.r;
+% kt = physics_p.kt;
+% r = physics_p.r;
 
 % state remapping
 theta = q(3);

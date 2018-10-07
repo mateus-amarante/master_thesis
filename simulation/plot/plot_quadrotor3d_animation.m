@@ -10,7 +10,7 @@ y = xyz(:,2);
 z = xyz(:,3);
 
 xyz_d = qd(:,1:3);
-psi_d = qd(:,4);
+% psi_d = qd(:,4);
 
 dt = t(2)-t(1);
 
