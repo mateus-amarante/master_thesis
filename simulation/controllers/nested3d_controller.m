@@ -19,6 +19,7 @@ kd_xyz = control_p.kd_xyz;
 kp_rpy = control_p.kp_rpy;
 kd_rpy = control_p.kd_rpy;
 
+xref = xref(:);
 % Reference renaming
 qd = xref(1:4);
 qdot_d = xref(5:8);

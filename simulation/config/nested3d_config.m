@@ -15,7 +15,7 @@ control_p.control_fun = @nested3d_controller;
 
 % Trajectory parameters
 xd = 2;
-yd = 1;
+yd = 4;
 zd = 3;
 psid = -pi/6;
 T = 3;

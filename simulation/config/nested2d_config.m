@@ -21,7 +21,7 @@ control_p.control_fun = @nested2d_controller;
 % Trajectory parameters
 xd = 5;
 zd = 3;
-T = 3;
+T = 4;
 steady_time = 3;
 dt = .01;
 traj_p = simple2d_trajectory(xd,zd,T,steady_time,dt);
