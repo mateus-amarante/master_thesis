@@ -6,8 +6,8 @@ startup
 % [physics_p, control_p, traj_p, plot_p] = nested2d_slung_config();
 % [physics_p, control_p, traj_p, plot_p] = smc2d_slung_config();
 
-% [physics_p, control_p, traj_p, plot_p] = nested3d_config();
-[physics_p, control_p, traj_p, plot_p] = nested3d_slung_config();
+[physics_p, control_p, traj_p, plot_p] = nested3d_config();
+% [physics_p, control_p, traj_p, plot_p] = nested3d_slung_config();
 
 [t,x] = ode23(@(t,x) ode_fun(t,x,physics_p,control_p,traj_p), traj_p.t, traj_p.x0);
 
@@ -22,4 +22,4 @@ for i=1:length(t)
 end
 
 plot_p.plot_state(t,q,q_dot,qd,u,physics_p);
-% plot_p.plot_animation(t,q,qd,physics_p);
+plot_p.plot_animation(t,q,qd,physics_p);

@@ -17,7 +17,7 @@ wd = damping*wn;
 Td = 2*pi/wd;
 tt = (0:dt:traj_p.Tf+Td)';
 
-qd = traj_p.sample_fun(tt)';
+qd = traj_p.sample_fun(tt);
 qd = zvd_shaper(tt,qd,wn,zeta);
 traj_p.qd = qd(1:length(traj_p.t),:);
 
