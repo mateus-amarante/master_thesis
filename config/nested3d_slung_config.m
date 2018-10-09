@@ -14,14 +14,27 @@ control_p.kd_rpy = [20 20 20]';
 control_p.control_fun = @nested3d_controller;
 
 % Trajectory parameters
-xd = 6;
-yd = 2;
-zd = 3;
-psid = 0;
-T = 3;
-steady_time = 2;
-dt = .01;
-traj_p = simple3d_trajectory(xd,yd,zd,psid,T,steady_time,dt);
+xd = [0 0 2 2 0 0 0]';
+yd = [0 0 0 1 1 0 0]';
+zd = [0 0 3 3 0 0 0]';
+psid = zeros(size(xd));
+
+pos = [xd yd zd psid];
+vel = zeros(size(pos));
+acc = zeros(size(pos));
+
+traj_p.Tf = 10;
+traj_p.dt = .02;
+traj_p.t = 0:traj_p.dt:traj_p.Tf;
+
+td = linspace(0,traj_p.Tf,length(xd));
+q = [pos vel acc];
+n_vars = size(pos,2);
+n_deriv_out = 3;
+
+% traj_p = simple3d_trajectory(xd,yd,zd,psid,T,steady_time,dt);
+% traj_p = simple3d_shaped_trajectory(xd,yd,zd,psid,T,steady_time,dt,physics_p);
+traj_p = shaped_poly_trajectory(td, q, n_vars, n_deriv_out, traj_p, physics_p);
 traj_p.x0 = zeros(16,1);
 
 % Plot parameters
