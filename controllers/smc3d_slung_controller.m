@@ -17,41 +17,41 @@ L = physics_p.L;
 m = physics_p.m;
 
 % Control parameters renaming
-lambda_zpsi = contro_p.lambda_zpsi;
-kappa_zpsi = contro_p.kappa_zpsi;
-eta_zpsi = contro_p.eta_zpsi;
+lambda_zpsi = control_p.lambda_zpsi;
+kappa_zpsi = control_p.kappa_zpsi;
+eta_zpsi = control_p.eta_zpsi;
 
 lambda_xtheta = control_p.lambda_xtheta;
 lambda_xtheta_dot = control_p.lambda_xtheta_dot;
-kappa_xtheta = contro_p.kappa_xtheta;
-eta_xtheta = contro_p.eta_xtheta;
+kappa_xtheta = control_p.kappa_xtheta;
+eta_xtheta = control_p.eta_xtheta;
 
 lambda_yphi = control_p.lambda_yphi;
 lambda_yphi_dot = control_p.lambda_yphi_dot;
-kappa_yphi = contro_p.kappa_yphi;
-eta_yphi = contro_p.eta_yphi;
+kappa_yphi = control_p.kappa_yphi;
+eta_yphi = control_p.eta_yphi;
 
 % Reference signal renaming
 q_d = xref(1:4);
 qdot_d = xref(5:8);
 qddot_d = xref(9:12);
 
-x_d, xdot_d, xddot_d = q_d(1), qdot_d(1), qddot_d(1);
-y_d, ydot_d, yddot_d = q_d(2), qdot_d(2), qddot_d(2);
-z_d, zdot_d, zddot_d = q_d(3), qdot_d(3), qddot_d(3);
-psi_d, psidot_d, psiddot_d = q_d(4), qdot_d(4), qddot_d(4);
+x_d = q_d(1); xdot_d = qdot_d(1); xddot_d = qddot_d(1);
+y_d = q_d(2); ydot_d = qdot_d(2); yddot_d = qddot_d(2);
+z_d = q_d(3); zdot_d = qdot_d(3); zddot_d = qddot_d(3);
+psi_d = q_d(4); psidot_d = qdot_d(4); psiddot_d = qddot_d(4);
 
 % State renaming
-x, xdot = q(1), qdot(1);
-y, ydot = q(2), qdot(2);
-z, zdot = q(3), qdot(3);
+x = q(1); xdot = qdot(1);
+y = q(2); ydot = qdot(2);
+z = q(3); zdot = qdot(3);
 
-phi, phidot = q(4), qdot(4);
-theta, thetadot = q(5), qdot(5);
-psi, psidot = q(6), qdot(6);
+phi = q(4); phidot = qdot(4);
+theta = q(5); thetadot = qdot(5);
+psi = q(6); psidot = qdot(6);
 
-phiL, phiLdot = q(7), qdot(7);
-thetaL, thetaLdot = q(8), qdot(8);
+phiL = q(7); phiLdot = qdot(7);
+thetaL = q(8); thetaLdot = qdot(8);
 
 %% Dynamic model state-space representation
 
@@ -76,13 +76,13 @@ by = Cb*(sphiL*cthetaL*(ux*sthetaL + uz*cphiL*cthetaL) + uy*(M/m + 1 - sphiL^2*c
 fz = -Cf*cphiL*cthetaL - g;
 bz = Cb*(cphiL*cthetaL*(-ux*sthetaL + uy*sphiL*cthetaL) + uz*(M/m + 1 - cphiL^2*cthetaL^2));
 
-fphi = thetadot*psidot(Iy - Iz)/Ix;
+fphi = thetadot*psidot*(Iy - Iz)/Ix;
 bphi = 1/Ix;
 
-ftheta = phidot*psidot(Iz - Ix)/Iy;
+ftheta = phidot*psidot*(Iz - Ix)/Iy;
 btheta = 1/Iy;
 
-fpsi = phidot*thetadot(Ix - Iy)/Iz;
+fpsi = phidot*thetadot*(Ix - Iy)/Iz;
 bpsi = 1/Iz;
 
 fphiL = 2*tan(thetaL)*phiLdot*thetaLdot;
@@ -104,15 +104,26 @@ zpsi_ddot_d = [zddot_d; psiddot_d];
 fzpsi = [fz; fpsi];
 bzpsi = [bz; bpsi];
 
-u([1 4]) = smc([ezpsi, ezpsi_dot, zpsi_ddot_d, fzpsi, bzpsi, lambda_zpsi, kappa_zpsi, eta_zpsi);
+u([1 4]) = smc(ezpsi, ezpsi_dot, zpsi_ddot_d, fzpsi, bzpsi, lambda_zpsi, kappa_zpsi, eta_zpsi);
 
 if u(1) > maxThrust
     u(1) = maxThrust;
 end
 
-% Under-actuated SMC: x and theta
-theta_d, thetadot_d, thetaddot_d = 0,0,0;
+% Compute desired phi and theta
+theta_d = 0; thetadot_d = 0; thetaddot_d = 0;
+phi_d = 0; phidot_d = 0; phiddot_d = 0;
 
+xddot_c = xddot_d + lambda_xtheta(1)*(x_d - x) + lambda_xtheta_dot(1)*(xdot_d - xdot);
+yddot_c = yddot_d + lambda_yphi(1)*(y_d - y) + lambda_yphi_dot(1)*(ydot_d - ydot);
+
+xddot_c = xddot_c;
+yddot_c = yddot_c;
+
+phi_d = M/((M + m)*g)*(sin(psi)*xddot_c - cos(psi)*yddot_c);
+theta_d = M/((M + m)*g)*(sin(psi)*xddot_c + cos(psi)*yddot_c);
+
+% Under-actuated SMC: x and theta
 extheta = [x_d; theta_d] - [x; theta];
 extheta_dot = [xdot_d; thetadot_d] - [xdot; thetadot];
 
@@ -124,8 +135,6 @@ bxtheta = [0; btheta];
 u(3) = smcu([extheta; extheta_dot], xtheta_ddot_d, fxtheta, bxtheta, [lambda_xtheta; lambda_xtheta_dot] , kappa_xtheta, eta_xtheta);
 
 % Under-actuated SMC: y and phi
-phi_d, phidot_d, phiddot_d = 0,0,0;
-
 eyphi = [y_d; phi_d] - [y; phi];
 eyphi_dot = [ydot_d; phidot_d] - [ydot; phidot];
 
