@@ -39,12 +39,12 @@ psid = qd(:,4);
 %% Plot Robot State
 figure;
 subplot(2,1,1);
-plot(t,[x y z xd yd zd]);
+plot(t,[x y z xd(1:length(x)) yd(1:length(y)) zd(1:length(z))]);
 ylabel('Position [m]'); %xlabel('Time [s]');
 legend('x','y','z','$$x_d$$','$$y_d$$','$$z_d$$');
 
 subplot(2,1,2);
-plot(t,[phi theta psi psid phiL thetaL]);
+plot(t,[phi theta psi psid(1:length(psi)) phiL thetaL]);
 legend('$$\phi$$','$$\theta$$','$$\psi$$','$$\psi_d$$','$$\phi_L$$','$$\theta_L$$');
 ylabel('Aircraft/Load Orientation[rad]');
 
