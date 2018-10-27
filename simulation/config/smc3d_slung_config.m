@@ -16,8 +16,8 @@ control_p.lambda_xtheta_dot = [cparam(4); cparam(5)];
 control_p.kappa_xtheta = cparam(7);
 control_p.eta_xtheta = 0;
 
-control_p.lambda_yphi = [cparam(2); cparam(3)];
-control_p.lambda_yphi_dot = [cparam(4); cparam(5)];
+control_p.lambda_yphi = [-cparam(2); cparam(3)];
+control_p.lambda_yphi_dot = [-cparam(4); cparam(5)];
 control_p.kappa_yphi = cparam(7);
 control_p.eta_yphi = 0;
 
@@ -30,6 +30,7 @@ xd = [0 0 2 2 0 0 0]';
 yd = [0 0 0 1 1 0 0]';
 zd = [0 0 3 3 0 0 0]';
 psid = zeros(size(xd));
+psid = [0 0 pi/2 pi/2 pi pi pi]';
 
 pos = [xd yd zd psid];
 vel = zeros(size(pos));
@@ -51,6 +52,7 @@ traj_p = shaped_poly_trajectory(td, q, n_vars, n_deriv_out, traj_p, physics_p);
 % traj_p.qd = traj_p.sample_fun(traj_p.t);
 
 traj_p.x0 = zeros(16,1);
+% traj_p.x0(6) = pi/2;
 
 % Plot parameters
 plot_p.plot_state = @plot_quadrotor3d_slung_state;
