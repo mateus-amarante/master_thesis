@@ -114,35 +114,78 @@ end
 theta_d = 0; thetadot_d = 0; thetaddot_d = 0;
 phi_d = 0; phidot_d = 0; phiddot_d = 0;
 
-xddot_c = xddot_d + lambda_xtheta(1)*(x_d - x) + lambda_xtheta_dot(1)*(xdot_d - xdot);
-yddot_c = yddot_d + lambda_yphi(1)*(y_d - y) + lambda_yphi_dot(1)*(ydot_d - ydot);
+% xddot_c = xddot_d + lambda_xtheta(1)*(x_d - x) + lambda_xtheta_dot(1)*(xdot_d - xdot);
+% yddot_c = yddot_d + lambda_yphi(1)*(y_d - y) + lambda_yphi_dot(1)*(ydot_d - ydot);
+% phi_d = -M/((M + m)*g)*(sin(psi)*xddot_c - cos(psi)*yddot_c);
+% theta_d = M/((M + m)*g)*(sin(psi)*xddot_c + cos(psi)*yddot_c);
 
-xddot_c = xddot_c;
-yddot_c = yddot_c;
+% Compute controller variables
+psiddot = fpsi + bpsi*u(4);
+xddot = fx + bx*u(1);
+yddot = fy + by*u(1);
 
-phi_d = M/((M + m)*g)*(sin(psi)*xddot_c - cos(psi)*yddot_c);
-theta_d = M/((M + m)*g)*(sin(psi)*xddot_c + cos(psi)*yddot_c);
+ex = x_d - x;
+exdot = xdot_d - xdot;
+exddot = xddot_d - xddot;
 
-% Under-actuated SMC: x and theta
-extheta = [x_d; theta_d] - [x; theta];
-extheta_dot = [xdot_d; thetadot_d] - [xdot; thetadot];
+ey = y_d - y;
+eydot = ydot_d - ydot;
+eyddot = yddot_d - yddot;
 
-xtheta_ddot_d = [xddot_d; thetaddot_d];
+exb =  cos(psi)*ex + sin(psi)*ey;
+eyb = -sin(psi)*ex + cos(psi)*ey;
 
-fxtheta = [fx + bx*u(1); ftheta];
-bxtheta = [0; btheta];
+exbdot = psidot*eyb + cos(psi)*exdot + sin(psi)*eydot;
+eybdot = -psidot*exb - sin(psi)*exdot + cos(psi)*eydot;
 
-u(3) = smcu([extheta; extheta_dot], xtheta_ddot_d, fxtheta, bxtheta, [lambda_xtheta; lambda_xtheta_dot] , kappa_xtheta, eta_xtheta);
+exbddot = psiddot*eyb - psidot^2*exb + 2*psidot*(-sin(psi)*exdot + cos(psi)*eydot) + ...
+    cos(psi)*exddot + sin(psi)*eyddot;
 
-% Under-actuated SMC: y and phi
-eyphi = [y_d; phi_d] - [y; phi];
-eyphi_dot = [ydot_d; phidot_d] - [ydot; phidot];
+eybddot = -psiddot*exb - psidot^2*eyb - 2*psidot*(cos(psi)*exdot + sin(psi)*eydot) + ...
+    -sin(psi)*exddot + cos(psi)*eyddot;
 
-yphi_ddot_d = [yddot_d; phiddot_d];
+% Under-actuated SMC: xb and theta
+exbtheta = [exb; theta_d - theta];
+exbtheta_dot = [exbdot; thetadot_d - thetadot];
 
-fyphi = [fy + by*u(1); fphi];
-byphi = [0; bphi];
+xbtheta_ddot_d = [exbddot; thetaddot_d];
 
-u(2) = smcu([eyphi; eyphi_dot], yphi_ddot_d, fyphi, byphi, [lambda_yphi; lambda_yphi_dot] , kappa_yphi, eta_yphi);
+fxbtheta = [0; ftheta];
+bxbtheta = [0; btheta];
+
+u(3) = smcu([exbtheta; exbtheta_dot], xbtheta_ddot_d, fxbtheta, bxbtheta, [lambda_xtheta; lambda_xtheta_dot] , kappa_xtheta, eta_xtheta);
+
+% Under-acrtuated SMC: yb and phi
+eybphi = [eyb; phi_d - phi];
+eybphi_dot = [eybdot; phidot_d - phidot];
+
+ybphi_ddot_d = [eybddot; phiddot_d];
+
+fybphi = [0; fphi];
+bybphi = [0; bphi];
+
+u(2) = smcu([eybphi; eybphi_dot], ybphi_ddot_d, fybphi, bybphi, [lambda_yphi; lambda_yphi_dot] , kappa_yphi, eta_yphi);
+
+% % Under-actuated SMC: x and theta
+% extheta = [x_d; theta_d] - [x; theta];
+% extheta_dot = [xdot_d; thetadot_d] - [xdot; thetadot];
+% 
+% xtheta_ddot_d = [xddot_d; thetaddot_d];
+% 
+% fxtheta = [fx + bx*u(1); ftheta];
+% bxtheta = [0; btheta];
+% 
+% u(3) = smcu([extheta; extheta_dot], xtheta_ddot_d, fxtheta, bxtheta, [lambda_xtheta; lambda_xtheta_dot] , kappa_xtheta, eta_xtheta);
+% 
+% % Under-actuated SMC: y and phi
+% eyphi = [y_d; phi_d] - [y; phi];
+% eyphi_dot = [ydot_d; phidot_d] - [ydot; phidot];
+% 
+% yphi_ddot_d = [yddot_d; phiddot_d];
+% 
+% fyphi = [fy + by*u(1); fphi];
+% byphi = [0; bphi];
+% 
+% u(2) = smcu([eyphi; eyphi_dot], yphi_ddot_d, fyphi, byphi, [lambda_yphi; lambda_yphi_dot] , kappa_yphi, eta_yphi);
 
 end
