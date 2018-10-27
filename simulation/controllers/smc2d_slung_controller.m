@@ -71,10 +71,16 @@ if U1 > maxThrust
 end
 
 % From linearized model
-xddot = (-m/M*alpha + theta*(M+m)/M)*g;
-theta_c = (xddot_d + control_p.lambda_x*(x_d - x) + control_p.lambda_xdot*(xdot_d -xdot))*M/((M+m)*g);% + m*alpha/(M+m);
-thetadot_c = (control_p.lambda_x*(xdot_d - xdot) +control_p.lambda_xdot*(xddot_d - xddot))*M/((M+m)*g);% + m*alphadot/(M+m);
- 
+% xddot = (-m/M*alpha + theta*(M+m)/M)*g;
+% theta_c = (xddot_d + control_p.lambda_x*(x_d - x) + control_p.lambda_xdot*(xdot_d -xdot))*M/((M+m)*g);% + m*alpha/(M+m);
+% thetadot_c = 0;
+% thetadot_c = (control_p.lambda_x*(xdot_d - xdot) +control_p.lambda_xdot*(xddot_d - xddot))*M/((M+m)*g);% + m*alphadot/(M+m);
+
+theta_c = (xddot_d + control_p.lambda_x*(x_d - x) + control_p.lambda_xdot*(xdot_d -xdot))*M/((M+m*cos(alpha)^2)*g);
+thetadot_c = 0;
+% den = g*( M + m*cos(alpha)^2 + (M - m*cos(alpha)*sin(alpha)*alphadot)*theta);
+% thetadot_c = (control_p.lambda_x*(xdot_d - xdot) + control_p.lambda_xdot*(xddot_d - xddot))*M/den;
+
 e = [x_d theta_c]' - [x theta]';
 edot = [xdot_d thetadot_c]' - [xdot thetadot]';
 
