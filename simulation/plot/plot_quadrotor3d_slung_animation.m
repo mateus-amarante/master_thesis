@@ -53,6 +53,10 @@ axis equal;
 view(3);
 hold on;
 
+% v = VideoWriter('peaks.avi','MPEG-4');
+% v.FrameRate = 50;
+% open(v);
+
 for i=1:length(t)
     pos = (xyz(i,:))';
     ang = (rpy(i,:));
@@ -90,10 +94,14 @@ for i=1:length(t)
     
     line([pos(1) pos_load(1)],[pos(2) pos_load(2)],[pos(3) pos_load(3)],'Color','k'); % Cable
     
+%     frame = getframe(gcf);
+%     writeVideo(v,frame);
     
-    time = toc;
-    pause(dt-time);
+%     time = toc;
+%     pause(dt-time);
     
 end
+
+% close(v);
 
 end
