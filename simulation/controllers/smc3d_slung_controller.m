@@ -1,4 +1,4 @@
-function u = smc2d_slung_controller(q,qdot,xref,physics_p,control_p)
+function [u, s] = smc3d_slung_controller(q,qdot,xref,physics_p,control_p)
 % SMC for 2D quadrotor
 % q: [x z theta]'
 
@@ -42,6 +42,11 @@ z_d = q_d(3); zdot_d = qdot_d(3); zddot_d = qddot_d(3);
 psi_d = q_d(4); psidot_d = qdot_d(4); psiddot_d = qddot_d(4);
 
 % State renaming
+% q(1:3) = q(1:3) + (rand(3,1)-.5)*.01;
+% q(4:8) = q(4:8) + (rand(5,1)-.5)*1*pi/180.;
+% qdot(1:3) = qdot(1:3) + (rand(3,1)-.5)*.01;
+% qdot(4:8) = qdot(4:8) + (rand(5,1)-.5)*5*pi/180./50;
+
 x = q(1); xdot = qdot(1);
 y = q(2); ydot = qdot(2);
 z = q(3); zdot = qdot(3);
@@ -104,22 +109,29 @@ zpsi_ddot_d = [zddot_d; psiddot_d];
 fzpsi = [fz; fpsi];
 bzpsi = [bz; bpsi];
 
-u([1 4]) = smc(ezpsi, ezpsi_dot, zpsi_ddot_d, fzpsi, bzpsi, lambda_zpsi, kappa_zpsi, eta_zpsi);
+[u([1 4]), s_zpsi]  = smc(ezpsi, ezpsi_dot, zpsi_ddot_d, fzpsi, bzpsi, lambda_zpsi, kappa_zpsi, eta_zpsi);
 
-if u(1) > maxThrust
-    u(1) = maxThrust;
-end
+% if abs(psidot) > 0
+% end
+
+% if u(1) > maxThrust
+%     u(1) = maxThrust;
+% end
 
 % Compute desired phi and theta
 theta_d = 0; thetadot_d = 0; thetaddot_d = 0;
 phi_d = 0; phidot_d = 0; phiddot_d = 0;
 
-% xddot_c = xddot_d + lambda_xtheta(1)*(x_d - x) + lambda_xtheta_dot(1)*(xdot_d - xdot);
-% yddot_c = yddot_d + lambda_yphi(1)*(y_d - y) + lambda_yphi_dot(1)*(ydot_d - ydot);
-% phi_d = -M/((M + m)*g)*(sin(psi)*xddot_c - cos(psi)*yddot_c);
-% theta_d = M/((M + m)*g)*(sin(psi)*xddot_c + cos(psi)*yddot_c);
+xddot_c = xddot_d + lambda_xtheta(1)*(x_d - x) + lambda_xtheta_dot(1)*(xdot_d - xdot);
+yddot_c = yddot_d + lambda_yphi(1)*(y_d - y) + lambda_yphi_dot(1)*(ydot_d - ydot);
 
-% Compute controller variables
+% xddot_c = xddot_c + m*g/M*thetaL;
+% yddot_c = yddot_c - m*g/M*phiL;
+
+% phi_d = M/((M + m)*g)*(sin(psi)*xddot_c - cos(psi)*yddot_c);
+% theta_d = M/((M + m)*g)*(cos(psi)*xddot_c + sin(psi)*yddot_c);
+
+% Compute hjcontroller variables
 psiddot = fpsi + bpsi*u(4);
 xddot = fx + bx*u(1);
 yddot = fy + by*u(1);
@@ -153,7 +165,7 @@ xbtheta_ddot_d = [exbddot; thetaddot_d];
 fxbtheta = [0; ftheta];
 bxbtheta = [0; btheta];
 
-u(3) = smcu([exbtheta; exbtheta_dot], xbtheta_ddot_d, fxbtheta, bxbtheta, [lambda_xtheta; lambda_xtheta_dot] , kappa_xtheta, eta_xtheta);
+[u(3), s_xtheta] = smcu([exbtheta; exbtheta_dot], xbtheta_ddot_d, fxbtheta, bxbtheta, [lambda_xtheta; lambda_xtheta_dot] , kappa_xtheta, eta_xtheta);
 
 % Under-acrtuated SMC: yb and phi
 eybphi = [eyb; phi_d - phi];
@@ -164,7 +176,9 @@ ybphi_ddot_d = [eybddot; phiddot_d];
 fybphi = [0; fphi];
 bybphi = [0; bphi];
 
-u(2) = smcu([eybphi; eybphi_dot], ybphi_ddot_d, fybphi, bybphi, [lambda_yphi; lambda_yphi_dot] , kappa_yphi, eta_yphi);
+[u(2), s_yphi] = smcu([eybphi; eybphi_dot], ybphi_ddot_d, fybphi, bybphi, [lambda_yphi; lambda_yphi_dot] , kappa_yphi, eta_yphi);
+
+
 
 % % Under-actuated SMC: x and theta
 % extheta = [x_d; theta_d] - [x; theta];
@@ -175,7 +189,7 @@ u(2) = smcu([eybphi; eybphi_dot], ybphi_ddot_d, fybphi, bybphi, [lambda_yphi; la
 % fxtheta = [fx + bx*u(1); ftheta];
 % bxtheta = [0; btheta];
 % 
-% u(3) = smcu([extheta; extheta_dot], xtheta_ddot_d, fxtheta, bxtheta, [lambda_xtheta; lambda_xtheta_dot] , kappa_xtheta, eta_xtheta);
+% [u(3), s_xtheta] = smcu([extheta; extheta_dot], xtheta_ddot_d, fxtheta, bxtheta, [lambda_xtheta; lambda_xtheta_dot] , kappa_xtheta, eta_xtheta);
 % 
 % % Under-actuated SMC: y and phi
 % eyphi = [y_d; phi_d] - [y; phi];
@@ -186,6 +200,9 @@ u(2) = smcu([eybphi; eybphi_dot], ybphi_ddot_d, fybphi, bybphi, [lambda_yphi; la
 % fyphi = [fy + by*u(1); fphi];
 % byphi = [0; bphi];
 % 
-% u(2) = smcu([eyphi; eyphi_dot], yphi_ddot_d, fyphi, byphi, [lambda_yphi; lambda_yphi_dot] , kappa_yphi, eta_yphi);
+% [u(2), s_yphi] = smcu([eyphi; eyphi_dot], yphi_ddot_d, fyphi, byphi, [lambda_yphi; lambda_yphi_dot] , kappa_yphi, eta_yphi);
+
+
+s = [s_zpsi(:); s_xtheta(:); s_yphi(:)];
 
 end
