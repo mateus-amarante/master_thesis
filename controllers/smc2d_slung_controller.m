@@ -1,4 +1,4 @@
-function u = smc2d_slung_controller(q,qdot,xref,physics_p,control_p)
+function [u,s] = smc2d_slung_controller(q,qdot,xref,physics_p,control_p)
 % SMC for 2D quadrotor
 % q: [x z theta]'
 
@@ -64,7 +64,7 @@ btheta = 1/Itheta;
 % balpha = -sin(alpha-theta)/(M*L);
 
 % CONTROL CALCULATION
-U1 = smc(z_d-z,zdot_d-zdot,zddot_d,fz,bz,lambda_z,kappa_z,eta_z);
+[U1, s1] = smc(z_d-z,zdot_d-zdot,zddot_d,fz,bz,lambda_z,kappa_z,eta_z);
 
 if U1 > maxThrust
     U1 = maxThrust;
@@ -76,7 +76,8 @@ end
 % thetadot_c = 0;
 % thetadot_c = (control_p.lambda_x*(xdot_d - xdot) +control_p.lambda_xdot*(xddot_d - xddot))*M/((M+m)*g);% + m*alphadot/(M+m);
 
-theta_c = (xddot_d + control_p.lambda_x*(x_d - x) + control_p.lambda_xdot*(xdot_d -xdot))*M/((M+m*cos(alpha)^2)*g);
+% theta_c = (xddot_d + control_p.lambda_x*(x_d - x) + control_p.lambda_xdot*(xdot_d -xdot))*M/((M+m*cos(alpha)^2)*g);
+theta_c = 0;
 thetadot_c = 0;
 % den = g*( M + m*cos(alpha)^2 + (M - m*cos(alpha)*sin(alpha)*alphadot)*theta);
 % thetadot_c = (control_p.lambda_x*(xdot_d - xdot) + control_p.lambda_xdot*(xddot_d - xddot))*M/den;
@@ -87,10 +88,10 @@ edot = [xdot_d thetadot_c]' - [xdot thetadot]';
 f = [fx+bx*U1 0]';
 b = [0 btheta]';
 lambda = [lambda_x lambda_theta lambda_xdot lambda_thetadot]';
-U2 = smcu([e;edot],[xddot_d 0]',f,b,lambda,kappa_xtheta,eta_xtheta);
+[U2, s2] = smcu([e;edot],[xddot_d 0]',f,b,lambda,kappa_xtheta,eta_xtheta);
 
 u = [U1;U2];
-
+s = [s1(:); s2(:)];
 % Rotors velocities calculation
 % u = sqrt([kt kt; -r*kt r*kt]\[U1; U2]);
 

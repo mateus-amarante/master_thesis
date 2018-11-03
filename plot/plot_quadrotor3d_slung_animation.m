@@ -97,8 +97,8 @@ for i=1:length(t)
 %     frame = getframe(gcf);
 %     writeVideo(v,frame);
     
-%     time = toc;
-%     pause(dt-time);
+    time = toc;
+    pause(dt-time);
     
 end
 
