@@ -6,16 +6,17 @@ z = q(:,2);
 theta = q(:,3);
 alpha = q(:,4);
 
-% xdot = qdot(:,1);
-% zdot = qdot(:,2);
+xdot = qdot(:,1);
+zdot = qdot(:,2);
+thetadot = qdot(:,3);
+alphadot = qdot(:,4);
 
 xd = qd(:,1);
 zd = qd(:,2);
+xdot_d = qd(:,3);
+zdot_d = qd(:,4);
 
-% xdot_d = qd(:,3);
-% zdot_d = qd(:,4);
-
-%% Plot Robot State
+%% Plot Robot Position and Orientation
 figure;
 
 subplot(2,1,1);
@@ -30,13 +31,24 @@ legend('$$\theta$$','$$\alpha$$');
 
 xlabel('Time [s]');
 fig = gcf;
-title(fig.Children(end), 'Robot State');
+title(fig.Children(end), 'Robot Pose');
 
-% figure;
-% plot(t,[xdot zdot],t,[xdot_d zdot_d]);
-% legend('$$\dot{x}$$','$$\dot{z}$$','$$\dot{x}_d$$','$$\dot{z}_d$$');
-% title('Velocities');
-% xlabel('Time [s]');
+%% Plot Robot Lienar and Angular Velocities
+figure;
+
+subplot(2,1,1);
+plot(t,[xdot zdot xdot_d zdot_d]);
+legend('$$\dot{x}$$','$$\dot{z}$$','$$\dot{x}_d$$','$$\dot{z}_d$$');
+ylabel('Linear Velocity [m/s]');
+
+subplot(2,1,2);
+plot(t,[thetadot alphadot]);
+ylabel('Angular Velocity [rad/s]');
+legend('$$\dot{\theta}$$','$$\dot{\alpha}$$');
+
+xlabel('Time [s]');
+fig = gcf;
+title(fig.Children(end), 'Robot Twist');
 
 %% Plot Control Input
 figure;
@@ -59,11 +71,13 @@ for i=1:length(t)
     s(:,i) = ss;
 end
 
-sdot = diff(s')/(t(2)-t(1));
-% 
-figure;
+% sdot = diff(s')/(t(2)-t(1));
 % plot(s(1,1:end-1),sdot(:,1));
-% plot(t,s);
-plot(t, s.^2)
 
+figure;
+plot(t, s.^2);
+xlabel('Time [s]');
+ylabel('$$s^2$$');
+fig = gcf;
+title(fig.Children(end), 'Lyapunov Function');
 end
