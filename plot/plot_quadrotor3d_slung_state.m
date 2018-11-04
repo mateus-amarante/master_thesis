@@ -13,16 +13,16 @@ phiL = q(:,7);
 thetaL = q(:,8);
 
 % Robot Velocity
-% xdot = qdot(:,1);
-% ydot = qdot(:,2);
-% zdot = qdot(:,3);
-% 
-% phidot = qdot(:,4);
-% thetadot = qdot(:,5);
-% psidot = qdot(:,6);
-% 
-% phiLdot = qdot(:,7);
-% thetaLdot = qdot(:,8);
+xdot = qdot(:,1);
+ydot = qdot(:,2);
+zdot = qdot(:,3);
+
+phidot = qdot(:,4);
+thetadot = qdot(:,5);
+psidot = qdot(:,6);
+
+phiLdot = qdot(:,7);
+thetaLdot = qdot(:,8);
 
 % Desired State
 xd = qd(:,1);
@@ -30,10 +30,10 @@ yd = qd(:,2);
 zd = qd(:,3);
 psid = qd(:,4);
 
-% xdot_d = qd(:,5);
-% ydot_d = qd(:,6);
-% zdot_d = qd(:,7);
-% psidot_d = qd(:,8);
+xdot_d = qd(:,5);
+ydot_d = qd(:,6);
+zdot_d = qd(:,7);
+psidot_d = qd(:,8);
 
 
 %% Plot Robot State
@@ -51,6 +51,24 @@ ylabel('Aircraft/Load Orientation[rad]');
 xlabel('Time [s]');
 fig = gcf;
 title(fig.Children(end), 'Robot State');
+
+
+%% Plot Robot Lienar and Angular Velocities
+figure;
+
+subplot(2,1,1);
+plot(t,[xdot ydot zdot xdot_d ydot_d zdot_d]);
+legend('$$\dot{x}$$','$$\dot{y}$$','$$\dot{z}$$','$$\dot{x}_d$$','$$\dot{y}_d$$','$$\dot{z}_d$$');
+ylabel('Linear Velocity [m/s]');
+
+subplot(2,1,2);
+plot(t,[phidot thetadot psidot phiLdot thetaLdot psidot_d]);
+ylabel('Angular Velocity [rad/s]');
+legend('$$\dot{\phi}$$','$$\dot{\theta}$$','$$\dot{\psi}$$','$$\dot{\phi}_L$$','$$\dot{\theta}_L$$','$$\dot{\psi}_d$$');
+
+xlabel('Time [s]');
+fig = gcf;
+title(fig.Children(end), 'Robot Twist');
 
 
 %% Plot Control Input
