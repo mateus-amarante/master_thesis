@@ -102,6 +102,6 @@ pqr_dot = Iinv*(U(2:4) + cross(pqr,I*pqr));
 rpy_ddot = Tib*(pqr_dot-Tbi_dot*rpy_dot);
 
 %% Output remapping
-qddot = [linear_acc(1:3); rpy_ddot; linear_acc(4:5)];
+qddot = [linear_acc(1:3); pqr_dot; linear_acc(4:5)];
 
 end
