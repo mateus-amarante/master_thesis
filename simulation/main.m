@@ -4,8 +4,9 @@ startup
 % [physics_p, control_p, traj_p, plot_p] = nested2d_config();
 % [physics_p, control_p, traj_p, plot_p] = smc2d_config();
 % [physics_p, control_p, traj_p, plot_p] = nested2d_slung_config();
-% [physics_p, control_p, traj_p, plot_p] = smc2d_slung_config();
-[physics_p, control_p, traj_p, plot_p] = smc3d_slung_config();
+[physics_p, control_p, traj_p, plot_p] = smc2d_slung_config();
+% [physics_p, control_p, traj_p, plot_p] = smc2d_slung_config2();
+% [physics_p, control_p, traj_p, plot_p] = smc3d_slung_config();
 
 % [physics_p, control_p, traj_p, plot_p] = nested3d_config();
 % [physics_p, control_p, traj_p, plot_p] = nested3d_slung_config();
@@ -22,5 +23,5 @@ for i=1:length(t)
     u(i,:) = control_p.control_fun(q(i,:)',q_dot(i,:)',qd(i,:)',physics_p,control_p)';
 end
 
-plot_p.plot_state(t,q,q_dot,qd,u,physics_p);
+plot_p.plot_state(t,q,q_dot,qd,u,physics_p,control_p);
 plot_p.plot_animation(t,q,qd,physics_p);

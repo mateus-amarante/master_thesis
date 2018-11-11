@@ -10,11 +10,13 @@ addpath('auxiliary','control','controllers','dynamics','physical_params',...
 % [physics_p, control_p, traj_p, plot_p] = smc2d_config();
 % [physics_p, control_p, traj_p, plot_p] = nested2d_slung_config();
 % [physics_p, control_p, traj_p, plot_p] = smc2d_slung_config();
-[physics_p, control_p, traj_p, plot_p] = smc3d_slung_config();
+[physics_p, control_p, traj_p, plot_p] = smc2d_slung_config2();
+% [physics_p, control_p, traj_p, plot_p] = smc3d_slung_config();
 % optimization_function = @nested2d_xzerror_optfun;
 % optimization_function = @smc2d_xzerror_optfun;
-optimization_function = @smc3d_xyzpsi_error_optfun;
- 
+% optimization_function = @smc3d_xyzpsi_error_optfun;
+optimization_function = @smc2d_xzerror_optfun2; 
+
 % warnId = 'MATLAB:ode45:IntegrationTolNotMet';
 % warnstate = warning('warning', warnId);
 
