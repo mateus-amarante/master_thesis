@@ -19,19 +19,33 @@ xlim(xlim_values);
 ylim(ylim_values);
 axis equal
 
+line(xd,zd,'Color','g');
+
+i = 1;
+
+q_line = line(x(1:i),z(1:i),'Color','r');
+
+rotor_x = [x(i) x(i)] + r*[ cos(theta(i)) -cos(theta(i))];
+rotor_z = [z(i) z(i)] + r*[-sin(theta(i))  sin(theta(i))];
+
+drone_line = line(rotor_x,rotor_z,'Color','k','LineWidth',1);
+
+tic;
 
 for i=1:length(t)
     rotor_x = [x(i) x(i)] + r*[ cos(theta(i)) -cos(theta(i))];
     rotor_z = [z(i) z(i)] + r*[-sin(theta(i))  sin(theta(i))];
     
-    cla
-    tic;
-    line(xd,zd,'Color','g')
-    line(x(1:i),z(1:i),'Color','r')
-    line(rotor_x,rotor_z,'Color','k','LineWidth',1)
+%     cla
+    q_line.XData = x(1:i);
+    q_line.YData = z(1:i);
+    
+    drone_line.XData = rotor_x;
+    drone_line.YData = rotor_z;
     
     time = toc;
     pause(dt-time);
+    tic;
     
 end
 
