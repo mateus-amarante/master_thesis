@@ -86,17 +86,17 @@ xlabel('Time [s]');
 fig = gcf;
 title(fig.Children(end), 'Control Input');
 
-%% Plot sliding variables
-for i=1:length(t)
-    % FIXME: state variables are temporarily transposed for nested3d_control
-    [~, ss] = control_p.control_fun(q(i,:)',qdot(i,:)',qd(i,:)',physics_p,control_p);
-    s(:,i) = ss;
-end
-
-sdot = diff(s')/(t(2)-t(1));
-% 
-figure;
-% plot(s(3,1:end-1),sdot(:,3));
-plot(t,s.^2);
+% % Plot sliding variables
+% % for i=1:length(t)
+% %     FIXME: state variables are temporarily transposed for nested3d_control
+% %     [~, ss] = control_p.control_fun(q(i,:)',qdot(i,:)',qd(i,:)',physics_p,control_p);
+% %     s(:,i) = ss;
+% % end
+% % 
+% % sdot = diff(s')/(t(2)-t(1));
+% % 
+% % figure;
+% % plot(s(3,1:end-1),sdot(:,3));
+% % plot(t,s.^2);
 
 end
