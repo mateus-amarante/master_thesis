@@ -1,4 +1,4 @@
-function [physics_p, control_p, traj_p, plot_p] = smc2d_slung_config2()
+function [physics_p, control_p, traj_p, sim_p, plot_p] = smc2d_slung_config2()
 
 % Physical parameters
 physics_p = quadrotor2d_slung_physics();
@@ -24,38 +24,20 @@ control_p.n_input = 6;
 
 control_p.control_fun = @smc2d_slung_controller2;
 
-% Trajectory parameters
-xd = 4;
-zd = 2;
-T = 3;
+% Trajectory and simulation parameters
+xd = 5;
+zd = 3;
+T = 4;
+wait_time = 1;
 steady_time = 3;
-dt = .01;
-% traj_p = simple2d_shaped_trajectory(xd,zd,T,steady_time,dt,physics_p);
-% traj_p = simple2d_trajectory(xd,zd,T,steady_time,dt);
+dt = .02;
 
-% Trajectory parameters
-xd = [0 0 0 1 1 1 1]';
-zd = [0 0 0 1 1 1 1]';
+% traj_p = simple_smooth_trajectory([xd zd], T, wait_time, steady_time);
+traj_p = simple_shaped_trajectory([xd zd], T, wait_time, steady_time, dt, physics_p);
 
-pos = [xd zd];
-vel = zeros(size(pos));
-acc = zeros(size(pos));
-
-traj_p.Tf = 12;
-traj_p.dt = .02;
-traj_p.t = 0:traj_p.dt:traj_p.Tf;
-
-td = linspace(0,traj_p.Tf,length(xd));
-q = [pos vel acc];
-n_vars = size(pos,2);
-n_deriv_out = 3;
-
-% traj_p = simple3d_trajectory(xd,yd,zd,psid,T,steady_time,dt);
-% traj_p = simple3d_shaped_trajectory(xd,yd,zd,psid,T,steady_time,dt,physics_p);
-traj_p = shaped_poly_trajectory(td, q, n_vars, n_deriv_out, traj_p, physics_p);
-
-
-traj_p.x0 = zeros(8,1);
+sim_p.x0 = zeros(8, 1);
+sim_p.dyn_fun = @quadrotor2d_slung;
+sim_p.t = 0:dt:(wait_time + T + steady_time);
 
 % Plot parameters
 plot_p.plot_state = @plot_quadrotor2d_slung_state;

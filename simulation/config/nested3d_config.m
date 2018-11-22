@@ -1,8 +1,7 @@
-function [physics_p, control_p, traj_p, plot_p] = nested3d_config()
+function [physics_p, control_p, traj_p, sim_p, plot_p] = nested3d_config()
 
 % Physical parameters
 physics_p = quadrotor3d_slung_physics();
-physics_p.dyn_fun = @quadrotor3d;
 
 % Control parameters
 control_p.kp_xyz = [50 50 50]';
@@ -18,10 +17,17 @@ xd = 2;
 yd = 4;
 zd = 3;
 psid = -pi/6;
-T = 3;
-steady_time = 2;
-dt = .01;
-traj_p = simple3d_trajectory(xd,yd,zd,psid,T,steady_time,dt);
+T = 4;
+wait_time = 1;
+steady_time = 3;
+dt = .02;
+
+% traj_p = simple_smooth_trajectory([xd zd], T, wait_time, steady_time);
+traj_p = simple_shaped_trajectory([xd yd zd psid], T, wait_time, steady_time, dt, physics_p);
+
+sim_p.x0 = zeros(12, 1);
+sim_p.dyn_fun = @quadrotor3d;
+sim_p.t = 0:dt:(wait_time + T + steady_time);
 
 % Plot parameters
 plot_p.plot_state = @plot_quadrotor3d_state;
