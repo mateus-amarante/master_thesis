@@ -38,6 +38,10 @@ pos = [xd yd zd psid];
 vel = zeros(size(pos));
 acc = zeros(size(pos));
 
+traj_p.Tf = 12;
+traj_p.dt = .02;
+traj_p.t = 0:traj_p.dt:traj_p.Tf;
+
 td = linspace(0,traj_p.Tf,length(xd));
 q = [pos vel acc];
 n_vars = size(pos,2);
@@ -48,6 +52,7 @@ traj_p = shaped_poly_trajectory(td, q, n_vars, n_deriv_out, traj_p, physics_p);
 
 sim_p.x0 = zeros(16, 1);
 sim_p.dyn_fun = @quadrotor3d_slung;
+sim_p.t = traj_p.t;
 % sim_p.t = 0:dt:(wait_time + T + steady_time);
 
 % Plot parameters
