@@ -1,4 +1,3 @@
-% function plot_quadrotor3d_slung(t,r,xyz_d,xyz,rpy,xyz_load)
 function plot_quadrotor3d_slung_animation(t,q,qd,physics_p)
 
 % Physical Parameters
@@ -46,12 +45,27 @@ xe = xe*r_l; ye = ye*r_l; ze = ze*r_l;
 
 figure('units','normalized','outerposition',[0 0 1 1]);
 grid on;
+view(3);
+
+load_sphere = surf(xe*eps, ye*eps, ze*eps);
+load_sphere.EdgeColor = 'none';
+load_sphere.FaceLighting = 'gouraud';
+shading interp;
+
 xlim(xlim_values);
 ylim(ylim_values);
 zlim(zlim_values);
 axis equal;
-view(3);
-hold on;
+
+line(xd,yd,zd,'Color','g');
+
+q_line = line(x(1),y(1),z(1),'Color','r');
+qL_line = line(xyz_load(1,1),xyz_load(1,1),xyz_load(1,1),'Color','m','LineWidth',1);
+
+drone_line_13 = line(x(1),x(1),x(1),'Color','k','LineWidth',1);
+drone_line_24 = line(x(1),x(1),x(1),'Color','k','LineWidth',1);
+
+cable_line = line(x(1),x(1),x(1),'Color','k','LineWidth',1);
 
 % v = VideoWriter('peaks.avi','MPEG-4');
 % v.FrameRate = 50;
@@ -77,28 +91,35 @@ for i=1:length(t)
     rotors24_y = [rotor2_pos(2) rotor4_pos(2)];
     rotors24_z = [rotor2_pos(3) rotor4_pos(3)];
     
-    cla;
-    s = surf(xe + pos_load(1), ye + pos_load(2), ze + pos_load(3));
-    s.EdgeColor = 'none';
-    s.FaceLighting = 'gouraud';
-%     s.FaceColor = 'b';
-    shading interp;
-   
-    tic;  
-    line(xd,yd,zd,'Color','g');
-    line(x(1:i),y(1:i),z(1:i),'Color','r');
-    line(xyz_load(1:i,1),xyz_load(1:i,2),xyz_load(1:i,3),'Color','m');
+    q_line.XData = x(1:i);
+    q_line.YData = y(1:i);
+    q_line.ZData = z(1:i);
     
-    line(rotors13_x,rotors13_y,rotors13_z,'Color','k','LineWidth',2);
-    line(rotors24_x,rotors24_y,rotors24_z,'Color','k','LineWidth',2);
+    qL_line.XData = xyz_load(1:i,1);
+    qL_line.YData = xyz_load(1:i,2);
+    qL_line.ZData = xyz_load(1:i,3);
+        
+    drone_line_13.XData = rotors13_x;
+    drone_line_13.YData = rotors13_y;
+    drone_line_13.ZData = rotors13_z;
     
-    line([pos(1) pos_load(1)],[pos(2) pos_load(2)],[pos(3) pos_load(3)],'Color','k'); % Cable
+    drone_line_24.XData = rotors24_x;
+    drone_line_24.YData = rotors24_y;
+    drone_line_24.ZData = rotors24_z;
+    
+    cable_line.XData = [pos(1) pos_load(1)];
+    cable_line.YData = [pos(2) pos_load(2)];
+    cable_line.ZData = [pos(3) pos_load(3)];
+    
+    load_sphere.XData = xe + pos_load(1);
+    load_sphere.YData = ye + pos_load(2);
+    load_sphere.ZData = ze + pos_load(3);
     
 %     frame = getframe(gcf);
 %     writeVideo(v,frame);
     
-    time = toc;
-    pause(dt-time);
+    pause(dt-toc);
+    tic;
     
 end
 
