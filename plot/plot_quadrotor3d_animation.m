@@ -29,6 +29,13 @@ zlim(zlim_values);
 axis equal;
 view(3);
 
+line(xd,yd,zd,'Color','g');
+
+q_line = line(x(1),y(1),z(1),'Color','r');
+
+drone_line_13 = line(x(1),x(1),x(1),'Color','k','LineWidth',1);
+drone_line_24 = line(x(1),x(1),x(1),'Color','k','LineWidth',1);
+
 for i=1:length(t)
     pos = (xyz(i,:))';
     ang = (rpy(i,:));
@@ -47,16 +54,20 @@ for i=1:length(t)
     rotors24_y = [rotor2_pos(2) rotor4_pos(2)];
     rotors24_z = [rotor2_pos(3) rotor4_pos(3)];
     
-    cla;
+    q_line.XData = x(1:i);
+    q_line.YData = y(1:i);
+    q_line.ZData = z(1:i);
+    
+    drone_line_13.XData = rotors13_x;
+    drone_line_13.YData = rotors13_y;
+    drone_line_13.ZData = rotors13_z;
+    
+    drone_line_24.XData = rotors24_x;
+    drone_line_24.YData = rotors24_y;
+    drone_line_24.ZData = rotors24_z;
+    
+    pause(dt-toc);
     tic;
-    line(xd,yd,zd,'Color','g');
-    line(x(1:i),y(1:i),z(1:i),'Color','r');
-    
-    line(rotors13_x,rotors13_y,rotors13_z,'Color','k','LineWidth',1);
-    line(rotors24_x,rotors24_y,rotors24_z,'Color','k','LineWidth',1);
-    
-    time = toc;
-    pause(dt-time);
 end
 
 end
