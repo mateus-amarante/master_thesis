@@ -30,10 +30,12 @@ end
 xyz_d = qd(:,1:3);
 
 dt = t(2)-t(1);
-offset = .5;
-xlim_values = [min(xyz_load(:,1))-offset max(xyz(:,1))+offset];
-ylim_values = [min(xyz_load(:,2))-offset max(xyz(:,2))+offset];
-zlim_values = [min(xyz_load(:,3))-offset max(xyz(:,3))+offset];
+
+offset_xy = .9*L;
+offset_z = 2*r;
+xlim_values = [min(xyz_load(:,1))-offset_xy, max(xyz(:,1))+offset_xy];
+ylim_values = [min(xyz_load(:,2))-offset_xy, max(xyz(:,2))+offset_xy];
+zlim_values = [min(xyz_load(:,3))-offset_z,  max(xyz(:,3))+offset_z];
 
 xd=xyz_d(:,1);
 yd=xyz_d(:,2);
@@ -52,10 +54,11 @@ load_sphere.EdgeColor = 'none';
 load_sphere.FaceLighting = 'gouraud';
 shading interp;
 
+axis equal;
 xlim(xlim_values);
 ylim(ylim_values);
 zlim(zlim_values);
-axis equal;
+% axis equal;
 
 line(xd,yd,zd,'Color','g');
 

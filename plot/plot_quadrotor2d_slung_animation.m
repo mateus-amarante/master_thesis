@@ -17,14 +17,16 @@ zd = qd(:,2);
 
 figure('units','normalized','outerposition',[0 0 1 1]);
 
+offset_x = .9*L;
+offset_z = 2*r;
 dt = t(2)-t(1);
-xlim_values = [min(min(x)-2*r, min(xload)) max(max(x)+2*r, max(xload))];
-ylim_values = [min(min(z)-2*r, min(zload)) max(max(z)+2*r, max(zload))];
+xlim_values = [min(xload)-offset_x, max(x)+offset_x];
+ylim_values = [min(zload)-offset_z, max(z)+offset_z];
 
-
+axis equal;
 xlim(xlim_values);
 ylim(ylim_values);
-axis equal;
+% axis equal;
 
 line(xd,zd,'Color','g'); % Desired Trajectory
 
