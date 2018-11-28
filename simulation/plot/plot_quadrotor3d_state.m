@@ -1,4 +1,4 @@
-function plot_quadrotor3d_state(t,q,qdot,qd,u,physics_p)
+function plot_quadrotor3d_state(t,q,qdot,qd,u,physics_p,control_p)
 
 % Robot Position
 x = q(:,1);
