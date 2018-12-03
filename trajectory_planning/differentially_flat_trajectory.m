@@ -4,35 +4,19 @@ function [flat_outputs] = differentially_flat_trajectory(flat_rL, flat_yaw, phys
     M = physics_p.M;
     g = physics_p.g;
     I = physics_p.I;
-    Ix = physics_p.Ix;
-    Iy = physics_p.Iy;
-    Iz = physics_p.Iz;
 
     L = physics_p.L;
     m = physics_p.m;
 
     % Auxiliar variables
-    ez = [0, 0, 1]';
+    ez = [0, 0, 1];
 
     % Auxiliar functions
     rLvec = @(der)flat_rL(:, der * 3 + 1:(der + 1) * 3);
-    yaw = @(der)flat_yaw(:, der);
-
-    % State renaming
-    % xLddot = rLvec(2)(:, 1);
-    % yLddot = rLvec(2)(:, 2);
-    % zLddot = rLvec(2)(:, 3);
-
-    % xL3dot = rLvec(3)(:, 1);
-    % yL3dot = rLvec(3)(:, 2);
-    % zL3dot = rLvec(3)(:, 3);
-
-    % xL4dot = rLvec(4)(:, 1);
-    % yL4dot = rLvec(4)(:, 2);
-    % zL4dot = rLvec(4)(:, 3);
+    yaw = @(der)flat_yaw(:, der+1);
 
     % Cable tension determination
-    Tp = -m * rLvec(2) - m * g * ez';
+    Tp = -m * rLvec(2) - m * g * ez;
     p = Tp ./ vecnorm(Tp, 2, 2);
     T = dot(Tp, p, 2);
 
@@ -70,5 +54,45 @@ function [flat_outputs] = differentially_flat_trajectory(flat_rL, flat_yaw, phys
     r4dot = rLvec(4) - L * p4dot;
 
     flat_outputs = [r rdot rddot r3dot r4dot];
+
+    % Rotation Matrix
+    t = M * rddot - Tp + M * g;
+    ezb = t ./ vecnorm(t, 2, 2);
+
+    exc = [cos(yaw(0)), sin(yaw(0)), zeros(size(t, 1), 1)];
+
+    aux = cross(ezb, exc, 2);
+    eyb = aux ./ vecnorm(aux, 2, 2);
+    exb = cross(eyb, ezb, 2);
+
+    Rvec = [exb eyb ezb];
+    
+    % Euler angles (TODO)
+    
+
+    % Thrust force
+    u1 = vecnorm(t, 2, 2);
+
+    % Angular velocity
+    hw = M ./ u1 .* (r3dot - dot(r3dot, ezb, 2) .* ezb);
+
+    p = -dot(hw, eyb, 2);
+    q = dot(hw, exb, 2);
+    r = dot(yaw(1) .* ez, ezb, 2);
+
+    omega = [p, q, r];
+    
+    % Angular velocities in inertial frame (TODO)
+    
+    % Angular acceleration (TODO)
+%     halpha
+%     
+%     pdot
+%     qdot
+%     rdot
+%     
+%     alpha
+    
+    % Input torques (TODO)
     
 end
