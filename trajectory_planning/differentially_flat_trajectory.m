@@ -13,12 +13,18 @@ function [flat_outputs] = differentially_flat_trajectory(flat_rL, flat_yaw, phys
 
     % Auxiliar functions
     rLvec = @(der)flat_rL(:, der * 3 + 1:(der + 1) * 3);
-    yaw = @(der)flat_yaw(:, der+1);
+    yaw = @(der)flat_yaw(:, der + 1);
 
     % Cable tension determination
     Tp = -m * rLvec(2) - m * g * ez;
     p = Tp ./ vecnorm(Tp, 2, 2);
     T = dot(Tp, p, 2);
+
+    % Compute load angle
+    thetaL = asin(p(:, 1));
+    phiL = acos(p(:, 3) ./ cos(thetaL));
+
+    % Compute load angular velocity/acceleration (TODO)
 
     % Tension magnitude derivatives
     Tdot = m^2 * dot(rLvec(2) + [0, 0, g], rLvec(3), 2) ./ T;
@@ -47,13 +53,11 @@ function [flat_outputs] = differentially_flat_trajectory(flat_rL, flat_yaw, phys
         (m * rLvec(6) + p .* T4dot + 2 * Tdot .* p3dot + 5 * Tddot .* pddot + 4 * T3dot .* pdot) .* T.^2) ./ T.^3;
 
     % Drone state
-    r = rLvec(0) - L * p;
-    rdot = rLvec(1) - L * pdot;
+    rvec = rLvec(0) - L * p;
+    rvecdot = rLvec(1) - L * pdot;
     rddot = rLvec(2) - L * pddot;
     r3dot = rLvec(3) - L * p3dot;
     r4dot = rLvec(4) - L * p4dot;
-
-    flat_outputs = [r rdot rddot r3dot r4dot];
 
     % Rotation Matrix
     t = M * rddot - Tp + M * g;
@@ -65,15 +69,13 @@ function [flat_outputs] = differentially_flat_trajectory(flat_rL, flat_yaw, phys
     eyb = aux ./ vecnorm(aux, 2, 2);
     exb = cross(eyb, ezb, 2);
 
-    Rvec = [exb eyb ezb];
-    
-    % Euler angles (TODO)
-    
+    Rvec = [exb, eyb, ezb];
 
     % Thrust force
     u1 = vecnorm(t, 2, 2);
 
     % Angular velocity
+    u1dot = M*dot(r3dot, ezb, 2);
     hw = M ./ u1 .* (r3dot - dot(r3dot, ezb, 2) .* ezb);
 
     p = -dot(hw, eyb, 2);
@@ -81,18 +83,40 @@ function [flat_outputs] = differentially_flat_trajectory(flat_rL, flat_yaw, phys
     r = dot(yaw(1) .* ez, ezb, 2);
 
     omega = [p, q, r];
-    
-    % Angular velocities in inertial frame (TODO)
-    
-    % Angular acceleration (TODO)
-%     halpha
-%     
-%     pdot
-%     qdot
-%     rdot
-%     
-%     alpha
-    
+
+    % Angular acceleration
+    aux = cross(omega, cross(omega, u1 .* ezb, 2), 2);
+    u1ddot = M * dot(r4dot, ezb, 2) - dot(aux, ezb, 2);
+    halpha = M * r4dot - u1ddot .* ezb - 2 * cross(omega, u1dot .* ezb, 2) - aux;
+
+    pdot = -dot(halpha, eyb, 2);
+    qdot = dot(halpha, exb, 2);
+    rdot = dot(yaw(2) .* ez, ezb, 2);
+
+    omegadot = [pdot, qdot, rdot];
+
     % Input torques (TODO)
-    
+    Tau = (I * omegadot')' + cross(omega, (I * omega')', 2);
+
+    % Euler angles and angular velocity/acceleration in inertial frame
+
+    rpy = zeros(size(ezb));
+    rpy_dot = rpy;
+    rpy_ddot = rpy;
+
+    for i = 1:size(Rvec, 1)
+        rpy(i, :) = fliplr(rotm2eul(reshape(Rvec(i, :), [3, 3])));
+
+        Tib = Ti2b(rpy(i, 1), rpy(i, 2));
+        Tbi = Tb2i(rpy(i, 1), rpy(i, 2));
+        Tbi_dot = Tb2i_dot(rpy(i, 1), rpy(i, 2), omega(i, 1), omega(i, 2));
+
+        rpy_dot(i, :) = (Tbi * rpy(i, :)')';
+        rpy_ddot(i, :) = (Tib * (omegadot(i, :)' - Tbi_dot * rpy_dot(i, :)'))';
+    end
+
+    flat_outputs = [rvec, rpy, phiL, thetaL];
+    % flat_outputs = [rvec, rvedot, rddot, r3dot, r4dot, rpy, phiL, thetaL, pqr, rqpy_dot, phiLdot, thetaLdot];
+
 end
+    
