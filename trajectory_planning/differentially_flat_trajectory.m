@@ -17,12 +17,15 @@ function [flat_outputs] = differentially_flat_trajectory(flat_rL, flat_yaw, phys
 
     % Cable tension determination
     Tp = -m * rLvec(2) - m * g * ez;
-    p = Tp ./ vecnorm(Tp, 2, 2);
-    T = dot(Tp, p, 2);
+    pvec = Tp ./ vecnorm(Tp, 2, 2);
+    T = dot(Tp, pvec, 2);
 
     % Compute load angle
-    thetaL = asin(p(:, 1));
-    phiL = acos(p(:, 3) ./ cos(thetaL));
+    % thetaL = asin(pvec(:, 1));
+    % phiL = acos(-pvec(:, 3) ./ cos(thetaL));
+    phiL = asin(pvec(:, 2));
+    thetaL = asin(-pvec(:, 1) ./ cos(phiL));
+
 
     % Compute load angular velocity/acceleration (TODO)
 
@@ -40,27 +43,27 @@ function [flat_outputs] = differentially_flat_trajectory(flat_rL, flat_yaw, phys
         (aux6 - 2 .* Tdot .* T3dot - 2 * Tddot.^2) .* T.^2) ./ T.^3;
 
     % Tension unit vector derivatives
-    pdot = -(m * rLvec(3) + p .* Tdot) ./ T;
+    pvecdot = -(m * rLvec(3) + pvec .* Tdot) ./ T;
 
-    aux2 = m * rLvec(4) + p .* Tddot + 2 * Tdot .* pdot;
+    aux2 = m * rLvec(4) + pvec .* Tddot + 2 * Tdot .* pvecdot;
     pddot = -aux2 ./ T;
 
-    p3dot = (aux2 .* Tdot - (m * rLvec(5) + p .* T3dot + 2 * Tdot .* pddot + 3 * Tddot .* pdot) .* T) ./ T.^2;
+    p3dot = (aux2 .* Tdot - (m * rLvec(5) + pvec .* T3dot + 2 * Tdot .* pddot + 3 * Tddot .* pvecdot) .* T) ./ T.^2;
 
-    p4dot = (-2 * aux2 .* Tdot.^2 + ((m * rLvec(4) + p .* Tddot + Tdot .* pdot) .* Tddot + ...
-        2 * (m * rLvec(5) + p .* T3dot + Tdot .* pddot + 2 * Tddot .* pdot) .* Tdot + ...
-        2 * Tdot.^2 .* pddot + 3 * Tdot .* Tddot .* pdot) .* T - ...
-        (m * rLvec(6) + p .* T4dot + 2 * Tdot .* p3dot + 5 * Tddot .* pddot + 4 * T3dot .* pdot) .* T.^2) ./ T.^3;
+    p4dot = (-2 * aux2 .* Tdot.^2 + ((m * rLvec(4) + pvec .* Tddot + Tdot .* pvecdot) .* Tddot + ...
+        2 * (m * rLvec(5) + pvec .* T3dot + Tdot .* pddot + 2 * Tddot .* pvecdot) .* Tdot + ...
+        2 * Tdot.^2 .* pddot + 3 * Tdot .* Tddot .* pvecdot) .* T - ...
+        (m * rLvec(6) + pvec .* T4dot + 2 * Tdot .* p3dot + 5 * Tddot .* pddot + 4 * T3dot .* pvecdot) .* T.^2) ./ T.^3;
 
     % Drone state
-    rvec = rLvec(0) - L * p;
-    rvecdot = rLvec(1) - L * pdot;
+    rvec = rLvec(0) - L * pvec;
+    rvecdot = rLvec(1) - L * pvecdot;
     rddot = rLvec(2) - L * pddot;
     r3dot = rLvec(3) - L * p3dot;
     r4dot = rLvec(4) - L * p4dot;
 
     % Rotation Matrix
-    t = M * rddot - Tp + M * g;
+    t = M * rddot - Tp + M * g * ez;
     ezb = t ./ vecnorm(t, 2, 2);
 
     exc = [cos(yaw(0)), sin(yaw(0)), zeros(size(t, 1), 1)];
@@ -75,7 +78,7 @@ function [flat_outputs] = differentially_flat_trajectory(flat_rL, flat_yaw, phys
     u1 = vecnorm(t, 2, 2);
 
     % Angular velocity
-    u1dot = M*dot(r3dot, ezb, 2);
+    u1dot = M * dot(r3dot, ezb, 2);
     hw = M ./ u1 .* (r3dot - dot(r3dot, ezb, 2) .* ezb);
 
     p = -dot(hw, eyb, 2);
@@ -119,4 +122,3 @@ function [flat_outputs] = differentially_flat_trajectory(flat_rL, flat_yaw, phys
     % flat_outputs = [rvec, rvedot, rddot, r3dot, r4dot, rpy, phiL, thetaL, pqr, rqpy_dot, phiLdot, thetaLdot];
 
 end
-    
