@@ -1,12 +1,12 @@
 startup
 
 % PICK YOUR CONFIG FUNCTION
-[physics_p, control_p, traj_p, sim_p, plot_p] = nested2d_config();
+% [physics_p, control_p, traj_p, sim_p, plot_p] = nested2d_config();
 % [physics_p, control_p, traj_p, sim_p, plot_p] = smc2d_config();
 % [physics_p, control_p, traj_p, sim_p, plot_p] = nested2d_slung_config();
 % [physics_p, control_p, traj_p, sim_p, plot_p] = smc2d_slung_config();
 % [physics_p, control_p, traj_p, sim_p, plot_p] = smc2d_slung_config2();
-% [physics_p, control_p, traj_p, sim_p, plot_p] = smc3d_slung_config();
+[physics_p, control_p, traj_p, sim_p, plot_p] = smc3d_slung_config();
 % [physics_p, control_p, traj_p, sim_p, plot_p] = nested3d_config();
 % [physics_p, control_p, traj_p, sim_p, plot_p] = nested3d_slung_config();
 

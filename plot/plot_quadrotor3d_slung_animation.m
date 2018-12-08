@@ -75,6 +75,8 @@ cable_line = line(x(1),x(1),x(1),'Color','k','LineWidth',1);
 % open(v);
 
 for i=1:length(t)
+    tic;
+    
     pos = (xyz(i,:))';
     ang = (rpy(i,:));
     R = eul2rotm(flip(ang));
@@ -122,7 +124,6 @@ for i=1:length(t)
 %     writeVideo(v,frame);
     
     pause(dt-toc);
-    tic;
     
 end
 
