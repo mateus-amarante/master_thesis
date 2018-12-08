@@ -20,15 +20,6 @@ function [flat_outputs] = differentially_flat_trajectory(flat_rL, flat_yaw, phys
     pvec = Tp ./ vecnorm(Tp, 2, 2);
     T = dot(Tp, pvec, 2);
 
-    % Compute load angle
-    % thetaL = asin(pvec(:, 1));
-    % phiL = acos(-pvec(:, 3) ./ cos(thetaL));
-    phiL = asin(pvec(:, 2));
-    thetaL = asin(-pvec(:, 1) ./ cos(phiL));
-
-
-    % Compute load angular velocity/acceleration (TODO)
-
     % Tension magnitude derivatives
     Tdot = m^2 * dot(rLvec(2) + [0, 0, g], rLvec(3), 2) ./ T;
 
@@ -54,6 +45,18 @@ function [flat_outputs] = differentially_flat_trajectory(flat_rL, flat_yaw, phys
         2 * (m * rLvec(5) + pvec .* T3dot + Tdot .* pddot + 2 * Tddot .* pvecdot) .* Tdot + ...
         2 * Tdot.^2 .* pddot + 3 * Tdot .* Tddot .* pvecdot) .* T - ...
         (m * rLvec(6) + pvec .* T4dot + 2 * Tdot .* p3dot + 5 * Tddot .* pddot + 4 * T3dot .* pvecdot) .* T.^2) ./ T.^3;
+
+    % Compute load angle
+    phiL = asin(pvec(:, 2));
+    thetaL = asin(-pvec(:, 1) ./ cos(phiL));
+
+    % Compute load angular velocity/acceleration
+    phiLdot = pvecdot(:, 2) ./ cos(phiL);
+    thetaLdot = (sin(phiL) .* sin(thetaL) .* phiLdot - pvecdot(:, 1)) ./ (cos(phiL) .* cos(thetaL));
+
+    phiLddot = (pddot(:, 2) + sin(phiL) .* phiLdot.^2) ./ cos(phiL);
+    thetaLddot = (sin(phiL) .* sin(thetaL) .* phiLddot + 2 * sin(phiL) .* cos(thetaL) .* phiLdot .* thetaLdot + ...
+        cos(phiL) .* sin(thetaL) .* (phiLdot.^2 + thetaL.^2)) ./ (cos(phiL) .* cos(thetaL));
 
     % Drone state
     rvec = rLvec(0) - L * pvec;
@@ -118,7 +121,9 @@ function [flat_outputs] = differentially_flat_trajectory(flat_rL, flat_yaw, phys
         rpy_ddot(i, :) = (Tib * (omegadot(i, :)' - Tbi_dot * rpy_dot(i, :)'))';
     end
 
-    flat_outputs = [rvec, rpy, phiL, thetaL];
+    flat_outputs = [rvec, rpy, phiL, thetaL, ...
+                        rvecdot, omega, phiLdot, thetaLdot, ...
+                        rddot, omegadot, phiLddot, thetaLddot];
     % flat_outputs = [rvec, rvedot, rddot, r3dot, r4dot, rpy, phiL, thetaL, pqr, rqpy_dot, phiLdot, thetaLdot];
 
 end
