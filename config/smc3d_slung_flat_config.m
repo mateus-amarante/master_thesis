@@ -69,7 +69,7 @@ sim_p.t = traj_p.t;
 % sim_p.t = 0:dt:(wait_time + T + steady_time);
 
 % Plot parameters
-plot_p.plot_state = @plot_quadrotor3d_slung_state;
-plot_p.plot_animation = @plot_quadrotor3d_slung_animation;
+plot_p.plot_state = @plot_quadrotor3d_slung_flat_state;
+plot_p.plot_animation = @plot_quadrotor3d_slung_flat_animation;
 
 end

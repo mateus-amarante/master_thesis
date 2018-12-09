@@ -1,0 +1,163 @@
+function plot_quadrotor3d_slung_flat_state(t,q,qdot,qd,u,physics_p, control_p)
+
+% Robot Position
+x = q(:,1);
+y = q(:,2);
+z = q(:,3);
+
+phi = q(:,4);
+theta = q(:,5);
+psi = q(:,6);
+
+phiL = q(:,7);
+thetaL = q(:,8);
+
+% Robot Velocity
+xdot = qdot(:,1);
+ydot = qdot(:,2);
+zdot = qdot(:,3);
+
+phidot = qdot(:,4);
+thetadot = qdot(:,5);
+psidot = qdot(:,6);
+
+phiLdot = qdot(:,7);
+thetaLdot = qdot(:,8);
+
+% Desired State
+xd = qd(:,1);
+yd = qd(:,2);
+zd = qd(:,3);
+
+phid = qd(:,4);
+thetad = qd(:,5);
+psid = qd(:,6);
+
+phiLd = qd(:,7);
+thetaLd = qd(:,8);
+
+
+xdot_d = qd(:,9);
+ydot_d = qd(:,10);
+zdot_d = qd(:,11);
+
+phidot_d = qd(:,12);
+thetadot_d = qd(:,13);
+psidot_d = qd(:,14);
+
+phiLdot_d = qd(:,15);
+thetaLdot_d = qd(:,16);
+
+%% Plot Robot State
+figure;
+subplot(2,1,1);
+plot(t,[x y z xd(1:length(x)) yd(1:length(y)) zd(1:length(z))]);
+ylabel('Position [m]'); %xlabel('Time [s]');
+legend('x','y','z','$$x_d$$','$$y_d$$','$$z_d$$');
+
+subplot(2,1,2);
+plot(t,[phi theta psi phid thetad psid]);
+legend('$$\phi$$','$$\theta$$','$$\psi$$','$$\phi_d$$','$$\theta_d$$','$$\psi_d$$');
+ylabel('Aircraft Orientation[rad]');
+
+xlabel('Time [s]');
+fig = gcf;
+title(fig.Children(end), 'Robot State');
+
+%% Plot Load State
+xL = x - physics_p.L*cos(phiL).*sin(thetaL);
+yL = y + physics_p.L*sin(phiL);
+zL = z - physics_p.L*cos(phiL).*cos(thetaL);
+
+xL_d = xd - physics_p.L*cos(phiLd).*sin(thetaLd);
+yL_d = yd + physics_p.L*sin(phiLd);
+zL_d = zd - physics_p.L*cos(phiLd).*cos(thetaLd);
+
+figure;
+subplot(2,1,1);
+plot(t,[xL yL zL xL_d yL_d zL_d]);
+ylabel('Position [m]'); %xlabel('Time [s]');
+legend('$$x_L$$','$$y_L$$','$$z_L$$','$${x_L}_d$$','$${y_L}_d$$','$${z_L}_d$$');
+
+subplot(2,1,2);
+plot(t,[phiL thetaL phiLd thetaLd]);
+legend('$$\phi_L$$','$$\theta_L$$','$${\phi_L}_d$$','$${\theta_L}_d$$');
+ylabel('Load Orientation[rad]');
+
+xlabel('Time [s]');
+fig = gcf;
+title(fig.Children(end), 'Load State');
+
+
+%% Plot Robot Linear and Angular Velocities
+figure;
+
+subplot(2,1,1);
+plot(t,[xdot ydot zdot xdot_d ydot_d zdot_d]);
+legend('$$\dot{x}$$','$$\dot{y}$$','$$\dot{z}$$','$$\dot{x}_d$$','$$\dot{y}_d$$','$$\dot{z}_d$$');
+ylabel('Linear Velocity [m/s]');
+
+subplot(2,1,2);
+plot(t,[phidot thetadot psidot phidot_d thetadot_d psidot_d]);
+ylabel('Angular Velocity [rad/s]');
+legend('$$\dot{\phi}$$','$$\dot{\theta}$$','$$\dot{\psi}$$','$$\dot{\phi}_d$$','$$\dot{\theta}_d$$','$$\dot{\psi}_d$$');
+
+xlabel('Time [s]');
+fig = gcf;
+title(fig.Children(end), 'Robot Twist');
+
+%% Plot Load Linear and Angular Velocities
+xLdot = xdot + physics_p.L*(sin(phiL).*sin(thetaL).*phiLdot - cos(phiL).*cos(thetaL).*thetaLdot);
+yLdot = ydot + physics_p.L*cos(phiL).*phiLdot;
+zLdot = zdot + physics_p.L*(sin(phiL).*cos(thetaL).*phiLdot + cos(phiL).*sin(thetaL).*thetaLdot);
+
+xLdot_d = xdot_d + physics_p.L*(sin(phiL).*sin(thetaL).*phiLdot - cos(phiL).*cos(thetaL).*thetaLdot);
+yLdot_d = ydot_d + physics_p.L*cos(phiL).*phiLdot;
+zLdot_d = zdot_d + physics_p.L*(sin(phiL).*cos(thetaL).*phiLdot + cos(phiL).*sin(thetaL).*thetaLdot);
+
+figure;
+
+subplot(2,1,1);
+plot(t,[xLdot yLdot zLdot xLdot_d yLdot_d zLdot_d]);
+legend('$$\dot{x}_L$$','$$\dot{y}_L$$','$$\dot{z}_L$$','$$\dot{x}_{L_d}$$','$$\dot{y}_{L_d}$$','$$\dot{z}_{L_d}$$');
+ylabel('Linear Velocity [m/s]');
+
+subplot(2,1,2);
+plot(t,[phiLdot thetaLdot phiLdot_d thetaLdot_d]);
+ylabel('Angular Velocity [rad/s]');
+legend('$$\dot{\phi}_L$$','$$\dot{\theta}_L$$','$$\dot{\phi}_{L_d}$$','$$\dot{\theta}_{L_d}$$');
+
+xlabel('Time [s]');
+fig = gcf;
+title(fig.Children(end), 'Load Twist');
+
+
+%% Plot Control Input
+figure;
+subplot(2,1,1);
+plot(t,u(:,1));
+ylabel('Thrust Force $$U_1$$ [N]');
+
+subplot(2,1,2);
+plot(t,u(:,2:end));
+ylabel('Input Torque [N$$\cdot$$m]');
+legend('$$U_2$$','$$U_3$$','$$U_4$$');
+
+xlabel('Time [s]');
+fig = gcf;
+title(fig.Children(end), 'Control Input');
+
+% % Plot sliding variables
+% % for i=1:length(t)
+% %     FIXME: state variables are temporarily transposed for nested3d_control
+% %     [~, ss] = control_p.control_fun(q(i,:)',qdot(i,:)',qd(i,:)',physics_p,control_p);
+% %     s(:,i) = ss;
+% % end
+% % 
+% % sdot = diff(s')/(t(2)-t(1));
+% % 
+% % figure;
+% % plot(s(3,1:end-1),sdot(:,3));
+% % plot(t,s.^2);
+
+end
