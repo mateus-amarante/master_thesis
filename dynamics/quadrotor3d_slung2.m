@@ -69,23 +69,23 @@ uy = cos(phi)*sin(theta)*sin(psi) - sin(phi)*cos(psi);
 uz = cos(phi)*cos(theta);
 
 % Auxiliar constants
-Cf = m*L/(M+m)*(cthetaL^2*phiLdot^2 + thetaLdot^2);
+Cf = m*L/(M+m)*(cphiL^2*thetaLdot^2 + phiLdot^2);
 Cb = m/(M*(M + m));
 
-fx = -Cf*sthetaL;
-bx = Cb*(sthetaL*cthetaL*(uy*sphiL - uz*cphiL) + ux*(M/m + cthetaL^2));
+fx = -Cf*cphiL*sthetaL;
+bx = Cb*(cphiL*sthetaL*(uy*sphiL - uz*cphiL*cthetaL) + ux*(M/m + 1 - cphiL^2*sthetaL^2));
 
-fy = Cf*sphiL*cthetaL;
-by = Cb*(sphiL*cthetaL*(ux*sthetaL + uz*cphiL*cthetaL) + uy*(M/m + 1 - sphiL^2*cthetaL^2));
+fy = Cf*sphiL;
+by = Cb*(sphiL*cphiL*(ux*sthetaL + uz*cthetaL) + uy*(M/m + cphiL^2));
 
 fz = -Cf*cphiL*cthetaL - g;
-bz = Cb*(cphiL*cthetaL*(-ux*sthetaL + uy*sphiL*cthetaL) + uz*(M/m + 1 - cphiL^2*cthetaL^2));
+bz = Cb*(cphiL*cthetaL*(-ux*cphiL*sthetaL + uy*sphiL) + uz*(M/m + 1 - cphiL^2*cthetaL^2));
 
-fphiL = 2*tan(thetaL)*phiLdot*thetaLdot;
-bphiL = -(uy*cphiL + uz*sphiL)/(M*L*cthetaL);
+fphiL = -sphiL*cthetaL*thetaLdot^2;
+bphiL = -(uy*cphiL + sphiL*(ux*sthetaL + uz*cthetaL))/(M*L);
 
-fthetaL = -sthetaL*cthetaL*phiLdot^2;
-bthetaL = (ux*cthetaL + sthetaL*(uy*sphiL - uz*cphiL))/(M*L);
+fthetaL = 2*tan(phiL)*phiLdot*thetaLdot;
+bthetaL = (ux*cthetaL + sthetaL*(uy*sphiL - uz*cphiL))/(M*L*cphiL);
 
 
 f = [fx fy fz fphiL fthetaL]';
