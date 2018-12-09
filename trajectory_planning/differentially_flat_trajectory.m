@@ -1,4 +1,4 @@
-function [flat_outputs] = differentially_flat_trajectory(flat_rL, flat_yaw, physics_p)
+function [system_state, control_input] = differentially_flat_trajectory(flat_rL, flat_yaw, physics_p)
 
     % Physics parameters renaming
     M = physics_p.M;
@@ -101,7 +101,7 @@ function [flat_outputs] = differentially_flat_trajectory(flat_rL, flat_yaw, phys
 
     omegadot = [pdot, qdot, rdot];
 
-    % Input torques (TODO)
+    % Input torques
     Tau = (I * omegadot')' + cross(omega, (I * omega')', 2);
 
     % Euler angles and angular velocity/acceleration in inertial frame
@@ -121,9 +121,11 @@ function [flat_outputs] = differentially_flat_trajectory(flat_rL, flat_yaw, phys
         rpy_ddot(i, :) = (Tib * (omegadot(i, :)' - Tbi_dot * rpy_dot(i, :)'))';
     end
 
-    flat_outputs = [rvec, rpy, phiL, thetaL, ...
+    system_state = [rvec, rpy, phiL, thetaL, ...
                         rvecdot, omega, phiLdot, thetaLdot, ...
                         rddot, omegadot, phiLddot, thetaLddot];
-    % flat_outputs = [rvec, rvedot, rddot, r3dot, r4dot, rpy, phiL, thetaL, pqr, rqpy_dot, phiLdot, thetaLdot];
+
+    control_input = [u1, Tau];
+
 
 end
