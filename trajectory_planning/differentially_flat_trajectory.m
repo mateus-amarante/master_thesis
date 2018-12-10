@@ -47,16 +47,16 @@ function [system_state, control_input] = differentially_flat_trajectory(flat_rL,
         (m * rLvec(6) + pvec .* T4dot + 2 * Tdot .* p3dot + 5 * Tddot .* pddot + 4 * T3dot .* pvecdot) .* T.^2) ./ T.^3;
 
     % Compute load angle
-    phiL = asin(pvec(:, 2));
-    thetaL = asin(-pvec(:, 1) ./ cos(phiL));
+    thetaL = asin(-pvec(:, 1));
+    phiL = asin(pvec(:, 2) ./ cos(thetaL));
 
     % Compute load angular velocity/acceleration
-    phiLdot = pvecdot(:, 2) ./ cos(phiL);
-    thetaLdot = (sin(phiL) .* sin(thetaL) .* phiLdot - pvecdot(:, 1)) ./ (cos(phiL) .* cos(thetaL));
+    thetaLdot = -pvecdot(:, 1) ./ cos(thetaL);
+    phiLdot = (sin(phiL) .* sin(thetaL) .* thetaLdot + pvecdot(:, 2)) ./ (cos(phiL) .* cos(thetaL));
 
-    phiLddot = (pddot(:, 2) + sin(phiL) .* phiLdot.^2) ./ cos(phiL);
-    thetaLddot = (sin(phiL) .* sin(thetaL) .* phiLddot + 2 * sin(phiL) .* cos(thetaL) .* phiLdot .* thetaLdot + ...
-        cos(phiL) .* sin(thetaL) .* (phiLdot.^2 + thetaL.^2)) ./ (cos(phiL) .* cos(thetaL));
+    thetaLddot = (sin(thetaL) .* thetaLdot.^2 - pddot(:, 1)) ./ cos(thetaL);
+    phiLddot = (sin(phiL) .* sin(thetaL) .* thetaLddot + 2 * cos(phiL) .* sin(thetaL) .* phiLdot .* thetaLdot + ...
+        sin(phiL) .* cos(thetaL) .* (phiLdot.^2 + thetaL.^2) + pddot(:, 2)) ./ (cos(phiL) .* cos(thetaL));
 
     % Drone state
     rvec = rLvec(0) - L * pvec;
@@ -126,6 +126,5 @@ function [system_state, control_input] = differentially_flat_trajectory(flat_rL,
                         rddot, omegadot, phiLddot, thetaLddot];
 
     control_input = [u1, Tau];
-
 
 end

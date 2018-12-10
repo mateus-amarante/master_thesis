@@ -27,11 +27,11 @@ yaw_tt = sample_fun_yaw(tt);
 
 physics_p = quadrotor3d_slung_physics();
 
-[flat_outputs] = differentially_flat_trajectory(qqd, yaw_tt, physics_p);
+[flat_outputs control_input] = differentially_flat_trajectory(qqd, yaw_tt, physics_p);
 % plot(tt, qqd(:,1:3), tt, flat_outputs(:,1:3));
 % plot(tt, flat_outputs(:,end-1:end));
 
-plot_quadrotor3d_slung_animation(tt, flat_outputs, flat_outputs(:, 1:3), physics_p);
+plot_quadrotor3d_slung_flat_animation(tt, flat_outputs, flat_outputs, physics_p);
 
 x = flat_outputs(:, 1);
 y = flat_outputs(:, 2);
@@ -40,10 +40,11 @@ z = flat_outputs(:, 3);
 phiL = flat_outputs(:, 7);
 thetaL = flat_outputs(:, 8);
 
-xL = x - physics_p.L * cos(phiL) .* sin(thetaL);
-yL = y + physics_p.L * sin(phiL);
+xL = x - physics_p.L * sin(thetaL);
+yL = y + physics_p.L * sin(phiL) .* cos(thetaL);
 zL = z - physics_p.L * cos(phiL) .* cos(thetaL);
 
+% plot(tt,control_input);
 % plot3(qqd(:, 1), qqd(:, 2), qqd(:, 3)); hold on;
-% plot3(x,y,z); hold on;
-% plot3(xL,yL,zL);
+plot3(x,y,z); hold on;
+plot3(xL,yL,zL);
