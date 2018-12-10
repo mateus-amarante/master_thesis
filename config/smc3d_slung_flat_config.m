@@ -32,7 +32,7 @@ L = physics_p.L;
 % Trajectory and simulation parameters
 xLd = [ 0  0 2 2 0 0 0]';
 yLd = [ 0  0 0 1 1 0 0]';
-zLd = [-L -L 1 1 0 -L -L]';
+zLd = [-L -L 1 1 1 -L -L]';
 psid = zeros(size(xLd));
 psid = [0 0 0 pi/2 pi/2 pi pi]';
 
