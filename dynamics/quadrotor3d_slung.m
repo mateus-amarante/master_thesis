@@ -65,37 +65,41 @@ U = u;
 sphiL = sin(phiL); sthetaL = sin(thetaL);
 cphiL = cos(phiL); cthetaL = cos(thetaL);
 
-m15 = -m*L*cthetaL;       m51 = m15;
+m14 = m*L*sphiL*sthetaL;  m41 = m14;
+m15 = -m*L*cphiL*cthetaL; m51 = m15;
 
-m24 =  m*L*cphiL*cthetaL; m42 = m24;
-m25 = -m*L*sphiL*sthetaL; m52 = m25;
+m24 =  m*L*cphiL; m42 = m24;
 
 m34 =  m*L*sphiL*cthetaL; m43 = m34;
 m35 =  m*L*cphiL*sthetaL; m53 = m35;
 
 Mq = [
-    M+m  0    0    0                m15;
-    0    M+m  0    m24              m25;
-    0    0    M+m  m34              m35;
-    0    m42  m43  m*L^2*cthetaL^2  0;
-    m51  m52  m53    0,             m*L^2];
+    M+m  0    0    m14     m15;
+    0    M+m  0    m24     0;
+    0    0    M+m  m34     m35;
+    m41  m42  m43  m*L^2   0;
+    m51  0    m53    0,    m*L^2*cphiL^2];
 
 
-c15 =  m*L*sthetaL*thetaLdot;
-c24 = -m*L*(sphiL*cthetaL*phiLdot   + cphiL*sthetaL*thetaLdot);
-c25 = -m*L*(sphiL*cthetaL*thetaLdot + cphiL*sthetaL*phiLdot);
-c34 =  m*L*(cphiL*cthetaL*phiLdot   - sphiL*sthetaL*thetaLdot);
-c35 =  m*L*(cphiL*cthetaL*thetaLdot - sphiL*sthetaL*phiLdot);
-c44 = -m*L^2*sthetaL*cthetaL*thetaLdot;
-c45 = -m*L^2*sthetaL*cthetaL*phiLdot;
+c14 =  m*L*(sphiL*cthetaL*thetaLdot + cphiL*sthetaL*phiLdot);
+c15 =  m*L*(sphiL*cthetaL*phiLdot   + cphiL*sthetaL*thetaLdot);
+
+c24 = -m*L*sphiL*phiLdot;
+
+c34 =  m*L*(-sphiL*sthetaL*thetaLdot + cphiL*cthetaL*phiLdot);
+c35 =  m*L*(-sphiL*sthetaL*phiLdot   + cphiL*cthetaL*thetaLdot);
+
+c45 =  m*L^2*sphiL*cphiL*thetaLdot;
+
 c54 = -c45;
+c55 = -m*L^2*sphiL*cphiL*phiLdot;
 
 Cq = [
-    0 0 0 0   c15;
-    0 0 0 c24 c25;
+    0 0 0 c14 c15;
+    0 0 0 c24  0 ;
     0 0 0 c34 c35;
-    0 0 0 c44 c45;
-    0 0 0 c54 0];
+    0 0 0  0  c45;
+    0 0 0 c54 c55];
 
 Gq = [0; 0; (M+m)*g; m*g*L*sphiL*cthetaL; m*g*L*cphiL*sthetaL];
 
@@ -115,7 +119,7 @@ Tbi_dot = Tb2i_dot(phi,theta,phidot,thetadot);
 pqr = Tib*rpy_dot;
 
 pqr_dot = Iinv*(U(2:4) + cross(pqr,I*pqr));
-rpy_ddot = Tib*(pqr_dot-Tbi_dot*rpy_dot);
+% rpy_ddot = Tib*(pqr_dot-Tbi_dot*rpy_dot);
 
 % Output remapping
 qddot = [linear_acc(1:3); pqr_dot; linear_acc(4:5)];
