@@ -32,8 +32,8 @@ wait_time = 1;
 steady_time = 3;
 dt = .02;
 
-% traj_p = simple_smooth_trajectory([xd zd], T, wait_time, steady_time);
-traj_p = simple_shaped_trajectory([xd zd], T, wait_time, steady_time, dt, physics_p);
+traj_p = simple_smooth_trajectory([xd zd], T, wait_time, steady_time);
+% traj_p = simple_shaped_trajectory([xd zd], T, wait_time, steady_time, dt, physics_p);
 
 sim_p.x0 = zeros(8, 1);
 sim_p.dyn_fun = @quadrotor2d_slung;
