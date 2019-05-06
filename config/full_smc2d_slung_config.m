@@ -9,12 +9,12 @@ cparam = [42.0112   49.9835   47.1140   41.8978    0.6964    0.5118   44.0564 1 
 
 % z and alpha
 % Eigen values of alpha, alphadot and z
-control_p.gamma_alpha = 10;
+control_p.gamma_alpha = 80;
 control_p.gamma_alphadot = 10;
-control_p.gamma_z = 10;
+control_p.gamma_z = 150;
 
-control_p.lambda_alphadot = 1;
-control_p.lambda_alpha = 1;
+control_p.lambda_alphadot = 5;
+control_p.lambda_alpha = 30;
 
 control_p.kappa_zalpha = 100;
 control_p.eta_zalpha = 0;
