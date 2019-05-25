@@ -147,14 +147,20 @@ eyddot = yddot_d - yddot;
 exb =  cos(psi)*ex + sin(psi)*ey;
 eyb = -sin(psi)*ex + cos(psi)*ey;
 
-exbdot = psidot*eyb + cos(psi)*exdot + sin(psi)*eydot;
-eybdot = -psidot*exb - sin(psi)*exdot + cos(psi)*eydot;
+exbdot =  cos(psi)*exdot + sin(psi)*eydot;
+eybdot = -sin(psi)*exdot + cos(psi)*eydot;
 
-exbddot = psiddot*eyb - psidot^2*exb + 2*psidot*(-sin(psi)*exdot + cos(psi)*eydot) + ...
-    cos(psi)*exddot + sin(psi)*eyddot;
+exbddot =  cos(psi)*exddot + sin(psi)*eyddot;
+eybddot = -sin(psi)*exddot + cos(psi)*eyddot;
 
-eybddot = -psiddot*exb - psidot^2*eyb - 2*psidot*(cos(psi)*exdot + sin(psi)*eydot) + ...
-    -sin(psi)*exddot + cos(psi)*eyddot;
+% exbdot = psidot*eyb + cos(psi)*exdot + sin(psi)*eydot;
+% eybdot = -psidot*exb - sin(psi)*exdot + cos(psi)*eydot;
+% 
+% exbddot = psiddot*eyb - psidot^2*exb + 2*psidot*(-sin(psi)*exdot + cos(psi)*eydot) + ...
+%     cos(psi)*exddot + sin(psi)*eyddot;
+% 
+% eybddot = -psiddot*exb - psidot^2*eyb - 2*psidot*(cos(psi)*exdot + sin(psi)*eydot) + ...
+%     -sin(psi)*exddot + cos(psi)*eyddot;
 
 % Under-actuated SMC: xb and theta
 exbtheta = [exb; theta_d - theta];
@@ -201,8 +207,20 @@ bybphi = [0; bphi];
 % byphi = [0; bphi];
 % 
 % [u(2), s_yphi] = smcu([eyphi; eyphi_dot], yphi_ddot_d, fyphi, byphi, [lambda_yphi; lambda_yphi_dot] , kappa_yphi, eta_yphi);
+Cx = (M/m + cthetaL^2);
+Cy = (M/m + 1 - sphiL^2*cthetaL^2);
+Cz = (M/m + 1 - cphiL^2*cthetaL^2);
+t1 = 2*sin(phiL)*sin(psi)*sin(thetaL)*cos(psi)*cos(thetaL);
 
+T1 = cos(theta_d)*(Cx*cos(psi)^2 + Cy*sin(psi)^2 + t1);
+T2 = cos(phiL)*cos(thetaL)*sin(theta_d)*(-sin(phiL)*cos(thetaL)*sin(psi) + sin(thetaL)*cos(psi));
 
-s = [s_zpsi(:); s_xtheta(:); s_yphi(:)];
+u1n = (zddot_d - fz + lambda_zpsi(1)*(zdot_d - zdot));
+
+ss(1) = u(1)*Cb*cos(phi)*(T1 + T2);
+ss(2) = u(1)*Cb*cos(phi)*(Cx*cos(psi)^2 + Cy*sin(psi)^2);
+ss(3) = u1n*cos(phi)*(Cx*cos(psi)^2 + Cy*sin(psi)^2)/(Cz*cos(theta_d)^2);
+
+s = [s_zpsi(:); s_xtheta(:); s_yphi(:); ss(:)];
 
 end
