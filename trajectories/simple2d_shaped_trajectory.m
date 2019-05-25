@@ -1,6 +1,6 @@
 function traj_p = simple2d_shaped_trajectory(x,z,T,steady_time,dt,physics_p)
 
-traj_p = simple2d_trajectory(x,z,T,steady_time,dt);
+traj_p = simple_smooth_trajectory([x z], T, 4, steady_time);
 
 M = physics_p.M;
 m = physics_p.m;
