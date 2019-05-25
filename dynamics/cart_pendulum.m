@@ -1,4 +1,4 @@
-function [q_ddot] = quadrotor2d_slung(q,q_dot,u,params)
+function [q_ddot] = cart_pendulum(q,q_dot,u,params)
 %      __
 %     |__|  -->
 %      /
