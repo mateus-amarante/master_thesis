@@ -19,6 +19,13 @@
 # * This document does not cover the rotational dynamics, since it's the same of the quadrotor
 # * There is a summary at the end
 #
+# ![Screenshot%20from%202019-05-26%2018-28-09.png](attachment:Screenshot%20from%202019-05-26%2018-28-09.png)
+#
+# $$
+# u_1 = f_1 + f_2 \\
+# \tau = (f_1 - f_2) d \\[10pt]\text{d: distance between rotors}
+# $$
+#
 # ## Common Setup
 
 # +
@@ -81,6 +88,7 @@ print('LOAD ACCELERATIONS:')
 display(simplify(xLddot),simplify(zLddot))
 # -
 
+# LAGRANGIAN
 L = M/2*(xdot**2+zdot**2) + m/2*(xLdot**2+zLdot**2) - M*g*z - m*g*zL
 L = simplify(expand(L))
 L = collect(collect(L,zdot**2),xdot**2)
@@ -110,7 +118,6 @@ eqAlpha
 # $$ 
 
 res = solve([eqX,eqZ,eqAlpha],[xddot,zddot,alphaddot])
-
 res
 
 fx = res[xddot]
@@ -172,6 +179,7 @@ xLddot = diff(xLdot,t)
 zLddot = diff(zLdot,t)
 # -
 
+# LAGRANGIAN
 L = M/2*(xdot**2+zdot**2) + m/2*(xLdot**2+zLdot**2) - M*g*z - m*g*zL
 L = simplify(expand(L))
 L = collect(collect(L,zLdot**2),xLdot**2)
@@ -271,5 +279,3 @@ falpha
 # \ddot{\alpha} &= \left[\frac{\sin(\alpha-\theta)}{ml}\right]u_1
 # \end{align}
 # $$
-
-
