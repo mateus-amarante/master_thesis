@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # ---
 # jupyter:
 #   jupytext:
@@ -8,12 +9,20 @@
 #       format_version: '1.4'
 #       jupytext_version: 1.1.3
 #   kernelspec:
-#     display_name: Python 2
+#     display_name: Python 3
 #     language: python
-#     name: python2
+#     name: python3
 # ---
 
 # # Differentially Flatness of Slung-Load System
+#
+# ## Sources
+#
+# [1] K. Sreenath, N. Michael, and V. Kumar, “Trajectory generation and control of a quadrotor with a cable-suspended load - A differentially-flat hybrid system,” in 2013 IEEE International Conference on Robotics and Automation, 2013, pp. 4888–4895.
+#
+# [2] D. Mellinger and V. Kumar, “Minimum snap trajectory generation and control for quadrotors,” in 2011 IEEE International Conference on Robotics and Automation, Shanghai, China, 2011, pp. 2520–2525.
+#
+# ## Step 0
 #
 # Dynamic Model (Newton-Euler):
 #
@@ -62,7 +71,7 @@
 # $\dot{T}$ can be determined by derivating $T$ obtained directly from the second equation of the dynamic model:
 #
 # $$
-# T = \|-m\ddot{\vec{x}}_L -mg\vec{e}_z \| = \sqrt{m^2\left[{\ddot{\vec{x}}_L}^2+{\ddot{\vec{y}}_L}^2 \left( {\ddot{\vec{z}}_L}^2 + g\right) \right]}
+# T = \|-m\ddot{\vec{x}}_L -mg\vec{e}_z \| = \sqrt{m^2\left[{\ddot{\vec{x}}_L}^2+{\ddot{\vec{y}}_L}^2 + {\left( \ddot{\vec{z}}_L + g\right)}^2 \right]}
 # $$
 #
 # Note that, by derivating the two equations above, $\vec{p}^{(n)}$ will depend on the $(n+2)th$ derivative of $\vec{x}_L$ and the lower order derivatives.
@@ -215,9 +224,7 @@ vprint(simplify(p4dot_exp))
 # Projecting this expression along $\vec{e}{z_b}$, we get: $\vec{\alpha}_{bc} \cdot \vec{e}_{z_b} = 0,\, (\vec{\omega}_{cw} \times \vec{\omega}_{bc}) \cdot \vec{e}_{z_b} = 0$. So $\dot{r}$ is the projection of the yaw acceleration from the inertial frame onto the body frame:
 #
 # $$
-# r = \ddot{\psi}\vec{e}_{z} \cdot \vec{e}_{z_b}
+# \dot{r} = \ddot{\psi}\vec{e}_{z} \cdot \vec{e}_{z_b}
 # $$
 #
 # Finally, $\vec{\tau}$ is determined directly from the dynamic model third equation.
-
-
