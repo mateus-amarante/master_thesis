@@ -105,9 +105,9 @@ display(simplify(xLddot),simplify(yLddot),simplify(zLddot))
 
 # -
 
-T = M/2*(xdot**2 + ydot**2 + zdot**2) + m/2*(xLdot**2 + yLdot**2 + zLdot**2)
-V = M*g*z + m*g*zL
-L = T-V
+T = M/2*(xdot**2 + ydot**2 + zdot**2) + m/2*(xLdot**2 + yLdot**2 + zLdot**2) # Kinetic energy
+V = M*g*z + m*g*zL # Potential Energy
+L = T-V # Lagrangian
 simplify(L)
 
 eqX = expand(diff(diff(L,xdot),t) - diff(L,x) - ux)
@@ -133,6 +133,8 @@ eqThetaL = expand_trig(eqThetaL)
 eqThetaL
 
 # ### Dynamic Model $(x,y,z,\phi_L,\theta_L)$
+#
+# #### System of equations
 #
 # $$
 # \begin{align}
@@ -249,3 +251,59 @@ zddot_expr = collect(zddot_expr,u*uy)
 zddot_expr = collect(zddot_expr,u*uz)
 zddot_expr = collect(zddot_expr,u)
 zddot_expr
+
+# #### Closed form
+#
+# $$
+# \ddot{q} = M^{-1}(q)\left[ B(q)\,u - C(q,\dot{q})\,\dot{q} + G(q)\right]\\[10pt]
+# $$
+#
+# $$
+# \begin{align}
+# \begin{cases}
+# \ddot{x} &= f_x + b_x \, u_1 \\
+# \ddot{y} &= f_y + b_y \, u_1 \\
+# \ddot{z} &= f_z + b_z \, u_1 \\
+# \ddot{\phi}_L &= f_{\phi_L} + b_{\phi_L} \, u_1 \\
+# \ddot{\theta}_L &= f_{\theta_L} + b_{\theta_L} \, u_1
+# \end{cases}
+# \end{align}\\[50pt]
+# $$
+
+#
+# $$
+# \begin{align}
+# f_x &= -\frac{ml\sin{\theta_L}}{(M+m)} \left( \cos^2{\theta_L} \dot{\phi}_L^2 +  \dot{\theta}_L^2\right) \\
+# b_x &= \frac{m}{M(M+m)} \left[ \sin{\theta_L}\cos{\theta_L} \left( u_y\sin{\phi_L} - u_z\cos{\phi_L} \right) + u_x\left( \frac{M}{m} + \cos^2{\theta_L} \right) \right]
+# \end{align}\\[25pt]
+# $$
+#
+# $$
+# \begin{align}
+# f_y &= \frac{ml\sin{\phi_L}\cos{\theta_L}}{(M+m)} \left( \cos^2{\theta_L} \dot{\phi}_L^2 +  \dot{\theta}_L^2\right) \\
+# b_y &= \frac{m}{M(M+m)} \left[ \sin{\phi_L}\cos{\theta_L} \left( u_x\sin{\theta_L} + u_z\cos{\phi_L}\cos{\theta_L} \right) + u_y\left( \frac{M}{m} + 1 - \sin^2{\phi_L}\cos^2{\theta_L} \right) \right]
+# \end{align}\\[25pt]
+# $$
+#
+# $$
+# \begin{align}
+# f_z &= -\frac{ml\cos{\phi_L}\cos{\theta_L}}{(M+m)} \left( \cos^2{\theta_L} \dot{\phi}_L^2 +  \dot{\theta}_L^2\right) - g \\
+# b_z &= \frac{m}{M(M+m)} \left[ \cos{\phi_L}\cos{\theta_L} \left(-u_x\sin{\theta_L} + u_z\sin{\phi_L}\cos{\theta_L} \right) + u_z\left( \frac{M}{m} + 1 - \cos^2{\phi_L}\cos^2{\theta_L} \right) \right]
+# \end{align}\\[25pt]
+# $$
+#
+# $$
+# \begin{align}
+# f_{\phi_L} &= 2 \tan{\theta_L} \dot{\phi}_L\dot{\theta}_L\\
+# b_{\phi_L} &= -\frac{\left( u_y\cos{\phi_L} + u_z\sin{\phi_L} \right)}{Ml\cos{\theta_L}}
+# \end{align}\\[25pt]
+# $$
+#
+# $$
+# \begin{align}
+# f_{\theta_L} &= -\sin{\theta_L}\cos{\theta_L}\dot{\phi}_L^2\\
+# b_{\theta_L} &= \frac{\left[ u_x\cos{\theta_L} + \sin{\theta_L} \left( u_y\sin{\phi_L} -u_z\cos{\phi_L} \right)\right]}{Ml}
+# \end{align}\\[25pt]
+# $$
+
+
