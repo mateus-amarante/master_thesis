@@ -19,7 +19,7 @@
 # * This document does not cover the rotational dynamics, since it's the same of the quadrotor
 # * There is a summary at the end
 #
-# ![Screenshot%20from%202019-05-26%2018-28-09.png](attachment:Screenshot%20from%202019-05-26%2018-28-09.png)
+# <img src="suspended_load_2d.png">
 #
 # $$
 # u_1 = f_1 + f_2 \\
