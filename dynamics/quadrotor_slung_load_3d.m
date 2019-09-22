@@ -42,7 +42,8 @@ load_rp = q(7:8);
 
 % Velocity
 xyz_dot = q(9:11);
-pqr = q(12:14);
+% pqr = q(12:14);
+rpy_dot = q(12:14);
 load_rp_dot= q(15:16);
 
 % Load angular position and velocity
@@ -56,10 +57,11 @@ phi = rpy(1);
 theta = rpy(2);
 psi = rpy(3);
 
-rpy_dot = Tb2i(phi, theta)*pqr;
-% phidot = rpy_dot(1);
-% thetadot = rpy_dot(2);
-% psidot = rpy_dot(3);
+pqr = Ti2b(phi, theta)*rpy_dot;
+% rpy_dot = Tb2i(phi, theta)*pqr;
+phidot = rpy_dot(1);
+thetadot = rpy_dot(2);
+psidot = rpy_dot(3);
 
 %% INPUT REMAPPING
 % U = zeros(4,1);
@@ -171,8 +173,9 @@ phiLthetaL_ddot = transl_acc(4:5);
 
 % Angular Dynamics
 pqr_dot = Iinv*(U(2:4) - cross(pqr,I*pqr));  % missing gyroscopic effect of the rotors
-
+rpy_ddot = Tb2i(phi,theta)*pqr_dot + Tb2i_dot(phi,theta,phidot,thetadot)*pqr;
 % OUTPUT REMAPPING
-qdot = [xyz_dot; rpy_dot; phiLdot; thetaLdot; xyz_ddot; pqr_dot; phiLthetaL_ddot];
+% qdot = [xyz_dot; rpy_dot; phiLdot; thetaLdot; xyz_ddot; pqr_dot; phiLthetaL_ddot];
+qdot = [xyz_dot; rpy_dot; phiLdot; thetaLdot; xyz_ddot; rpy_ddot; phiLthetaL_ddot];
 
 end

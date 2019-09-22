@@ -4,7 +4,7 @@ function [physics_p, control_p, traj_p, sim_p, plot_p] = final_smc3d_slung_confi
     physics_p = quadrotor3d_slung_physics();
     
     % Control parameters
-    cparam = [1 1 1 1 7.536613519	1.88634197	17.94128065	0.547326511	9.247371112 7.536613519	1.88634197	17.94128065	0.547326511	9.247371112];
+    cparam = [10 1 10 1 7.536613519	1.88634197	17.94128065	0.547326511	9.247371112 7.536613519	1.88634197	17.94128065	0.547326511	9.247371112];
     % cparam = [1 1 1 1 7.096489323	20.95267537	15.55696503	1.302720091	10.0564969 7.096489323	20.95267537	15.55696503	1.302720091	10.0564969];
     
     
@@ -32,7 +32,7 @@ function [physics_p, control_p, traj_p, sim_p, plot_p] = final_smc3d_slung_confi
     xLd = [ 0  0 2 2 0 0 0]';
     yLd = [ 0  0 0 1 1 0 0]';
     zLd = [-l -l 1 1 1 -l -l]';
-    psid = [0 0 0 pi/2 pi/2 pi pi]';
+    psid = [0 0 0 pi/2 pi/2 0 0]';
     
     pos = [xLd yLd zLd];
     vel = zeros(size(pos));
@@ -42,14 +42,14 @@ function [physics_p, control_p, traj_p, sim_p, plot_p] = final_smc3d_slung_confi
     
     traj_p.Tf = 15;
     traj_p.dt = .02;
-    traj_p.t = 0:traj_p.dt:traj_p.Tf;
+    traj_p.t = 0:traj_p.dt:traj_p.Tf';
     
-    td = linspace(0,traj_p.Tf,length(xLd));
+    td = linspace(0,traj_p.Tf,length(xLd))';
     
     x_waypoints = [pos vel acc jerk snap];
     yaw_waypoints = [psid zeros(length(psid), 2)];
     sample_fun = plan_polynomial_trajectory2(td, x_waypoints, 3, 6);
-    sample_fun_yaw = plan_polynomial_trajectory2(td, yaw_waypoints, 1, 2);
+    sample_fun_yaw = plan_polynomial_trajectory2(td, yaw_waypoints, 1, 3);
     
     % traj_p = shaped_poly_trajectory(td, q, n_vars, n_deriv_out, traj_p, physics_p);
     % n_vars = size(pos,2);
