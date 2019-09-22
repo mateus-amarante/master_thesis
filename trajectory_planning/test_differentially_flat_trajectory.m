@@ -12,24 +12,23 @@ accel = vel;
 jerk = vel;
 snap = vel;
 
-yaw = [0; pi / 4; -pi / 6; 0];
+yaw = [0; pi / 4; pi / 6; 0];
 yaw = [yaw zeros(length(yaw), 2)];
 
 x_d = [pos vel accel jerk snap];
-sample_fun = plan_polynomial_trajectory(t, x_d, 3, 7);
-sample_fun_yaw = plan_polynomial_trajectory(t, yaw, 1, 3);
+sample_fun = plan_polynomial_trajectory2(t, x_d, 3, 6);
+sample_fun_yaw = plan_polynomial_trajectory2(t, yaw, 1, 2);
 
 qqd = sample_fun(tt);
 yaw_tt = sample_fun_yaw(tt);
 
-% figure;
-% plot(tt,qqd);
+
 
 physics_p = quadrotor3d_slung_physics();
 
 [flat_outputs control_input] = differentially_flat_trajectory(qqd, yaw_tt, physics_p);
-% plot(tt, qqd(:,1:3), tt, flat_outputs(:,1:3));
-% plot(tt, flat_outputs(:,end-1:end));
+plot(tt, qqd(:,1:3), tt, flat_outputs(:,1:3));
+plot(tt, flat_outputs(:,end-1:end));
 
 plot_quadrotor3d_slung_flat_animation(tt, flat_outputs, flat_outputs, physics_p);
 
