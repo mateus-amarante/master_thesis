@@ -58,7 +58,10 @@ function [system_state, control_input] = differentially_flat_trajectory(flat_rL,
 
     % Rotation Matrix
     t = M * rvec(2) - Tp(0) + M * g * ez + Cd.*rvec(1);
-    ezb = t ./ vecnorm(t, 2, 2);
+    % Thrust force
+    u1 = vecnorm(t, 2, 2);
+    
+    ezb = t ./ u1;
 
     eyc = [-sin(yaw(0)), cos(yaw(0)), zeros(size(t, 1), 1)];
     
@@ -76,33 +79,30 @@ function [system_state, control_input] = differentially_flat_trajectory(flat_rL,
     end
     phi = rpy(:, 1);
     theta = rpy(:, 2);
-%     psi = rpy(:, 3);
-    
-    % TODO: Assert yaw input equals yaw output
+    psi = rpy(:, 3);
 
-    % Thrust force
-    u1 = vecnorm(t, 2, 2);
+    
 
     % Angular velocity
-    u1dot = dot(M*rvec(3) + Cd.*rvec(2), ezb, 2);
-    hw = (M*rvec(3) + Cd.*rvec(2) - u1dot .* ezb) ./ u1;
+    u1dot = dot(M*rvec(3) + Cd.*rvec(2) - Tp(1), ezb, 2);
+    hw = (M*rvec(3) + Cd.*rvec(2) - Tp(1) - u1dot .* ezb) ./ u1;
 
-    p = -dot(hw, eyb, 2);
+    pp = -dot(hw, eyb, 2);
     q = dot(hw, exb, 2);
     r = (cos(theta).*yaw(1) - sin(phi).*q)./cos(phi);
 
-    omega = [p, q, r];
+    omega = [pp, q, r];
     rpy_dot = rpy;
     for i = 1:size(Rvec, 1)
         Tbi = Tb2i(rpy(i, 1), rpy(i, 2));
-        rpy_dot(i, :) = (Tbi * rpy(i, :)')';
+        rpy_dot(i, :) = (Tbi * omega(i, :)')';
     end
     phidot = rpy_dot(:, 1);
     thetadot = rpy_dot(:, 2);
-%     psidot = rpy_dot(:, 3);
+    psidot = rpy_dot(:, 3);
 
     % Angular acceleration
-    aux = M*rvec(4) + Cd.*rvec(3) - cross(omega, cross(omega, u1.*ezb, 2), 2);
+    aux = M*rvec(4) + Cd.*rvec(3) - Tp(2) - cross(omega, cross(omega, u1.*ezb, 2), 2);
     u1ddot = dot(aux, ezb, 2);
     halpha = aux - u1ddot .* ezb - 2 * cross(omega, u1dot .* ezb, 2);
 
@@ -112,23 +112,23 @@ function [system_state, control_input] = differentially_flat_trajectory(flat_rL,
 
     omegadot = [pdot, qdot, rdot];
 
-%     rpy_ddot = rpy;
-%     for i = 1:size(Rvec, 1)
-%         Tib = Ti2b(rpy(i, 1), rpy(i, 2));
-%         Tbi = Tb2i(rpy(i, 1), rpy(i, 2));
-%         
-%         Tbi_dot = Tb2i_dot(rpy(i, 1), rpy(i, 2), omega(i, 1), omega(i, 2));
-% 
-%         rpy_dot(i, :) = (Tbi * rpy(i, :)')';
-%         rpy_ddot(i, :) = (Tib * (omegadot(i, :)' - Tbi_dot * rpy_dot(i, :)'))';
-%     end
+    rpy_ddot = rpy;
+    for i = 1:size(Rvec, 1)
+        Tbi = Tb2i(rpy(i, 1), rpy(i, 2));
+        Tbi_dot = Tb2i_dot(rpy(i, 1), rpy(i, 2), rpy_dot(i, 1), rpy_dot(i, 2));
+        rpy_ddot(i, :) = (Tbi_dot * omega(i, :)' + Tbi * omegadot(i, :)')';
+    end
+    
+    phiddot = rpy_ddot(:, 1);
+    thetaddot = rpy_ddot(:, 2);
+    psiddot = rpy_ddot(:, 3);
     
     % Input torques
     Tau = (I * omegadot')' + cross(omega, (I * omega')', 2);
 
     system_state = [rvec(0), rpy, phiL, thetaL, ...
-                        rvec(1), omega, phiLdot, thetaLdot, ...
-                        rvec(2), omegadot, phiLddot, thetaLddot];
+                    rvec(1), rpy_dot, phiLdot, thetaLdot, ...
+                    rvec(2), rpy_ddot, phiLddot, thetaLddot];
 
     control_input = [u1, Tau];
 
