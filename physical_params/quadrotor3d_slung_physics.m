@@ -16,8 +16,10 @@ physics_p.load_radius = .04;
 
 physics_p.m = physics_p.M*.5;
 physics_p.L = .4;
+physics_p.l = physics_p.L;
 
-
-% Dynamic mode function
-dyn_fun = @quadrotor3d_slung;
-physics_p.dyn_fun = @quadrotor3d_slung;
+physics_p.cx = .1;
+physics_p.cy = .1;
+physics_p.cz = .1;
+physics_p.Cd = [physics_p.cx physics_p.cy physics_p.cz]';
+physics_p.cL = .05;
