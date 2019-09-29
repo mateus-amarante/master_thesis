@@ -2,7 +2,7 @@
 close all;
 clc;
 
-addpath('auxiliary','control','controllers','dynamics','physical_params',...
+addpath('auxiliary','control','controllers','dynamics','physics',...
     'config','plot','trajectories','trajectory_planning');
 
 set(groot,'defaulttextinterpreter','latex');  
