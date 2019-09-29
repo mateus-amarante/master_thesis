@@ -49,4 +49,7 @@ plot3(x,y,z); hold on;
 plot3(xL,yL,zL);
 
 testCase = matlab.unittest.TestCase.forInteractiveUse;
-assertEqual(testCase,qqd(:,1:3),[xL,yL,zL],'AbsTol',1e-4);
+assertEqual(testCase,qqd(:,1:3),[xL,yL,zL],'AbsTol',1e-8);
+assertEqual(testCase,yaw_tt(:,1),flat_outputs(:,6),'AbsTol',1e-12);
+assertEqual(testCase,yaw_tt(:,2),flat_outputs(:,14),'AbsTol',1e-12);
+% assertEqual(testCase,yaw_tt(:,3),flat_outputs(:,22),'AbsTol',1e-12);

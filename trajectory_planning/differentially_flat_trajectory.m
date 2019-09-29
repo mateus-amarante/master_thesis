@@ -57,13 +57,13 @@ function [system_state, control_input] = differentially_flat_trajectory(flat_rL,
     rvec = @(der) rLvec(der) - l*p(der);
 
     % Rotation Matrix
-    t = M * rvec(2) - Tp(0) + M * g * ez + Cd.*rvec(1);
+    u1vec = M * rvec(2) - Tp(0) + M * g * ez + Cd.*rvec(1);
     % Thrust force
-    u1 = vecnorm(t, 2, 2);
+    u1 = vecnorm(u1vec, 2, 2);
     
-    ezb = t ./ u1;
+    ezb = u1vec ./ u1;
 
-    eyc = [-sin(yaw(0)), cos(yaw(0)), zeros(size(t, 1), 1)];
+    eyc = [-sin(yaw(0)), cos(yaw(0)), zeros(size(u1vec, 1), 1)];
     
     aux = cross(eyc, ezb, 2);
     exb = aux ./ vecnorm(aux, 2, 2);
@@ -80,8 +80,6 @@ function [system_state, control_input] = differentially_flat_trajectory(flat_rL,
     phi = rpy(:, 1);
     theta = rpy(:, 2);
     psi = rpy(:, 3);
-
-    
 
     % Angular velocity
     u1dot = dot(M*rvec(3) + Cd.*rvec(2) - Tp(1), ezb, 2);
@@ -104,7 +102,7 @@ function [system_state, control_input] = differentially_flat_trajectory(flat_rL,
     % Angular acceleration
     aux = M*rvec(4) + Cd.*rvec(3) - Tp(2) - cross(omega, cross(omega, u1.*ezb, 2), 2);
     u1ddot = dot(aux, ezb, 2);
-    halpha = aux - u1ddot .* ezb - 2 * cross(omega, u1dot .* ezb, 2);
+    halpha = (aux - u1ddot .* ezb - 2 * cross(omega, u1dot .* ezb, 2))./u1;
 
     pdot = -dot(halpha, eyb, 2);
     qdot = dot(halpha, exb, 2);
