@@ -30,9 +30,9 @@ kappa_yphi = control_p.kappa_yphi;
 eta_yphi = control_p.eta_yphi;
 
 %% Reference signal renaming
-q_d = xref(1:8);
-qdot_d = xref(9:16);
-qddot_d = xref(17:24);
+q_d = xref(1:8)';
+qdot_d = xref(9:16)';
+qddot_d = xref(17:24)';
 
 x_d = q_d(1); xdot_d = qdot_d(1); xddot_d = qddot_d(1);
 y_d = q_d(2); ydot_d = qdot_d(2); yddot_d = qddot_d(2);

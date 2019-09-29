@@ -1,4 +1,4 @@
-function [system_state, control_input] = differentially_flat_trajectory(flat_rL, flat_yaw, physics_p)
+function [flat_outputs] = differentially_flat_trajectory(flat_rL, flat_yaw, physics_p)
 
     % Physics parameters renaming
     M = physics_p.M;
@@ -130,4 +130,5 @@ function [system_state, control_input] = differentially_flat_trajectory(flat_rL,
 
     control_input = [u1, Tau];
 
+    flat_outputs = [system_state, control_input];
 end

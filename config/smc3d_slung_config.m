@@ -1,4 +1,4 @@
-function [physics_p, control_p, traj_p, sim_p, plot_p] = final_smc3d_slung_config()
+function [physics_p, control_p, traj_p, sim_p, plot_p] = smc3d_slung_config()
 
     % Physical parameters
     physics_p = quadrotor3d_slung_physics();
@@ -27,21 +27,23 @@ function [physics_p, control_p, traj_p, sim_p, plot_p] = final_smc3d_slung_confi
 
     % Trajectory and simulation parameters
     l = physics_p.l;
-    xLd = [ 0  0 2 2 0 0 0]';
-    yLd = [ 0  0 0 1 1 0 0]';
-    zLd = [-l -l 1 1 1 -l -l]';
-    rLd= [xLd yLd zLd];
+    xd = [ 0  0 2 2 0 0 0]';
+    yd = [ 0  0 0 1 1 0 0]';
+    zd = [-l -l 1 1 1 -l -l]' + l;
+    rd= [xd yd zd];
     
     psid = [0 0 0 pi/2 pi/2 0 0]';
-    
+    rpy_d = [zeros(length(psid),2), psid];
+    rpL_d = zeros(length(psid),2);
+        
     Tf = 12;
-    td = linspace(0,Tf,length(xLd))';
+    td = linspace(0,Tf,length(xd))';
     
     sim_p.x0 = zeros(16, 1);
     sim_p.dyn_fun = @quadrotor_slung_load_3d;
     sim_p.t = 0:.02:Tf;
 
-    traj_p.sample_fun = waypoint_flat_trajectory(td, rLd, psid, physics_p);
+    traj_p.sample_fun = waypoint_poly_trajectory(td, [rd, rpy_d, rpL_d], 2);
     
     % Plot parameters
     plot_p.plot_state = @plot_quadrotor3d_slung_state;

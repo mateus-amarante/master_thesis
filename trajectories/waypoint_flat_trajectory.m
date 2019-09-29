@@ -1,7 +1,9 @@
-function [outputArg1,outputArg2] = waypoint_trajectory(inputArg1,inputArg2)
-%WAYPOINT_TRAJECTORY Summary of this function goes here
-%   Detailed explanation goes here
-outputArg1 = inputArg1;
-outputArg2 = inputArg2;
+function sample_fun = waypoint_flat_trajectory(td, rL_pos, yaw_pos, physics_p)
+
+rL_fun = waypoint_poly_trajectory(td, rL_pos, 6);
+yaw_fun = waypoint_poly_trajectory(td, yaw_pos, 2);
+
+sample_fun = @(t) differentially_flat_trajectory(rL_fun(t), yaw_fun(t), physics_p);
+
 end
 
