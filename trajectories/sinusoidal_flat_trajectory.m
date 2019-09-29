@@ -14,7 +14,7 @@ traj_p.Tf = wait_time + T + steady_time;
 traj_p.traj_tspan = [wait_time, T + wait_time]';
 
 % Trajectory building
-traj_p.sample_fun = plan_polynomial_trajectory(traj_p.traj_tspan, traj_p.qd, traj_p.n_vars, 3);
+traj_p.sample_fun = plan_polynomial_trajectory2(traj_p.traj_tspan, traj_p.qd, traj_p.n_vars, 2);
 
 end
 

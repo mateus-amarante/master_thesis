@@ -1,11 +1,10 @@
-function traj_p = setpoint_trajectory(setpoint, Tf, dt)
+function sample_fun = setpoint_trajectory(startpoint, endpoint, wait_time)
 
-traj_p.t = 0:dt:Tf;
+startpoint = startpoint(:);
+endpoint = endpoint(:);
 
-setpoint = setpoint(:);
-
-traj_p.sample_fun = @(t) setpoint'.*ones(length(t), length(setpoint));
-traj_p.qd = traj_p.sample_fun(traj_p.t);
+sample_fun = @(t) startpoint'.*(t < wait_time).*ones(length(t), length(startpoint)) + ...
+    endpoint'.*(t >= wait_time).*ones(length(t), length(endpoint));
 
 end
 
