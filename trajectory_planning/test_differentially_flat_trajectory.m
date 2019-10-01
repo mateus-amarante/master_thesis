@@ -3,11 +3,11 @@ tt = (t(1):.01:t(end))'; % Sample times
 
 % Waypoints positions
 pos = [0 0 0;
-    1 2 1;
-    1 -1 3;
-    0 0  2];
+    .5 .5 0;
+    .5 .5 0;
+    0 0  0];
 
-yaw = [0; pi/2; pi; 0];
+yaw = [0; pi/4; pi/4; 0];
 
 physics_p = quadrotor3d_slung_physics();
 

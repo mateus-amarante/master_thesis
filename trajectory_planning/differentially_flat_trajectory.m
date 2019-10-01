@@ -26,20 +26,31 @@ function [flat_outputs] = differentially_flat_trajectory(flat_rL, flat_yaw, phys
     Tp_mat = [Tp(0) Tp(1) Tp(2) Tp(3) Tp(4)];
     Tp = @(der) Tp_mat(:, der * 3 + 1:(der + 1) * 3);
  
-    pvec = Tp(0) ./ vecnorm(Tp(0), 2, 2);
+    T = vecnorm(Tp(0), 2, 2);
+    pvec = Tp(0) ./ T;
     
-    T = @(der) dot(Tp(der), pvec, 2);
-    T_mat = [T(0) T(1) T(2) T(3) T(4)];
-    T = @(der) T_mat(:, der + 1);
+    Tdot = dot(Tp(1), pvec, 2);
+%     T = @(der) dot(Tp(der), pvec, 2);
+%     T_mat = [T(0) T(1) T(2) T(3) T(4)];
+%     T = @(der) T_mat(:, der + 1);
 
 %     pvec = Tp(0) ./ T(0);
-    pvec_dot = (Tp(1) - T(1).*pvec) ./ T(0);
-    pvec_ddot = (Tp(2) - T(2).*pvec - 2*T(1).*pvec_dot) ./ T(0);
-    pvec_3dot = (Tp(3) - T(3).*pvec - 3*T(2).*pvec_dot - 3*T(1).*pvec_ddot) ./ T(0);
-    pvec_4dot = (Tp(4) - T(4).*pvec - 4*T(3).*pvec_dot - 6*T(2).*pvec_ddot - 4*T(1).*pvec_3dot) ./ T(0);  
+    pvec_dot = (Tp(1) - Tdot.*pvec) ./ T;
+    
+    Tddot = dot(Tp(2), pvec, 2) + dot(Tp(1), pvec_dot, 2);
+    pvec_ddot = (Tp(2) - Tddot.*pvec - 2*Tdot.*pvec_dot) ./ T;
+    
+    T3dot = dot(Tp(3), pvec, 2) + 2*dot(Tp(2), pvec_dot, 2) + dot(Tp(1), pvec_ddot, 2);
+    pvec_3dot = (Tp(3) - T3dot.*pvec - 3*Tddot.*pvec_dot - 3*Tdot.*pvec_ddot) ./ T;
+    
+    T4dot = dot(Tp(4), pvec, 2) + 3*dot(Tp(3), pvec_dot, 2) + 3*dot(Tp(2), pvec_ddot, 2) + dot(Tp(1), pvec_3dot, 2); 
+    pvec_4dot = (Tp(4) - T4dot.*pvec - 4*T3dot.*pvec_dot - 6*Tddot.*pvec_ddot - 4*Tdot.*pvec_3dot) ./ T;  
     
     pvec_mat = [pvec, pvec_dot, pvec_ddot, pvec_3dot, pvec_4dot];
     p = @(der) pvec_mat(:, der * 3 + 1:(der + 1) * 3);
+    
+%     T_mat = [T Tdot Tddot T3dot T4dot];
+%     T = @(der) T_mat(:, der + 1);
     
     % Compute load angle
     thetaL = asin(-pvec(:, 1));
@@ -63,7 +74,12 @@ function [flat_outputs] = differentially_flat_trajectory(flat_rL, flat_yaw, phys
     
     ezb = u1vec ./ u1;
 
-    eyc = [-sin(yaw(0)), cos(yaw(0)), zeros(size(u1vec, 1), 1)];
+%     exc = [cos(yaw(0)), sin(yaw(0)), zeros(size(u1))];
+%     
+%     aux = cross(ezb, exc, 2);
+%     eyb = aux ./ vecnorm(aux, 2, 2);
+%     exb = cross(eyb, ezb, 2);
+    eyc = [-sin(yaw(0)), cos(yaw(0)), zeros(size(u1))];
     
     aux = cross(eyc, ezb, 2);
     exb = aux ./ vecnorm(aux, 2, 2);
@@ -82,17 +98,18 @@ function [flat_outputs] = differentially_flat_trajectory(flat_rL, flat_yaw, phys
     psi = rpy(:, 3);
 
     % Angular velocity
-    u1dot = dot(M*rvec(3) + Cd.*rvec(2) - Tp(1), ezb, 2);
-    hw = (M*rvec(3) + Cd.*rvec(2) - Tp(1) - u1dot .* ezb) ./ u1;
+    aux = M*rvec(3) + Cd.*rvec(2) - Tp(1);
+    u1dot = dot(aux, ezb, 2);
+    hw = (aux - u1dot .* ezb) ./ u1;
 
     pp = -dot(hw, eyb, 2);
     q = dot(hw, exb, 2);
     r = (cos(theta).*yaw(1) - sin(phi).*q)./cos(phi);
 
     omega = [pp, q, r];
-    rpy_dot = rpy;
+    rpy_dot = zeros(size(ezb));
     for i = 1:size(Rvec, 1)
-        Tbi = Tb2i(rpy(i, 1), rpy(i, 2));
+        Tbi = Tb2i(phi(i), theta(i));
         rpy_dot(i, :) = (Tbi * omega(i, :)')';
     end
     phidot = rpy_dot(:, 1);
