@@ -1,13 +1,13 @@
-t = [0 2 4 6]'; % Waypoints times
+t = [0 3 6 9]'; % Waypoints times
 tt = (t(1):.01:t(end))'; % Sample times
 
 % Waypoints positions
 pos = [0 0 0;
-    .5 .5 0;
-    .5 .5 0;
-    0 0  0];
+    0 0 0;
+    1 1 0;
+    1 1  0];
 
-yaw = [0; pi/4; pi/4; 0];
+yaw = [0; 0; pi/4; pi/4];
 
 physics_p = quadrotor3d_slung_physics();
 
@@ -16,7 +16,9 @@ flat_outputs = sample_fun(tt);
 % plot(tt, qqd(:,1:3), tt, flat_outputs(:,1:3));
 % plot(tt, flat_outputs(:,end-1:end));
 
-plot_quadrotor3d_slung_flat_animation(tt, flat_outputs, flat_outputs, physics_p);
+traj_p.sample_fun = sample_fun;
+
+plot_quadrotor3d_slung_flat_animation(tt, flat_outputs, physics_p, traj_p);
 
 x = flat_outputs(:, 1);
 y = flat_outputs(:, 2);

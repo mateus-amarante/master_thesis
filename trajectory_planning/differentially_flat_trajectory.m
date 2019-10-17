@@ -9,9 +9,6 @@ function [flat_outputs] = differentially_flat_trajectory(flat_rL, flat_yaw, phys
     m = physics_p.m;
 
     Cd = physics_p.Cd(:)'; % drag coefficients of the aircraft
-%     cx = physics_p.cx;
-%     cy = physics_p.cy;
-%     cz = physics_p.cz;
     cL = physics_p.cL; % drag coefficients of the load
 
     % Auxiliar variables
@@ -30,11 +27,6 @@ function [flat_outputs] = differentially_flat_trajectory(flat_rL, flat_yaw, phys
     pvec = Tp(0) ./ T;
     
     Tdot = dot(Tp(1), pvec, 2);
-%     T = @(der) dot(Tp(der), pvec, 2);
-%     T_mat = [T(0) T(1) T(2) T(3) T(4)];
-%     T = @(der) T_mat(:, der + 1);
-
-%     pvec = Tp(0) ./ T(0);
     pvec_dot = (Tp(1) - Tdot.*pvec) ./ T;
     
     Tddot = dot(Tp(2), pvec, 2) + dot(Tp(1), pvec_dot, 2);
@@ -52,9 +44,13 @@ function [flat_outputs] = differentially_flat_trajectory(flat_rL, flat_yaw, phys
 %     T_mat = [T Tdot Tddot T3dot T4dot];
 %     T = @(der) T_mat(:, der + 1);
     
+    % Drone state
+    rvec = @(der) rLvec(der) - l*p(der);
+    
     % Compute load angle
     thetaL = asin(-pvec(:, 1));
     phiL = asin(pvec(:, 2) ./ cos(thetaL));
+%     phiL = -acos(pvec(:, 3) ./ cos(thetaL));
 
     % Compute load angular velocity/acceleration
     thetaLdot = -pvec_dot(:, 1) ./ cos(thetaL);
@@ -63,10 +59,7 @@ function [flat_outputs] = differentially_flat_trajectory(flat_rL, flat_yaw, phys
     thetaLddot = (sin(thetaL) .* thetaLdot.^2 - pvec_ddot(:, 1)) ./ cos(thetaL);
     phiLddot = (sin(phiL) .* sin(thetaL) .* thetaLddot + 2 * cos(phiL) .* sin(thetaL) .* phiLdot .* thetaLdot + ...
         sin(phiL) .* cos(thetaL) .* (phiLdot.^2 + thetaL.^2) + pvec_ddot(:, 2)) ./ (cos(phiL) .* cos(thetaL));
-
-    % Drone state
-    rvec = @(der) rLvec(der) - l*p(der);
-
+    
     % Rotation Matrix
     u1vec = M * rvec(2) - Tp(0) + M * g * ez + Cd.*rvec(1);
     % Thrust force
@@ -117,9 +110,9 @@ function [flat_outputs] = differentially_flat_trajectory(flat_rL, flat_yaw, phys
     psidot = rpy_dot(:, 3);
 
     % Angular acceleration
-    aux = M*rvec(4) + Cd.*rvec(3) - Tp(2) - cross(omega, cross(omega, u1.*ezb, 2), 2);
-    u1ddot = dot(aux, ezb, 2);
-    halpha = (aux - u1ddot .* ezb - 2 * cross(omega, u1dot .* ezb, 2))./u1;
+    aux2 = M*rvec(4) + Cd.*rvec(3) - Tp(2) - cross(omega, cross(omega, u1vec, 2), 2);
+    u1ddot = dot(aux2, ezb, 2);
+    halpha = (aux2 - u1ddot .* ezb - 2 * cross(omega, u1dot .* ezb, 2))./u1;
 
     pdot = -dot(halpha, eyb, 2);
     qdot = dot(halpha, exb, 2);
@@ -127,12 +120,17 @@ function [flat_outputs] = differentially_flat_trajectory(flat_rL, flat_yaw, phys
 
     omegadot = [pdot, qdot, rdot];
 
-    rpy_ddot = rpy;
+    rpy_ddot = zeros(size(ezb));
     for i = 1:size(Rvec, 1)
+        
         Tbi = Tb2i(rpy(i, 1), rpy(i, 2));
         Tbi_dot = Tb2i_dot(rpy(i, 1), rpy(i, 2), rpy_dot(i, 1), rpy_dot(i, 2));
         rpy_ddot(i, :) = (Tbi_dot * omega(i, :)' + Tbi * omegadot(i, :)')';
+%         rpy_ddot(i,1) = (sin(phi(i)).*qdot(i) + cos(phi(i)).*rdot(i) + phidot(i).*thetadot(i)).*tan(theta(i)) + pdot(i) + psidot(i).*thetadot(i)./cos(theta(i));
+%         rpy_ddot(i,2) = -sin(phi(i)).*rdot(i) + cos(phi(i)).*qdot(i) - phidot(i).*(q(i).*sin(phi(i)) + r(i).*cos(phi(i)));
     end
+    
+%     rpy_ddot(:, 3) = yaw(2);
     
     phiddot = rpy_ddot(:, 1);
     thetaddot = rpy_ddot(:, 2);
