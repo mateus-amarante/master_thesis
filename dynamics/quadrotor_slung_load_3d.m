@@ -149,7 +149,7 @@ Bq = [ux uy uz 0 0]';
 p11 = -(cx + cL);
 p22 = -(cy + cL);
 p33 = -(cz + cL);
-p44 = -cL*l^2*thetaL^2;
+p44 = -cL*l^2*cthetaL^2;
 p55 = -cL*l^2;
 
 p15 =  cL*l*cthetaL;       p51 = p15;
