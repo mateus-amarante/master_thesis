@@ -38,9 +38,12 @@ x_d = q_d(1); xdot_d = qdot_d(1); xddot_d = qddot_d(1);
 y_d = q_d(2); ydot_d = qdot_d(2); yddot_d = qddot_d(2);
 z_d = q_d(3); zdot_d = qdot_d(3); zddot_d = qddot_d(3);
 
-phi_d = q_d(4); phidot_d = q_d(4); phiddot_d = q_d(4);
-theta_d = q_d(5); thetadot_d = q_d(5); thetaddot_d = q_d(5);
+phi_d = q_d(4); phidot_d = qdot_d(4); phiddot_d = qddot_d(4);
+theta_d = q_d(5); thetadot_d = qdot_d(5); thetaddot_d = qddot_d(5);
 psi_d = q_d(6); psidot_d = qdot_d(6); psiddot_d = qddot_d(6);
+
+% theta_d = 0; thetadot_d = 0; thetaddot_d = 0;
+% phi_d = 0; phidot_d = 0; phiddot_d = 0;
 
 % phiL_d = q_d(7); phiLdot_d = q_d(7); phiLddot_d = q_d(7);
 % thetaL_d = q_d(8); thetaLdot_d = q_d(8); thetaLddot_d = q_d(8);
@@ -57,6 +60,7 @@ psi = q(6); psidot = qdot(6);
 
 phiL = q(7); phiLdot = qdot(7);
 thetaL = q(8); thetaLdot = qdot(8);
+
 
 %% Dynamic model state-space representation
 
@@ -109,7 +113,7 @@ zpsi_ddot_d = [zddot_d; psiddot_d];
 fzpsi = [fz; fpsi];
 bzpsi = [bz; bpsi];
 
-[u([1 4]), s_zpsi, ueq_zpsi, usw_zpsi]  = smc(ezpsi, ezpsi_dot, zpsi_ddot_d, fzpsi, bzpsi, lambda_zpsi, kappa_zpsi, eta_zpsi);
+[u([1 4]), s_zpsi, ueq_zpsi, usw_zpsi]  = smc(ezpsi, ezpsi_dot, zpsi_ddot_d, fzpsi, bzpsi, lambda_zpsi, kappa_zpsi, eta_zpsi, @(x)tanh(50*x));
 
 % if u(1) > maxThrust
 %     u(1) = maxThrust;
@@ -155,7 +159,7 @@ xbtheta_ddot_d = [exbddot; thetaddot_d];
 fxbtheta = [0; ftheta];
 bxbtheta = [0; btheta];
 
-[u(3), s_xtheta, ueq_xtheta, usw_xtheta] = smcu([exbtheta; exbtheta_dot], xbtheta_ddot_d, fxbtheta, bxbtheta, [lambda_xtheta; lambda_xtheta_dot] , kappa_xtheta, eta_xtheta);
+[u(3), s_xtheta, ueq_xtheta, usw_xtheta] = smcu([exbtheta; exbtheta_dot], xbtheta_ddot_d, fxbtheta, bxbtheta, [lambda_xtheta; lambda_xtheta_dot] , kappa_xtheta, eta_xtheta, @(x)tanh(50*x));
 
 % Under-acrtuated SMC: yb and phi
 eybphi = [eyb; phi_d - phi];
@@ -166,7 +170,7 @@ ybphi_ddot_d = [eybddot; phiddot_d];
 fybphi = [0; fphi];
 bybphi = [0; bphi];
 
-[u(2), s_yphi, ueq_yphi, usw_yphi] = smcu([eybphi; eybphi_dot], ybphi_ddot_d, fybphi, bybphi, [lambda_yphi; lambda_yphi_dot] , kappa_yphi, eta_yphi);
+[u(2), s_yphi, ueq_yphi, usw_yphi] = smcu([eybphi; eybphi_dot], ybphi_ddot_d, fybphi, bybphi, [lambda_yphi; lambda_yphi_dot] , kappa_yphi, eta_yphi, @(x)tanh(50*x));
 
 s = [s_zpsi(:); s_xtheta(:); s_yphi(:)];
 ueq = [ueq_zpsi(:); ueq_xtheta(:); ueq_yphi(:)];
