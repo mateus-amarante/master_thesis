@@ -1,4 +1,19 @@
-function plot_quadrotor3d_slung_flat_state(t,q,qdot,qd,u,physics_p, control_p)
+function plot_quadrotor3d_slung_flat_state(t,q,physics_p, control_p, traj_p)
+
+% State remapping
+x = q;
+q = x(:,1:end/2);
+qdot = x(:,end/2+1:end);
+
+% Compute desired trajectory
+qd = traj_p.sample_fun(t);
+
+u = zeros(length(t), control_p.n_inputs);
+
+% TODO: define u for all timespecs at once
+for i=1:length(t)
+    u(i,:) = control_p.control_fun(x(i,:),qd(i,:),physics_p,control_p)';
+end
 
 % Robot Position
 x = q(:,1);
@@ -65,12 +80,12 @@ fig = gcf;
 title(fig.Children(end), 'Robot State');
 
 %% Plot Load State
-xL = x - physics_p.L*cos(phiL).*sin(thetaL);
-yL = y + physics_p.L*sin(phiL);
+xL = x - physics_p.L*sin(thetaL);
+yL = y + physics_p.L*sin(phiL).*cos(thetaL);
 zL = z - physics_p.L*cos(phiL).*cos(thetaL);
 
-xL_d = xd - physics_p.L*cos(phiLd).*sin(thetaLd);
-yL_d = yd + physics_p.L*sin(phiLd);
+xL_d = xd - physics_p.L*sin(thetaLd);
+yL_d = yd + physics_p.L*sin(phiLd).*cos(thetaLd);
 zL_d = zd - physics_p.L*cos(phiLd).*cos(thetaLd);
 
 figure;
@@ -107,13 +122,13 @@ fig = gcf;
 title(fig.Children(end), 'Robot Twist');
 
 %% Plot Load Linear and Angular Velocities
-xLdot = xdot + physics_p.L*(sin(phiL).*sin(thetaL).*phiLdot - cos(phiL).*cos(thetaL).*thetaLdot);
-yLdot = ydot + physics_p.L*cos(phiL).*phiLdot;
+xLdot = xdot - physics_p.L*cos(thetaL).*thetaLdot;
+yLdot = ydot + physics_p.L*(cos(phiL).*cos(thetaL).*phiLdot - sin(phiL).*sin(thetaL).*thetaLdot);
 zLdot = zdot + physics_p.L*(sin(phiL).*cos(thetaL).*phiLdot + cos(phiL).*sin(thetaL).*thetaLdot);
 
-xLdot_d = xdot_d + physics_p.L*(sin(phiL).*sin(thetaL).*phiLdot - cos(phiL).*cos(thetaL).*thetaLdot);
-yLdot_d = ydot_d + physics_p.L*cos(phiL).*phiLdot;
-zLdot_d = zdot_d + physics_p.L*(sin(phiL).*cos(thetaL).*phiLdot + cos(phiL).*sin(thetaL).*thetaLdot);
+xLdot_d = xdot_d - physics_p.L*cos(thetaLd).*thetaLdot_d;
+yLdot_d = ydot_d + physics_p.L*(cos(phiLd).*cos(thetaLd).*phiLdot_d - sin(phiLd).*sin(thetaLd).*thetaLdot_d);
+zLdot_d = zdot_d + physics_p.L*(sin(phiLd).*cos(thetaLd).*phiLdot_d + cos(phiLd).*sin(thetaLd).*thetaLdot_d);
 
 figure;
 
@@ -135,13 +150,14 @@ title(fig.Children(end), 'Load Twist');
 %% Plot Control Input
 figure;
 subplot(2,1,1);
-plot(t,u(:,1));
+plot(t,u(:,1),t,qd(:, 25));
 ylabel('Thrust Force $$U_1$$ [N]');
+legend('$$U_1$$(actual)','$$U_1$$(expected)');
 
 subplot(2,1,2);
-plot(t,u(:,2:end));
+plot(t,u(:,2:end),t,qd(:, 26:end));
 ylabel('Input Torque [N$$\cdot$$m]');
-legend('$$U_2$$','$$U_3$$','$$U_4$$');
+legend('$$U_2$$','$$U_3$$','$$U_4$$','$$U_2$$(expected)','$$U_3$$(expected)','$$U_4$$(expected)');
 
 xlabel('Time [s]');
 fig = gcf;

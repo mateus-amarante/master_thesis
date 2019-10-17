@@ -1,4 +1,7 @@
-function plot_quadrotor3d_slung_flat_animation(t,q,qd,physics_p)
+function plot_quadrotor3d_slung_flat_animation(t,q,physics_p,traj_p)
+
+% Compute desired trajectory
+qd = traj_p.sample_fun(t);
 
 % Physical Parameters
 r = physics_p.r;

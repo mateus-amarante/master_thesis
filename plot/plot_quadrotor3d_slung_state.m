@@ -1,4 +1,19 @@
-function plot_quadrotor3d_slung_state(t,q,qdot,qd,u,physics_p, control_p)
+function plot_quadrotor3d_slung_state(t,q,physics_p, control_p, traj_p)
+
+% State remapping
+x = q;
+q = x(:,1:end/2);
+qdot = x(:,end/2+1:end);
+
+% Compute desired trajectory
+qd = traj_p.sample_fun(t);
+
+u = zeros(length(t), control_p.n_inputs);
+
+% TODO: define u for all timespecs at once
+for i=1:length(t)
+    u(i,:) = control_p.control_fun(x(i,:),qd(i,:),physics_p,control_p)';
+end
 
 % Robot Position
 x = q(:,1);
@@ -28,12 +43,12 @@ thetaLdot = qdot(:,8);
 xd = qd(:,1);
 yd = qd(:,2);
 zd = qd(:,3);
-psid = qd(:,4);
+psid = qd(:,6);
 
-xdot_d = qd(:,5);
-ydot_d = qd(:,6);
-zdot_d = qd(:,7);
-psidot_d = qd(:,8);
+xdot_d = qd(:,9);
+ydot_d = qd(:,10);
+zdot_d = qd(:,11);
+psidot_d = qd(:,14);
 
 
 %% Plot Robot State
