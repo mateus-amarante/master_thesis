@@ -9,10 +9,13 @@ qdot = x(:,end/2+1:end);
 qd = traj_p.sample_fun(t);
 
 u = zeros(length(t), control_p.n_inputs);
+s = u;
+ueq = u;
+usw = u;
 
 % TODO: define u for all timespecs at once
 for i=1:length(t)
-    u(i,:) = control_p.control_fun(x(i,:),qd(i,:),physics_p,control_p)';
+    [u(i,:), s(i,:), ueq(i,:), usw(i,:)] = control_p.control_fun(x(i,:),qd(i,:),physics_p,control_p);
 end
 
 % Robot Position
@@ -150,9 +153,9 @@ title(fig.Children(end), 'Load Twist');
 %% Plot Control Input
 figure;
 subplot(2,1,1);
-plot(t,u(:,1),t,qd(:, 25));
+plot(t,u(:,1),t,qd(:, 25),t,ueq(:,1),t,usw(:,1));
 ylabel('Thrust Force $$U_1$$ [N]');
-legend('$$U_1$$(actual)','$$U_1$$(expected)');
+legend('$$U_1$$(actual)','$$U_1$$(expected)', '$$U_{1eq}$$', '$$U_{1sw}$$');
 
 subplot(2,1,2);
 plot(t,u(:,2:end),t,qd(:, 26:end));
@@ -163,17 +166,14 @@ xlabel('Time [s]');
 fig = gcf;
 title(fig.Children(end), 'Control Input');
 
-% % Plot sliding variables
-% % for i=1:length(t)
-% %     FIXME: state variables are temporarily transposed for nested3d_control
-% %     [~, ss] = control_p.control_fun(q(i,:)',qdot(i,:)',qd(i,:)',physics_p,control_p);
-% %     s(:,i) = ss;
-% % end
-% % 
-% % sdot = diff(s')/(t(2)-t(1));
-% % 
-% % figure;
-% % plot(s(3,1:end-1),sdot(:,3));
-% % plot(t,s.^2);
+% Plot sliding variables
+figure;
+plot(t,s);
+ylabel('Sliding variables');
+legend('$$s_1$$','$$s_2$$', '$$s_3$$', '$$s_4$$');
+
+xlabel('Time [s]');
+fig = gcf;
+title(fig.Children(end), 'Sliding Variables');
 
 end

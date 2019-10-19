@@ -16,7 +16,7 @@ function [physics_p, traj_p, sim_p] = common_config()
     traj_p.rpy_d = [zeros(length(traj_p.psid),2), traj_p.psid];
     traj_p.phithetaL_d = zeros(length(traj_p.psid),2);
         
-    traj_p.Tf = 15;
+    traj_p.Tf = 12;
     traj_p.td = linspace(0,traj_p.Tf,length(traj_p.xd))';
     
     sim_p.x0 = [traj_p.rd(1, :), traj_p.rpy_d(1, :), traj_p.phithetaL_d(1,:), zeros(1,8) ]';
@@ -27,7 +27,7 @@ function [physics_p, traj_p, sim_p] = common_config()
 
 %     traj_p.sample_fun = waypoint_poly_trajectory(td, [rd, rpy_d, rpL_d], 2);
     
-    noise_freq = 50;
+    noise_freq = 100;
     noise_t = 0:1/noise_freq:traj_p.Tf;
  
     xy_error = normrnd(0, .01, [2, numel(noise_t)]);

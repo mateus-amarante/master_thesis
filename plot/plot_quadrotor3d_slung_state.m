@@ -9,10 +9,13 @@ qdot = x(:,end/2+1:end);
 qd = traj_p.sample_fun(t);
 
 u = zeros(length(t), control_p.n_inputs);
+s = u;
+ueq = u;
+usw = u;
 
 % TODO: define u for all timespecs at once
 for i=1:length(t)
-    u(i,:) = control_p.control_fun(x(i,:),qd(i,:),physics_p,control_p)';
+    [u(i,:), s(i,:), ueq(i,:), usw(i,:)] = control_p.control_fun(x(i,:),qd(i,:),physics_p,control_p);
 end
 
 % Robot Position
@@ -89,9 +92,9 @@ title(fig.Children(end), 'Robot Twist');
 %% Plot Control Input
 figure;
 subplot(2,1,1);
-plot(t,u(:,1));
+plot(t,u(:,1),t,ueq(:,1),t,usw(:,1));
 ylabel('Thrust Force $$U_1$$ [N]');
-
+legend('$$U_1$$(actual)', '$$U_{1eq}$$', '$$U_{1sw}$$');
 subplot(2,1,2);
 plot(t,u(:,2:end));
 ylabel('Input Torque [N$$\cdot$$m]');

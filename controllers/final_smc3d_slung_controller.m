@@ -120,7 +120,7 @@ bzpsi = [bz; bpsi];
 % end
 
 % Compute controller variables
-% psiddot = fpsi + bpsi*u(4);
+psiddot = fpsi + bpsi*u(4);
 xddot = fx + bx*u(1);
 yddot = fy + by*u(1);
 
@@ -143,10 +143,10 @@ eybddot = -sin(psi)*exddot + cos(psi)*eyddot;
 
 % exbdot = psidot*eyb + cos(psi)*exdot + sin(psi)*eydot;
 % eybdot = -psidot*exb - sin(psi)*exdot + cos(psi)*eydot;
-
+% 
 % exbddot = psiddot*eyb - psidot^2*exb + 2*psidot*(-sin(psi)*exdot + cos(psi)*eydot) + ...
 %     cos(psi)*exddot + sin(psi)*eyddot;
-
+% 
 % eybddot = -psiddot*exb - psidot^2*eyb - 2*psidot*(cos(psi)*exdot + sin(psi)*eydot) + ...
 %     -sin(psi)*exddot + cos(psi)*eyddot;
 
@@ -172,8 +172,9 @@ bybphi = [0; bphi];
 
 [u(2), s_yphi, ueq_yphi, usw_yphi] = smcu([eybphi; eybphi_dot], ybphi_ddot_d, fybphi, bybphi, [lambda_yphi; lambda_yphi_dot] , kappa_yphi, eta_yphi, @(x)tanh(50*x));
 
-s = [s_zpsi(:); s_xtheta(:); s_yphi(:)];
-ueq = [ueq_zpsi(:); ueq_xtheta(:); ueq_yphi(:)];
-usw = [usw_zpsi(:); usw_xtheta(:); usw_yphi(:)];
+s = [s_zpsi(:); s_xtheta(:); s_yphi(:)]';
+ueq = [ueq_zpsi(:); ueq_xtheta(:); ueq_yphi(:)]';
+usw = [usw_zpsi(:); usw_xtheta(:); usw_yphi(:)]';
+u = u';
 
 end

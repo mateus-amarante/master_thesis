@@ -70,7 +70,7 @@ psidot = rpy_dot(3);
 % U(2) = kt*r*[0 1 0 -1]*wr2;
 % U(3) = kt*r*[-1 0 1 0]*wr2;
 % U(4) = km*[ 1 -1 1 -1]*wr2;
-U = u;
+U = u(:);
 
 %% COMPUTE ACCELERATIONS
 % Helper variables
