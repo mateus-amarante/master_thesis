@@ -4,19 +4,19 @@ function [physics_p, traj_p, sim_p] = common_config()
     physics_p = quadrotor3d_slung_physics();
 
     % Trajectory and simulation parameters
-    traj_p.xd = [ 0 2 2 2 0 0 0]';
-    traj_p.yd = [ 0 0 0 1 1 0 0]';
-    traj_p.zd = [ 0 0 1 1 1 0 0]';
+    traj_p.xd = [0 0 0 3 3 3]';
+    traj_p.yd = [0 0 0 3 3 3]';
+    traj_p.zd = [0 0 0 3 3 3]';
     traj_p.zLd = traj_p.zd - physics_p.l;
 
     traj_p.rd = [traj_p.xd traj_p.yd traj_p.zd];
     traj_p.rLd = [traj_p.xd traj_p.yd traj_p.zLd];
     
-    traj_p.psid = [0 pi/4 pi/4 pi/2 pi/2 0 0]';
+    traj_p.psid = [0 0 0 pi/4 pi/4 pi/4]';
     traj_p.rpy_d = [zeros(length(traj_p.psid),2), traj_p.psid];
     traj_p.phithetaL_d = zeros(length(traj_p.psid),2);
         
-    traj_p.Tf = 13;
+    traj_p.Tf = 15;
     traj_p.td = linspace(0,traj_p.Tf,length(traj_p.xd))';
     
     sim_p.x0 = [traj_p.rd(1, :), traj_p.rpy_d(1, :), traj_p.phithetaL_d(1,:), zeros(1,8) ]';
@@ -50,6 +50,7 @@ function [physics_p, traj_p, sim_p] = common_config()
     
     p = pchip(noise_t, [position_error; velocity_error]);
     sim_p.noise = @(t) ppval(p, t);
+%     sim_p.noise = @(t) zeros(size(t));
     
     % Plot parameters
 %     plot_p.plot_state = @plot_quadrotor3d_slung_flat_state;

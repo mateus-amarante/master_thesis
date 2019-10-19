@@ -23,3 +23,10 @@ physics_p.cy = .1;
 physics_p.cz = .1;
 physics_p.Cd = [physics_p.cx physics_p.cy physics_p.cz]';
 physics_p.cL = .05;
+
+physics_p.wn = sqrt((physics_p.M+physics_p.m)*physics_p.g/(physics_p.M*physics_p.l));
+physics_p.zeta = physics_p.cL/(2*physics_p.m*physics_p.wn);
+physics_p.damping = sqrt(1-physics_p.zeta^2);
+physics_p.wd = physics_p.damping*physics_p.wn;
+physics_p.Td = 2*pi/physics_p.wd;
+end

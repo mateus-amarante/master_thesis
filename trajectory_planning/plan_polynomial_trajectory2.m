@@ -14,10 +14,10 @@ n_deriv_in = size(q,2)/n_vars-1;
 
 if nargin < 4 || isempty(n_deriv_out)
     n_deriv_out = n_deriv_in;
-    
-    if nargin < 3 || isempty(n_vars)
-        n_vars = n_deriv_in;
-    end
+%     
+%     if nargin < 3 || isempty(n_vars)
+%         n_vars = n_deriv_in;
+%     end
 end
 
 % Reshape input (one variable per column)
@@ -30,6 +30,7 @@ v = v'; % one variable per row
 
 t = reshape(repmat(t,1,n_deriv_in+1)', 1, n_points*(n_deriv_in+1)); % repeat t n_deriv_in times
 sp = spapi(augknt(t, n_deriv_in*2+2), t, v); % compute the spline
+% poly_order = length(augknt(t, n_deriv_in*2+2)) - size(v,2) - 1
 
 sample_traj_fun = @(t)sample(t, fnxtr(sp,1), n_vars, n_deriv_out);
 

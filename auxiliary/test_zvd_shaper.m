@@ -2,7 +2,7 @@
 close all;
 clc;
 
-addpath('auxiliary','control','controllers','dynamics','physical_params',...
+addpath('auxiliary','control','controllers','dynamics','physics',...
     'config','plot','trajectories','trajectory_planning');
 
 xd = 5;
@@ -10,8 +10,10 @@ zd = 4;
 T = 3;
 steady_time = 3;
 dt = .01;
-traj_p = simple2d_trajectory(xd,zd,T,steady_time,dt);
-plot(traj_p.qd(:,1))
+sample_fun = waypoint_poly_trajectory([0;T], [0;xd], 2);
+
+t = 0:dt:T+steady_time;
+plot(sample_fun(t));
 hold on
 
 M = .85;
@@ -20,7 +22,7 @@ g = 9.81;
 L = 1;
 wn = sqrt((M+m)*g/(M*L));
 zeta = 0;
-[u, ts, A] = zvd_shaper(traj_p.t,traj_p.qd,wn,zeta);
-plot(traj_p.qd(:,1))
+[u, ts, A] = zvd_shaper(t,sample_fun(t),wn,zeta);
+plot(sample_fun(t));
 hold on
-plot(u(:,1))
+plot(u)
