@@ -7,7 +7,7 @@ pos = [0 0 0;
     1 1 0;
     1 1  0];
 
-yaw = [0; 0; pi/4; pi/4];
+yaw = [0; 0; pi/2; pi/2];
 
 physics_p = quadrotor3d_slung_physics();
 
@@ -43,7 +43,7 @@ qqd = sample_rLd(tt);
 yaw_tt = sample_psid(tt);
 
 testCase = matlab.unittest.TestCase.forInteractiveUse;
-assertEqual(testCase,qqd(:,1:3),[xL,yL,zL],'AbsTol',1e-8);
+assertEqual(testCase,qqd(:,1:3),[xL,yL,zL],'AbsTol',1e-12);
 assertEqual(testCase,yaw_tt(:,1),flat_outputs(:,6),'AbsTol',1e-12);
 assertEqual(testCase,yaw_tt(:,2),flat_outputs(:,14),'AbsTol',1e-12);
 assertEqual(testCase,yaw_tt(:,3),flat_outputs(:,22),'AbsTol',1e-12);

@@ -32,7 +32,7 @@ t = reshape(repmat(t,1,n_deriv_in+1)', 1, n_points*(n_deriv_in+1)); % repeat t n
 sp = spapi(augknt(t, n_deriv_in*2+2), t, v); % compute the spline
 % poly_order = length(augknt(t, n_deriv_in*2+2)) - size(v,2) - 1
 
-sample_traj_fun = @(t)sample(t, fnxtr(sp,1), n_vars, n_deriv_out);
+sample_traj_fun = @(t)sample(t, fnxtr(sp,n_deriv_out+1), n_vars, n_deriv_out);
 
     function v_out = sample(t, sp, n_vars, n_deriv_out) 
         v_out = zeros(numel(t), n_vars*(n_deriv_out+1));
