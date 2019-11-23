@@ -14,24 +14,24 @@ function [qdot] = quadrotor_slung_load_3d(q,u,physics_p)
 
 
 %% PARAM REMAPPING
-M = physics_p.M;
-m = physics_p.m;
-l = physics_p.l;
+M = physics_p.M_real;
+m = physics_p.m_real;
+l = physics_p.l_real;
 g = physics_p.g;
 % Ix = physics_p.Ix;
 % Iy = physics_p.Iy;
 % Iz = physics_p.Iz;
-I  = physics_p.I;
-Iinv = physics_p.Iinv;
+I  = physics_p.I_real;
+Iinv = physics_p.Iinv_real;
 % kt = physics_p.kt;
 % km = physics_p.km;
 % r = physics_p.r;
 
 % Drag coefficients
-cx = physics_p.cx;
-cy = physics_p.cy;
-cz = physics_p.cz;
-cL = physics_p.cL;
+cx = physics_p.cx_real;
+cy = physics_p.cy_real;
+cz = physics_p.cz_real;
+cL = physics_p.cL_real;
 
 %% STATE REMAPPING
 
