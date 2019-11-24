@@ -6,6 +6,7 @@ function [physics_p, control_p, traj_p, sim_p, plot_p] = differentially_flat_con
     
     [physics_p, traj_p, sim_p] = common_config();
     traj_p.sample_fun = waypoint_flat_trajectory(traj_p.td, traj_p.rLd, traj_p.psid, physics_p);
+    traj_p.load_sample_fun = waypoint_poly_trajectory(traj_p.td, traj_p.rLd, traj_p.psid, physics_p);
 
     % Plot parameters
     plot_p.plot_state = @plot_quadrotor3d_slung_flat_state;

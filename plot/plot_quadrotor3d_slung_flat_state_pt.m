@@ -1,4 +1,4 @@
-function plot_quadrotor3d_slung_flat_state(t,q,physics_p, control_p, traj_p)
+function plot_quadrotor3d_slung_flat_state_pt(t,q,physics_p, control_p, traj_p)
 
 % State remapping
 x = q;
@@ -9,6 +9,7 @@ qdot = x(:,end/2+1:end);
 qd = traj_p.sample_fun(t);
 
 u = zeros(length(t), control_p.n_inputs);
+u_d = qd(:, 25:end);
 s = u;
 ueq = u;
 usw = u;
@@ -18,7 +19,26 @@ for i=1:length(t)
     [u(i,:), s(i,:), ueq(i,:), usw(i,:)] = control_p.control_fun(x(i,:),qd(i,:),physics_p,control_p);
 end
 
-% Robot Position
+% Robot Position & orientation
+xyz = q(:,1:3);
+rpy = q(:,4:6);
+phithetaL = q(:,7:8);
+
+% Robot Velocity
+xyz_dot = qdot(:,1:3);
+rpy_dot = qdot(:,4:6);
+phithetaL_dot = qdot(:,7:8);
+
+% Desired position
+xyz_d = qd(:,1:3);
+rpy_d = qd(:,4:6);
+phithetaL_d = qd(:,7:8);
+
+% Desired velocity
+xyz_dot_d = qd(:,9:11);
+rpy_dot_d = qd(:,12:14);
+phithetaL_dot_d = qd(:,15:16);
+
 x = q(:,1);
 y = q(:,2);
 z = q(:,3);
@@ -67,25 +87,32 @@ phiLdot_d = qd(:,15);
 thetaLdot_d = qd(:,16);
 
 %% Plot Robot State
-figure;
-subplot(3,2,1);
-plot(t,[x y z xd(1:length(x)) yd(1:length(y)) zd(1:length(z))]);
-ylabel('Posição [m]'); %xlabel('Time [s]');
-legend('x','y','z','$$x_d$$','$$y_d$$','$$z_d$$');
+plot_quadrotor_posvel_pt(t,xyz, xyz_d, xyz_dot, xyz_dot_d);
+plot_quadrotor_rpy_pt(t,rpy, rpy_d, rpy_dot, rpy_dot_d);
+plot_sliding_variables_pt(t,s);
+plot_cable_angle_pt(t,phithetaL,phithetaL_d,phithetaL_dot,phithetaL_dot_d,traj_p.stop_time);
+plot_control_input_flat_pt(t,u,u_d);
 
-subplot(3,2,2);
-plot(t,[phi theta psi phid thetad psid]);
-legend('$$\phi$$','$$\theta$$','$$\psi$$','$$\phi_d$$','$$\theta_d$$','$$\psi_d$$');
-ylabel('Orientação da Aeronave [rad]');
-
-subplot(3,2,4);
-plot(t,[phiL, thetaL]);
-legend('$$\phi$$','$$\theta$$','$$\psi$$','$$\phi_d$$','$$\theta_d$$','$$\psi_d$$');
-ylabel('Orientação da Aeronave [rad]');
-
-xlabel('Time [s]');
-fig = gcf;
-title(fig.Children(end), 'Robot State');
+% 
+% figure;
+% subplot(3,2,1);
+% plot(t,[x y z xd(1:length(x)) yd(1:length(y)) zd(1:length(z))]);
+% ylabel('Posição [m]'); %xlabel('Time [s]');
+% legend('x','y','z','$$x_d$$','$$y_d$$','$$z_d$$');
+% 
+% subplot(3,2,2);
+% plot(t,[phi theta psi phid thetad psid]);
+% legend('$$\phi$$','$$\theta$$','$$\psi$$','$$\phi_d$$','$$\theta_d$$','$$\psi_d$$');
+% ylabel('Orientação da Aeronave [rad]');
+% 
+% subplot(3,2,4);
+% plot(t,[phiL, thetaL]);
+% legend('$$\phi$$','$$\theta$$','$$\psi$$','$$\phi_d$$','$$\theta_d$$','$$\psi_d$$');
+% ylabel('Orientação da Aeronave [rad]');
+% 
+% xlabel('Time [s]');
+% fig = gcf;
+% title(fig.Children(end), 'Robot State');
 
 %% Plot Load State
 xL = x - physics_p.L*sin(thetaL);

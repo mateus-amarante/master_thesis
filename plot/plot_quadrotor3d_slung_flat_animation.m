@@ -105,6 +105,7 @@ for i=1:length(t)
     rotors24_y = [rotor2_pos(2) rotor4_pos(2)];
     rotors24_z = [rotor2_pos(3) rotor4_pos(3)];
     
+
     q_line.XData = x(1:i);
     q_line.YData = y(1:i);
     q_line.ZData = z(1:i);
