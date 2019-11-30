@@ -1,4 +1,4 @@
-function plot_phase_portrait(q,qdot,q_name,qdot_name,lambda)
+function plot_phase_portrait(q,qdot,q_name,qdot_name,lambda, dict)
 
 figure;
 plot(q,qdot)

@@ -1,4 +1,4 @@
-function plot_horizontal_state(t, xy, phitheta, phithetaL)
+function plot_horizontal_state(t, xy, phitheta, phithetaL, dict)
 
 %% State remapping
 x = xy(:,1);
@@ -20,8 +20,8 @@ set(gcf, 'OuterPosition', [300, 150, 1200, 500]);
 subplot(2,3,1);
 plot(t, zeros(size(t)), '--', t,x);
 ylabel('$x$ [m]');
-legend('Desejado','Realizado');
-th = title('Posição da Aeronave', 'Interpreter','tex','FontSize',12,'FontAngle','Italic','FontWeight','normal');
+legend(dict.desired_leg, dict.actual_leg);
+th = title(dict.quad_position_title, 'Interpreter','tex','FontSize',12,'FontAngle','Italic','FontWeight','normal');
 set(th,'Unit','normalized','Position',[.5, 1.1, 0]);
 ylim(ylim_pos);
 xlim([t(1) t(end)]);
@@ -29,17 +29,17 @@ xlim([t(1) t(end)]);
 subplot(2,3,4);
 plot(t, zeros(size(t)), '--', t,y);
 ylabel('$y$ [m]');
-legend('Desejado','Realizado');
+legend(dict.desired_leg, dict.actual_leg);
 ylim(ylim_pos);
 xlim([t(1) t(end)]);
-xlabel('Tempo [s]','Interpreter','tex','FontSize',12);
+xlabel(dict.time_label,'Interpreter','tex','FontSize',12);
 
 
 subplot(2,3,2);
 plot(t, zeros(size(t)), '--', t,phi);
 ylabel('$\phi$ [rad]');
-legend('Desejado','Realizado');
-th = title('Orientação da Aeronave', 'Interpreter','tex','FontSize',12,'FontAngle','Italic','FontWeight','normal');
+legend(dict.desired_leg, dict.actual_leg);
+th = title(dict.quad_orientation_title, 'Interpreter','tex','FontSize',12,'FontAngle','Italic','FontWeight','normal');
 set(th,'Unit','normalized','Position',[.5, 1.1, 0]);
 ylim(ylim_ang);
 xlim([t(1) t(end)]);
@@ -47,16 +47,16 @@ xlim([t(1) t(end)]);
 subplot(2,3,5);
 plot(t, zeros(size(t)), '--', t,theta);
 ylabel('$\theta$ [rad]');
-legend('Desejado','Realizado');
+legend(dict.desired_leg, dict.actual_leg);
 ylim(ylim_ang);
 xlim([t(1) t(end)]);
-xlabel('Tempo [s]','Interpreter','tex','FontSize',12);
+xlabel(dict.time_label,'Interpreter','tex','FontSize',12);
 
 subplot(2,3,3);
 plot(t, zeros(size(t)), '--', t,phiL);
 ylabel('$\phi_L$ [rad]');
-legend('Desejado','Realizado');
-th = title('Orientação do Cabo', 'Interpreter','tex','FontSize',12,'FontAngle','Italic','FontWeight','normal');
+legend(dict.desired_leg, dict.actual_leg);
+th = title(dict.cable_orientation_title, 'Interpreter','tex','FontSize',12,'FontAngle','Italic','FontWeight','normal');
 set(th,'Unit','normalized','Position',[.5, 1.1, 0]);
 ylim(ylim_ang);
 xlim([t(1) t(end)]);
@@ -64,10 +64,10 @@ xlim([t(1) t(end)]);
 subplot(2,3,6);
 plot(t, zeros(size(t)), '--', t,thetaL);
 ylabel('$\theta_L$ [rad]');
-legend('Desejado','Realizado');
+legend(dict.desired_leg, dict.actual_leg);
 ylim(ylim_ang);
 xlim([t(1) t(end)]);
-xlabel('Tempo [s]','Interpreter','tex','FontSize',12);
+xlabel(dict.time_label,'Interpreter','tex','FontSize',12);
 
 end
 

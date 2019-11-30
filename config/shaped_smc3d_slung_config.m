@@ -20,7 +20,7 @@ function [physics_p, control_p, traj_p, sim_p, plot_p] = shaped_smc3d_slung_conf
     sim_p.qd = traj_p.sample_fun(sim_p.t);
     
     % Plot parameters
-    plot_p.plot_state = @plot_quadrotor3d_slung_state_pt;
+    plot_p.plot_state = @plot_quadrotor3d_slung_state;
     plot_p.plot_animation = @plot_quadrotor3d_slung_animation;
     
 end

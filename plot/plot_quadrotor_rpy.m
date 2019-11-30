@@ -1,4 +1,4 @@
-function plot_quadrotor_rpy_pt(t,rpy, rpy_d, rpy_dot, rpy_dot_d)
+function plot_quadrotor_rpy(t,rpy, rpy_d, rpy_dot, rpy_dot_d, dict)
 
 phi = rpy(:,1);
 theta = rpy(:,2);
@@ -27,8 +27,8 @@ set(gcf, 'OuterPosition', [300, 150, 940, 770]);
 subplot(3,2,1);
 plot(t,phi_d,'--', t, phi);
 ylabel('$\phi$ [rad]');
-legend('Desejado','Realizado');
-th = title('Orientação da Aeronave', 'Interpreter','tex','FontSize',12,'FontAngle','Italic','FontWeight','normal');
+legend(dict.desired_leg, dict.actual_leg);
+th = title(dict.quad_orientation_title, 'Interpreter','tex','FontSize',12,'FontAngle','Italic','FontWeight','normal');
 set(th,'Unit','normalized','Position',[.5, 1.1, 0]);
 ylim(ylim_phitheta);
 xlim([t(1) t(end)]);
@@ -36,8 +36,8 @@ xlim([t(1) t(end)]);
 subplot(3,2,2);
 plot(t,phidot_d,'--', t, phidot);
 ylabel('$\dot{\phi}$ [rad/s]');
-legend('Desejado','Realizado');
-th = title('Velocidade Angular da Aeronave', 'Interpreter','tex','FontSize',12,'FontAngle','Italic','FontWeight','normal');
+legend(dict.desired_leg, dict.actual_leg);
+th = title(dict.quad_angular_velocity_euler_title, 'Interpreter','tex','FontSize',12,'FontAngle','Italic','FontWeight','normal');
 set(th,'Unit','normalized','Position',[.5, 1.1, 0]);
 ylim(ylim_rpy_dot);
 xlim([t(1) t(end)]);
@@ -46,30 +46,30 @@ xlim([t(1) t(end)]);
 subplot(3,2,3);
 plot(t,theta_d,'--', t, theta);
 ylabel('$$\theta$$ [rad]');
-legend('Desejado','Realizado');
+legend(dict.desired_leg, dict.actual_leg);
 ylim(ylim_phitheta);
 xlim([t(1) t(end)]);
 
 subplot(3,2,4);
 plot(t,thetadot_d,'--', t, thetadot);
 ylabel('$$\dot{\theta}$$ [rad/s]');
-legend('Desejado','Realizado');
+legend(dict.desired_leg, dict.actual_leg);
 ylim(ylim_rpy_dot);
 xlim([t(1) t(end)]);
 
 subplot(3,2,5);
 plot(t,psi_d,'--', t, psi);
 ylabel('$$\psi$$ [rad]');
-legend('Desejado','Realizado');
-xlabel('Tempo [s]','Interpreter','tex','FontSize',12);
+legend(dict.desired_leg, dict.actual_leg);
+xlabel(dict.time_label,'Interpreter','tex','FontSize',12);
 ylim(ylim_psi);
 xlim([t(1) t(end)]);
 
 subplot(3,2,6);
 plot(t,psidot_d,'--', t, psidot);
 ylabel('$$\dot{\psi}$$ [rad/s]');
-legend('Desejado','Realizado');
-xlabel('Tempo [s]','Interpreter','tex','FontSize',12);
+legend(dict.desired_leg, dict.actual_leg);
+xlabel(dict.time_label,'Interpreter','tex','FontSize',12);
 ylim(ylim_rpy_dot);
 xlim([t(1) t(end)]);
 

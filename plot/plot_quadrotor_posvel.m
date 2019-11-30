@@ -1,4 +1,4 @@
-function plot_quadrotor_posvel_pt(t,xyz, xyz_d, xyz_dot, xyz_dot_d)
+function plot_quadrotor_posvel(t,xyz, xyz_d, xyz_dot, xyz_dot_d, dict)
 
 x = xyz(:,1);
 y = xyz(:,2);
@@ -26,8 +26,8 @@ set(gcf, 'OuterPosition', [300, 150, 940, 770]);
 subplot(3,2,1);
 plot(t,xd,'--', t, x);
 ylabel('$x$ [m]');
-legend('Desejado','Realizado');
-th = title('Posição da Aeronave', 'Interpreter','tex','FontSize',12,'FontAngle','Italic','FontWeight','normal');
+legend(dict.desired_leg, dict.actual_leg);
+th = title(dict.quad_position_title, 'Interpreter','tex','FontSize',12,'FontAngle','Italic','FontWeight','normal');
 set(th,'Unit','normalized','Position',[.5, 1.1, 0]);
 ylim(ylim_pos);
 xlim([t(1) t(end)]);
@@ -35,8 +35,8 @@ xlim([t(1) t(end)]);
 subplot(3,2,2);
 plot(t,xdot_d,'--', t, xdot);
 ylabel('$\dot{x}$ [m/s]');
-legend('Desejado','Realizado');
-th = title('Velocidade Linear da Aeronave', 'Interpreter','tex','FontSize',12,'FontAngle','Italic','FontWeight','normal');
+legend(dict.desired_leg, dict.actual_leg);
+th = title(dict.quad_linear_velocity_title, 'Interpreter','tex','FontSize',12,'FontAngle','Italic','FontWeight','normal');
 set(th,'Unit','normalized','Position',[.5, 1.1, 0]);
 ylim(ylim_vel);
 xlim([t(1) t(end)]);
@@ -44,30 +44,30 @@ xlim([t(1) t(end)]);
 subplot(3,2,3);
 plot(t,yd,'--', t, y);
 ylabel('$$y$$ [m]');
-legend('Desejado','Realizado');
+legend(dict.desired_leg, dict.actual_leg);
 ylim(ylim_pos);
 xlim([t(1) t(end)]);
 
 subplot(3,2,4);
 plot(t,ydot_d,'--', t, ydot);
 ylabel('$$\dot{y}$$ [m/s]');
-legend('Desejado','Realizado');
+legend(dict.desired_leg, dict.actual_leg);
 ylim(ylim_vel);
 xlim([t(1) t(end)]);
 
 subplot(3,2,5);
 plot(t,zd,'--', t, z);
 ylabel('$$z$$ [m]');
-legend('Desejado','Realizado');
-xlabel('Tempo [s]','Interpreter','tex','FontSize',12);
+legend(dict.desired_leg, dict.actual_leg);
+xlabel(dict.time_label,'Interpreter','tex','FontSize',12);
 ylim(ylim_pos);
 xlim([t(1) t(end)]);
 
 subplot(3,2,6);
 plot(t,zdot_d,'--', t, zdot);
 ylabel('$$\dot{z}$$ [m/s]');
-legend('Desejado','Realizado');
-xlabel('Tempo [s]','Interpreter','tex','FontSize',12);
+legend(dict.desired_leg, dict.actual_leg);
+xlabel(dict.time_label,'Interpreter','tex','FontSize',12);
 ylim(ylim_vel);
 xlim([t(1) t(end)]);
 
