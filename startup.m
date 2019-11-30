@@ -10,5 +10,5 @@ set(groot, 'defaultAxesTickLabelInterpreter','latex');
 set(groot, 'defaultLegendInterpreter','latex');
 
 set(0, 'DefaultLineLineWidth', 1.25);
-set(0,'DefaultAxesFontSize',14)
+set(0,'DefaultAxesFontSize',14);
 % set(0,'DefaultAxesTitleFontWeight','normal');

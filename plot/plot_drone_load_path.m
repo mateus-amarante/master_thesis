@@ -1,4 +1,4 @@
-function plot_drone_load_path(x,qd,physics_p,title_str)
+function plot_drone_load_path(x,qd,physics_p,title_str, dict)
 phiL = x(:,7);
 thetaL = x(:,8);
 
@@ -39,7 +39,8 @@ ylabel('$y$ [m]','FontSize',14);
 zlabel('$z$ [m]','FontSize',14);
 t = title(title_str,'FontSize',14);
 % set(t,'Position',[5.5 0.4 1.00011]);
-leg = legend("Trajeto de referência da aeronave", "Trajeto de referência da carga", "Trajeto da aeronave", "Trajeto da carga","Interpreter","tex","FontSize",12);
-set(leg,'FontSize',14);
+leg = legend(dict.quad_reference_trajectory_leg, dict.load_reference_trajectory_leg,...
+    dict.quad_trajectory_leg, dict.load_trajectory_leg,"Interpreter","tex","FontSize",12);
+set(leg,'FontSize',12);
 end
 

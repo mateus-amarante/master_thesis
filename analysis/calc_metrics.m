@@ -1,23 +1,29 @@
-function [rms_rpy, freq_rpy, rms_phithetaL, u_std, s_rms] = calc_metrics(t,x,u,s,stop_time)
+function metrics = calc_metrics(t,x,qd,u,Fs,stop_time)
+%% Metrics
+rpy = x(:, 4:6);
+beta = acos(cos(rpy(:,1)).*cos(rpy(:,2)));
+beta_rms = rms(beta,1);
 
-Fs = 1./(t(2)-t(1));
+pqr = size(length(t),3);
 
-rms_rpy = rms(x(:, [4:6,12:14]),1);
+for i=1:length(t)
+    pqr(i,1:3) = (Ti2b(x(i,4),x(i,5))*x(i, 12:14)')';
+end
+% pqr_rms = rms(vecnorm(pqr,2,2),1);
 
-meanfreq_phi = meanfreq(x(:,4), Fs);
-meanfreq_theta = meanfreq(x(:,5), Fs);
-meanfreq_psi = meanfreq(x(:,6), Fs);
+phithetaL = x(t>=stop_time, [7,8]);
+alpha = acos(cos(phithetaL(:,1)).*cos(phithetaL(:,2)));
+alpha_rms = rms(alpha,1);
+% alpha_max = max(alpha);
 
-meanfreq_phidot = meanfreq(x(:,12), Fs);
-meanfreq_thetadot = meanfreq(x(:,13), Fs);
-meanfreq_psidot = meanfreq(x(:,14), Fs);
+xyz_rms = norm(rms(x(:,1:3) - qd(:,1:3),1));
+% u_power = [power_u1, power_u2, power_u3, power_u4];
+% tau_rms = rms(vecnorm(u(:,2:4),2,2),1)/100;
+% u1_rms = rms(u(:,1),1)/100;
 
-freq_rpy = [meanfreq_phi, meanfreq_theta, meanfreq_psi, meanfreq_phidot, meanfreq_thetadot, meanfreq_psidot];
+meanfreq_pqr = meanfreq(vecnorm(pqr,2,2),Fs);
 
-rms_phithetaL = rms(x(t>=stop_time, [7,8,15,16]),1);
-
-s_rms = rms(s,1);
-u_std = std(u,1);
+metrics = [xyz_rms, beta_rms, alpha_rms, meanfreq_pqr];
 
 end
 

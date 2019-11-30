@@ -13,6 +13,21 @@ if strcmp(lang,'en')
     dict.quad_angular_velocity_euler_title  = 'Euler Angles Rate';
     dict.sliding_variables_title  = 'Sliding Variables';
     dict.time_label = 'Time [s]';
+    
+    dict.without_input_shaping_leg = "Without Input Shaping";
+    dict.with_input_shaping_leg  = "With Input Shaping";
+    
+    dict.load_trajectory_leg = "Load trajectory";
+    dict.quad_trajectory_leg = "Quadrotor trajectory";
+    
+    dict.quad_trajectory_without_input_shaping_leg = "Quadrotor trajectory without input shaping";
+    dict.quad_trajectory_with_input_shaping_leg = "Quadrotor trajectory with input shaping";
+    
+    dict.quad_reference_trajectory_leg = "Quadrotor reference trajectory";
+    dict.load_reference_trajectory_leg = "Load reference trajectory";
+    
+    dict.configuration_leg = "Configuration";
+
 elseif strcmp(lang,'pt')
     dict.desired_leg = 'Desejado';
     dict.actual_leg = 'Realizado';
@@ -26,6 +41,21 @@ elseif strcmp(lang,'pt')
     dict.quad_angular_velocity_euler_title  = 'Velocidade Angular da Aeronave';
     dict.sliding_variables_title  = 'Variáveis Deslizantes';
     dict.time_label = 'Tempo [s]';
+    
+    dict.without_input_shaping_leg = "Original";
+    dict.with_input_shaping_leg  = "Com \textit{Input Shaping}";
+    
+    dict.load_trajectory_leg = "Trajeto da carga";
+    dict.quad_trajectory_leg = "Trajeto da aeronave";
+    
+    dict.quad_trajectory_without_input_shaping_leg = "Trajeto da aeronave sem \textit{intput shaping}";
+    dict.quad_trajectory_with_input_shaping_leg = "Trajeto da aeronave com \textit{intput shaping}";
+    
+    dict.quad_reference_trajectory_leg = "Trajeto de referência da aeronave";
+    dict.load_reference_trajectory_leg = "Trajeto de referência da carga";
+    
+    dict.configuration_leg = "Configuração";
+
 end
 
 end
