@@ -1,4 +1,4 @@
-function plot_quadrotor3d_slung_animation(t,q,physics_p,traj_p)
+function plot_quadrotor3d_slung_animation(t,q,physics_p,traj_p,sim_p,record)
 
 % Compute desired trajectory
 qd = traj_p.sample_fun(t);
@@ -53,15 +53,18 @@ grid on;
 view(3);
 
 load_sphere = surf(xe*eps, ye*eps, ze*eps);
+shading interp;
 load_sphere.EdgeColor = 'none';
 load_sphere.FaceLighting = 'gouraud';
-shading interp;
+load_sphere.FaceColor = [.5 .5 .5];
 
 axis equal;
 xlim(xlim_values);
 ylim(ylim_values);
 zlim(zlim_values);
 % axis equal;
+
+campos([-60,-10,25]);
 
 line(xd,yd,zd,'Color','g');
 
@@ -73,10 +76,17 @@ drone_line_24 = line(x(1),x(1),x(1),'Color','k','LineWidth',1);
 
 cable_line = line(x(1),x(1),x(1),'Color','k','LineWidth',1);
 
-% v = VideoWriter('peaks.avi','MPEG-4');
-% v.FrameRate = 50;
-% open(v);
+rotor1_circle = line(x(1),x(1),x(1),'Color','k','LineWidth',1);
+rotor2_circle = line(x(1),x(1),x(1),'Color','k','LineWidth',1);
+rotor3_circle = line(x(1),x(1),x(1),'Color','k','LineWidth',1);
+rotor4_circle = line(x(1),x(1),x(1),'Color','k','LineWidth',1);
 
+if record
+    v = VideoWriter(strcat(sim_p.name,"_",datestr(datetime('now'),'mm-dd_HH-MM-SS'),'.avi'),'MPEG-4');
+    v.FrameRate = round(1/dt);
+    open(v);
+end
+    
 for i=1:length(t)
     tic;
     
@@ -98,6 +108,30 @@ for i=1:length(t)
     rotors24_x = [rotor2_pos(1) rotor4_pos(1)];
     rotors24_y = [rotor2_pos(2) rotor4_pos(2)];
     rotors24_z = [rotor2_pos(3) rotor4_pos(3)];
+    
+    normal = R(:,3)';
+
+    rotor1_circle_points = plot_circle_3d(rotor1_pos', normal, physics_p.rotor_r);
+    rotor2_circle_points = plot_circle_3d(rotor2_pos', normal, physics_p.rotor_r);
+    rotor3_circle_points = plot_circle_3d(rotor3_pos', normal, physics_p.rotor_r);
+    rotor4_circle_points = plot_circle_3d(rotor4_pos', normal, physics_p.rotor_r);
+
+    rotor1_circle.XData = rotor1_circle_points(1,:);
+    rotor1_circle.YData = rotor1_circle_points(2,:);
+    rotor1_circle.ZData = rotor1_circle_points(3,:);
+    
+    rotor2_circle.XData = rotor2_circle_points(1,:);
+    rotor2_circle.YData = rotor2_circle_points(2,:);
+    rotor2_circle.ZData = rotor2_circle_points(3,:);
+    
+    rotor3_circle.XData = rotor3_circle_points(1,:);
+    rotor3_circle.YData = rotor3_circle_points(2,:);
+    rotor3_circle.ZData = rotor3_circle_points(3,:);
+    
+    rotor4_circle.XData = rotor4_circle_points(1,:);
+    rotor4_circle.YData = rotor4_circle_points(2,:);
+    rotor4_circle.ZData = rotor4_circle_points(3,:);
+    
     
     q_line.XData = x(1:i);
     q_line.YData = y(1:i);
@@ -123,13 +157,17 @@ for i=1:length(t)
     load_sphere.YData = ye + pos_load(2);
     load_sphere.ZData = ze + pos_load(3);
     
-%     frame = getframe(gcf);
-%     writeVideo(v,frame);
+    if record
+        frame = getframe(gcf);
+        writeVideo(v,frame);
+    end
     
     pause(dt-toc);
     
 end
 
-% close(v);
+if record
+    close(v);
+end
 
 end

@@ -12,17 +12,23 @@ steady_time = 3;
 dt = .01;
 sample_fun = waypoint_poly_trajectory([0;T], [0;xd], 2);
 
+v = sample_fun(t);
 t = 0:dt:T+steady_time;
-plot(sample_fun(t));
-hold on
 
-M = .85;
-m = .8*M;
-g = 9.81;
-L = 1;
-wn = sqrt((M+m)*g/(M*L));
-zeta = 0;
-[u, ts, A] = zvd_shaper(t,sample_fun(t),wn,zeta);
-plot(sample_fun(t));
-hold on
-plot(u)
+
+physics_p = quadrotor3d_slung_physics();
+
+wn = physics_p.wn;
+zeta = physics_p.zeta;
+[u, ts, A] = zvd_shaper(t,v(:,1),wn,zeta);
+plot(t,v(:,1),t,u);
+% hold on
+% plot(u)
+legend('Original', 'Modulado')
+xlabel('Tempo [s]');
+% hold off;
+figure;
+stem(ts,A, 'LineWidth', 2);
+xlabel('Tempo [s]');
+ylim([0,0.6])
+xlim([t(1) t(end)]);

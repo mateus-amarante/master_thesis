@@ -10,6 +10,7 @@ function [physics_p, control_p, traj_p, sim_p, plot_p] = flat_smc3d_slung_config
     [physics_p, traj_p, sim_p] = common_config();
     [traj_p.sample_fun, traj_p.rL_fun, traj_p.yaw_fun] = waypoint_flat_trajectory(traj_p.td, traj_p.rLd, traj_p.psid, physics_p);
     sim_p.qd = traj_p.sample_fun(sim_p.t);
+    sim_p.name = 'flat';
     
     % Plot parameters
     plot_p.plot_state = @plot_quadrotor3d_slung_flat_state;

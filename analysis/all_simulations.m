@@ -4,7 +4,7 @@ startup;
 [~, control_p_flat, traj_p_flat] = flat_smc3d_slung_config();
 [~, control_p_shaped_smc, traj_p_shaped_smc] = shaped_smc3d_slung_config();
 [~, control_p_shaped_flat, traj_p_shaped_flat] = shaped_flat_smc3d_slung_config();
-dict = plot_dictionary('en');
+dict = plot_dictionary('pt');
 
 % Plot desired path
 fig = figure('units','normalized','outerposition',[0.25,0.2,0.46,0.56]);

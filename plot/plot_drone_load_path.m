@@ -39,8 +39,10 @@ ylabel('$y$ [m]','FontSize',14);
 zlabel('$z$ [m]','FontSize',14);
 t = title(title_str,'FontSize',14);
 % set(t,'Position',[5.5 0.4 1.00011]);
-leg = legend(dict.quad_reference_trajectory_leg, dict.load_reference_trajectory_leg,...
-    dict.quad_trajectory_leg, dict.load_trajectory_leg,"Interpreter","tex","FontSize",12);
-set(leg,'FontSize',12);
+% leg = legend(dict.quad_reference_trajectory_leg, dict.load_reference_trajectory_leg,...
+%     dict.quad_trajectory_leg, dict.load_trajectory_leg,"Interpreter","tex","FontSize",12);
+% set(leg,'FontSize',12);
+
+campos([-60,-10,25]);
 end
 

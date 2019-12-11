@@ -18,6 +18,7 @@ function [physics_p, control_p, traj_p, sim_p, plot_p] = shaped_smc3d_slung_conf
 
     traj_p.sample_fun = waypoint_shaped_poly_trajectory(traj_p.td, [traj_p.rd, traj_p.rpy_d, traj_p.phithetaL_d], 2, physics_p, sim_p.dt);
     sim_p.qd = traj_p.sample_fun(sim_p.t);
+    sim_p.name = 'shaped';
     
     % Plot parameters
     plot_p.plot_state = @plot_quadrotor3d_slung_state;

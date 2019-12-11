@@ -35,7 +35,7 @@ elseif strcmp(lang,'pt')
     dict.cable_rate_title = 'Taxa de Rotação do Cabo';
     dict.control_input_title = 'Entradas de Controle';
     dict.quad_position_title = 'Posição da Aeronave';
-    dict.quad_o_title = 'Orientação da Aeronave';
+    dict.quad_orientation_title = 'Orientação da Aeronave';
     dict.load_position_title= 'Posição da Carga';
     dict.quad_linear_velocity_title = 'Velocidade Linear da Aeronave';
     dict.quad_angular_velocity_euler_title  = 'Velocidade Angular da Aeronave';

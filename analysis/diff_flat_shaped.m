@@ -203,3 +203,6 @@ grid on;
 xlabel('$x$ [m]');ylabel('$y$ [m]');zlabel('$z$ [m]');
 % line(xyz_load_s(:,1),xyz_load_s(:,2),xyz_load_s(:,3),'Color','r');
 
+
+% plot_p.plot_animation(sim_p.t, qd, physics_p, traj_p,sim_p, true);
+% plot_p_s.plot_animation(sim_p.t, qd_s, physics_p_s, traj_p_s);
