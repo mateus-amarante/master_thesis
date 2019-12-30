@@ -1,4 +1,4 @@
-function [u, s, ueq, usw] = final_smc3d_slung_controller(q,xref,physics_p,control_p)
+function [u, s, ueq, usw, s_aux] = final_smc3d_slung_controller(q,xref,physics_p,control_p)
 % SMC for quadrotor with suspended load systemfg
 % q: [x z theta]'
 
@@ -159,7 +159,7 @@ xbtheta_ddot_d = [exbddot; thetaddot_d];
 fxbtheta = [0; ftheta];
 bxbtheta = [0; btheta];
 
-[u(3), s_xtheta, ueq_xtheta, usw_xtheta] = smcu([exbtheta; exbtheta_dot], xbtheta_ddot_d, fxbtheta, bxbtheta, [lambda_xtheta; lambda_xtheta_dot] , kappa_xtheta, eta_xtheta, @(x)tanh(50*x));
+[u(3), s_xtheta, ueq_xtheta, usw_xtheta, saux_xtheta] = smcu([exbtheta; exbtheta_dot], xbtheta_ddot_d, fxbtheta, bxbtheta, [lambda_xtheta; lambda_xtheta_dot] , kappa_xtheta, eta_xtheta, @(x)tanh(50*x));
 
 % Under-acrtuated SMC: yb and phi
 eybphi = [eyb; phi_d - phi];
@@ -170,11 +170,12 @@ ybphi_ddot_d = [eybddot; phiddot_d];
 fybphi = [0; fphi];
 bybphi = [0; bphi];
 
-[u(2), s_yphi, ueq_yphi, usw_yphi] = smcu([eybphi; eybphi_dot], ybphi_ddot_d, fybphi, bybphi, [lambda_yphi; lambda_yphi_dot] , kappa_yphi, eta_yphi, @(x)tanh(50*x));
+[u(2), s_yphi, ueq_yphi, usw_yphi, saux_yphi] = smcu([eybphi; eybphi_dot], ybphi_ddot_d, fybphi, bybphi, [lambda_yphi; lambda_yphi_dot] , kappa_yphi, eta_yphi, @(x)tanh(50*x));
 
 s = [s_zpsi(:); s_xtheta(:); s_yphi(:)]';
 ueq = [ueq_zpsi(:); ueq_xtheta(:); ueq_yphi(:)]';
 usw = [usw_zpsi(:); usw_xtheta(:); usw_yphi(:)]';
+s_aux = [saux_xtheta(:); saux_yphi(:)];
 u = u';
 
 end

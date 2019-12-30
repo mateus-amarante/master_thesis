@@ -1,4 +1,4 @@
-function [u, s, ueq, usw] = smcu(e,xddot_d,f,b,lambda,kappa,eta, switch_fun)
+function [u, s, ueq, usw, s_aux] = smcu(e,xddot_d,f,b,lambda,kappa,eta, switch_fun)
 % First Order Sliding-Mode Control of Underactuated Systems
 
 if nargin < 8
@@ -15,6 +15,8 @@ lambda = lambda(1:end/2);
 
 % Sliding variable
 s = lambda'*e + lambdadot'*edot;
+
+s_aux = edot + lambda./lambdadot.*e;
 
 % u calculation
 den = lambdadot'*b;
