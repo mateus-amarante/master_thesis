@@ -4,6 +4,9 @@ function plot_horizontal_state(t, xy, phitheta, phithetaL, dict)
 x = xy(:,1);
 y = xy(:,2);
 
+phitheta = rad2deg(phitheta);
+phithetaL = rad2deg(phithetaL);
+
 phi = phitheta(:,1);
 theta = phitheta(:,2);
 
@@ -37,7 +40,7 @@ xlabel(dict.time_label,'Interpreter','tex','FontSize',12);
 
 subplot(2,3,2);
 plot(t, zeros(size(t)), '--', t,phi);
-ylabel('$\phi$ [rad]');
+ylabel('$\phi [{}^{\circ}]$');
 legend(dict.desired_leg, dict.actual_leg);
 th = title(dict.quad_orientation_title, 'Interpreter','tex','FontSize',12,'FontAngle','Italic','FontWeight','normal');
 set(th,'Unit','normalized','Position',[.5, 1.1, 0]);
@@ -46,7 +49,7 @@ xlim([t(1) t(end)]);
 
 subplot(2,3,5);
 plot(t, zeros(size(t)), '--', t,theta);
-ylabel('$\theta$ [rad]');
+ylabel('$\theta [{}^{\circ}]$');
 legend(dict.desired_leg, dict.actual_leg);
 ylim(ylim_ang);
 xlim([t(1) t(end)]);
@@ -54,7 +57,7 @@ xlabel(dict.time_label,'Interpreter','tex','FontSize',12);
 
 subplot(2,3,3);
 plot(t, zeros(size(t)), '--', t,phiL);
-ylabel('$\phi_L$ [rad]');
+ylabel('$\phi_L [{}^{\circ}]$');
 legend(dict.desired_leg, dict.actual_leg);
 th = title(dict.cable_orientation_title, 'Interpreter','tex','FontSize',12,'FontAngle','Italic','FontWeight','normal');
 set(th,'Unit','normalized','Position',[.5, 1.1, 0]);
@@ -63,7 +66,7 @@ xlim([t(1) t(end)]);
 
 subplot(2,3,6);
 plot(t, zeros(size(t)), '--', t,thetaL);
-ylabel('$\theta_L$ [rad]');
+ylabel('$\theta_L [{}^{\circ}]$');
 legend(dict.desired_leg, dict.actual_leg);
 ylim(ylim_ang);
 xlim([t(1) t(end)]);
