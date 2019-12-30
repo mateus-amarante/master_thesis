@@ -70,7 +70,7 @@ zlim(zlim_values);
 % axis equal;
 
 line(xd,yd,zd,'Color','g');
-line(xyz_load_d(:,1),xyz_load_d(:,2),xyz_load_d(:,3),'Color','b');
+% line(xyz_load_d(:,1),xyz_load_d(:,2),xyz_load_d(:,3),'Color','b');
 
 q_line = line(x(1),y(1),z(1),'Color','r');
 qL_line = line(xyz_load(1,1),xyz_load(1,1),xyz_load(1,1),'Color','m','LineWidth',1);
