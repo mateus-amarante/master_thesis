@@ -113,7 +113,8 @@ zpsi_ddot_d = [zddot_d; psiddot_d];
 fzpsi = [fz; fpsi];
 bzpsi = [bz; bpsi];
 
-[u([1 4]), s_zpsi, ueq_zpsi, usw_zpsi]  = smc(ezpsi, ezpsi_dot, zpsi_ddot_d, fzpsi, bzpsi, lambda_zpsi, kappa_zpsi, eta_zpsi, @(x)tanh(50*x));
+[u([1 4]), s_zpsi, ueq_zpsi, usw_zpsi]  = smc( ...
+    ezpsi, ezpsi_dot, zpsi_ddot_d, fzpsi, bzpsi, lambda_zpsi, kappa_zpsi, eta_zpsi, @(x)tanh(control_p.epsilon_zpsi.*x));
 
 % if u(1) > maxThrust
 %     u(1) = maxThrust;
@@ -159,7 +160,8 @@ xbtheta_ddot_d = [exbddot; thetaddot_d];
 fxbtheta = [0; ftheta];
 bxbtheta = [0; btheta];
 
-[u(3), s_xtheta, ueq_xtheta, usw_xtheta, saux_xtheta] = smcu([exbtheta; exbtheta_dot], xbtheta_ddot_d, fxbtheta, bxbtheta, [lambda_xtheta; lambda_xtheta_dot] , kappa_xtheta, eta_xtheta, @(x)tanh(50*x));
+[u(3), s_xtheta, ueq_xtheta, usw_xtheta, saux_xtheta] = smcu(...
+    [exbtheta; exbtheta_dot], xbtheta_ddot_d, fxbtheta, bxbtheta, [lambda_xtheta; lambda_xtheta_dot] , kappa_xtheta, eta_xtheta, @(x)tanh(control_p.epsilon_xtheta*x));
 
 % Under-acrtuated SMC: yb and phi
 eybphi = [eyb; phi_d - phi];
@@ -170,7 +172,8 @@ ybphi_ddot_d = [eybddot; phiddot_d];
 fybphi = [0; fphi];
 bybphi = [0; bphi];
 
-[u(2), s_yphi, ueq_yphi, usw_yphi, saux_yphi] = smcu([eybphi; eybphi_dot], ybphi_ddot_d, fybphi, bybphi, [lambda_yphi; lambda_yphi_dot] , kappa_yphi, eta_yphi, @(x)tanh(50*x));
+[u(2), s_yphi, ueq_yphi, usw_yphi, saux_yphi] = smcu(...
+    [eybphi; eybphi_dot], ybphi_ddot_d, fybphi, bybphi, [lambda_yphi; lambda_yphi_dot] , kappa_yphi, eta_yphi, @(x)tanh(control_p.epsilon_yphi*x));
 
 s = [s_zpsi(:); s_xtheta(:); s_yphi(:)]';
 ueq = [ueq_zpsi(:); ueq_xtheta(:); ueq_yphi(:)]';

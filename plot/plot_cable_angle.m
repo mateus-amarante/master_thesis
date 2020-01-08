@@ -23,6 +23,8 @@ thetaLdot_d = phithetaL_dot_d(:,2);
 ylim_phithetaL = calc_ylim([phithetaL phithetaL_d],.2);
 ylim_phithetaLdot = calc_ylim([phithetaL_dot phithetaL_dot_d],.2);
 % ylim_alphaL = calc_ylim([psi;psi_d],.1);
+ylim_phithetaL = [-120, 120];
+
 
 figure;
 subplot(2,2,1);
@@ -64,7 +66,7 @@ legend(dict.desired_leg, dict.actual_leg);
 ylim(ylim_phithetaLdot);
 xlim([t(1) t(end)]);
 
-% set(gcf, 'OuterPosition', [300, 150, 940, 520]);
+set(gcf, 'OuterPosition', [300, 150, 940, 520]);
 set(gcf, 'OuterPosition', [300, 150, 650, 520]);
 % figure;
 % plot(t,alphaL);

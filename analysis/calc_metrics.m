@@ -2,7 +2,7 @@ function metrics = calc_metrics(t,x,qd,u,Fs,stop_time)
 %% Metrics
 rpy = x(:, 4:6);
 beta = acos(cos(rpy(:,1)).*cos(rpy(:,2)));
-beta_rms = rms(beta,1);
+beta_rms = rms(rad2deg(beta),1);
 
 pqr = size(length(t),3);
 
@@ -13,7 +13,7 @@ end
 
 phithetaL = x(t>=stop_time, [7,8]);
 alpha = acos(cos(phithetaL(:,1)).*cos(phithetaL(:,2)));
-alpha_rms = rms(alpha,1);
+alpha_rms = rms(rad2deg(alpha),1);
 % alpha_max = max(alpha);
 
 xyz_rms = norm(rms(x(:,1:3) - qd(:,1:3),1));

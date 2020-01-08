@@ -17,17 +17,17 @@ physics_p.cL_real = .1;
 
 physics_p.default_uncertainty = 0.3;
 physics_p.M_uncertainty = -0.15;
-physics_p.m_uncertainty = -0.2;
-physics_p.l_uncertainty = -0.15;
+physics_p.m_uncertainty = 0.20;
+physics_p.l_uncertainty = -0.1;
 physics_p.I_uncertainty = .3;
 physics_p.c_uncertainty = .1;
 
-physics_p.default_uncertainty = 0;
-physics_p.M_uncertainty = 0;
-physics_p.m_uncertainty = 0;
-physics_p.l_uncertainty = 0;
-physics_p.I_uncertainty = 0;
-physics_p.c_uncertainty = 0;
+% physics_p.default_uncertainty = 0;
+% physics_p.M_uncertainty = 0;
+% physics_p.m_uncertainty = 0;
+% physics_p.l_uncertainty = 0;
+% physics_p.I_uncertainty = 0;
+% physics_p.c_uncertainty = 0;
 
 % Rand
 % physics_p.M = (1+(rand()-.5)*physics_p.M_uncertainty)*physics_p.M_real;

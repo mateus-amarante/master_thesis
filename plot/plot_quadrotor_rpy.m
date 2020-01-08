@@ -26,6 +26,8 @@ psidot_d = rpy_dot_d(:,3);
 ylim_phitheta = calc_ylim([rpy(:,1:2);rpy_d(:,1:2)],.1);
 ylim_psi = calc_ylim([psi;psi_d],.1);
 ylim_rpy_dot = calc_ylim([rpy_dot;rpy_dot_d],.1);
+% ylim_phitheta = [-40, 40];
+% ylim_rpy_dot = [-200, 200];
 
 figure;
 set(gcf, 'OuterPosition', [300, 150, 940, 770]);

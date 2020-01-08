@@ -1,6 +1,6 @@
 # Simulation of multirotors carrying suspended loads using MATLAB
 
-This folder contains a generic framework to test controllers for drones carrying suspended loads. Actually, it may be used for any system.
+This folder contains a generic framework to test controllers for drones carrying suspended loads. Actually, it can be extended for any system.
 
 ## Framework Description
 
@@ -14,7 +14,9 @@ To simulate a controlled system, you need to define:
 
 4) Trajectory (function)
 
-5) Plot Functions (optional)
+5) Simulation Parameters(structure)
+
+5) Plot Functions (function)
 
 The system must be written in the form:
 
@@ -46,7 +48,7 @@ For a 2 DOF system:
 
 ## Folder Description
 
-* **/config** : each config file must define a set of physical parameters, a trajectory (function), a dynamic model (function) and a set of plot functions;
+* **/config** : each config file must define a set of physical parameters, a trajectory (function), a dynamic model (function), simulation parameters and functions;
 
 * **/plot** : define plot functions, especially plot\_state and plot\_animation;
 
@@ -64,11 +66,9 @@ For a 2 DOF system:
 
 * **/auxiliary** : helper functions not related to other folders.
 
+* **/analysis** : scripts used to write the master thesis
+
+* **/optimization_functions** : used to optimize control parameters (not used anymore)
+
 
 Pick one configuration from "/config" folder as input for *main.m* script. 
-
-
-## How to use
-
-* **main.m** : run the simulation based on the chosen configuration selected from "config" folder;
-* **ode_fun.m** :  default ode function passed to ode45 in main.m;

@@ -45,6 +45,7 @@ plot_sliding_variables(t,s, dict);
 plot_cable_angle(t,phithetaL,phithetaL_d,phithetaL_dot,phithetaL_dot_d,traj_p.stop_time, dict);
 plot_control_input(t,u, dict);
 plot_horizontal_state(t,xyz,rpy,phithetaL, dict);
+plot_relative_error(t,xyz,xyz_d,rpy );
 % plot_phase_portrait(xyz(:,3), xyz_dot(:,3), '$z$', '$\dot{z}$', control_p.lambda_zpsi(1));
 % plot_phase_portrait(rpy(:,3), rpy_dot(:,3), '$\psi$', '$\dot{\psi}$', control_p.lambda_zpsi(2));
 % plot_phase_portrait(rpy(:,1), rpy_dot(:,1), '$\phi$', '$\dot{\phi}$',0);
