@@ -1,0 +1,23 @@
+function [physics_p, control_p, traj_p, sim_p, plot_p] = smc3d_slung_config()
+
+    % Control parameters
+%     cparam = [10 1 10 1 7.536613519	1.88634197	17.94128065	0.547326511	9.247371112 -7.536613519	1.88634197	-17.94128065	0.547326511	9.247371112];
+%     cparam = [9.84516635359751,5.79393229462933,5.67014902761136,0.676939559076963,9.98040471254924,1.52456299956164,8.55524822544648,0.233284144110266,9.29480932089801,9.46799443941274];
+%     cparam = [7.53042500573555,2.73764630678718,9.86945497119891,5.18342486027631,9.37200139705815,0.0561585599085908,2.48045515188691,0.0111731872412042,9.99939579333874,9.95358380185247];
+%     cparam = [1.5    5    10    1    10    0.1];
+%     cparam = [5.40003419880771,2.35131398784227,9.70270322164802,3.03102075350392,8.25770367914041,0.0930329132692248,-8.69322755524701,5.38571974636810,-7.90328080809817,6.73940361637328]
+%     cparam = [2.44582472691516,0.620638478028150,1.37726401476879,0.418436990668209,0.438489733566486,0.0656073125908137,-5.06731339544286,2.73163244404272,-0.674001913505578,9.86822857418915]
+    control_p = common_control();    
+    control_p.control_fun = @final_smc3d_slung_controller;
+    
+    [physics_p, traj_p, sim_p] = common_config();
+    traj_p.sample_fun = waypoint_poly_trajectory(traj_p.td, [traj_p.rd, traj_p.rpy_d, traj_p.phithetaL_d ], 2);
+%     traj_p.sample_fun = setpoint_trajectory(zeros(1,24), [-1 1 1 0 0 pi/2 0 0, zeros(1,16)], 2);
+    sim_p.qd = traj_p.sample_fun(sim_p.t);
+    sim_p.name = 'smc';
+
+    % Plot parameters
+    plot_p.plot_state = @plot_quadrotor3d_slung_state;
+    plot_p.plot_animation = @plot_quadrotor3d_slung_animation;
+    
+end

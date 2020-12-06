@@ -1,0 +1,84 @@
+function plot_quadrotor_rpy(t,rpy, rpy_d, rpy_dot, rpy_dot_d, dict)
+
+rpy = rad2deg(rpy);
+rpy_d = rad2deg(rpy_d);
+rpy_dot = rad2deg(rpy_dot);
+rpy_dot_d = rad2deg(rpy_dot_d);
+
+phi = rpy(:,1);
+theta = rpy(:,2);
+psi = rpy(:,3);
+
+phi_d = rpy_d(:,1);
+theta_d = rpy_d(:,2);
+psi_d = rpy_d(:,3);
+
+phidot = rpy_dot(:,1);
+thetadot = rpy_dot(:,2);
+psidot = rpy_dot(:,3);
+
+phidot_d = rpy_dot_d(:,1);
+thetadot_d = rpy_dot_d(:,2);
+psidot_d = rpy_dot_d(:,3);
+
+
+%% Plot Robot Orientation and Euler Angles Rate
+ylim_phitheta = calc_ylim([rpy(:,1:2);rpy_d(:,1:2)],.1);
+ylim_psi = calc_ylim([psi;psi_d],.1);
+ylim_rpy_dot = calc_ylim([rpy_dot;rpy_dot_d],.1);
+% ylim_phitheta = [-40, 40];
+% ylim_rpy_dot = [-200, 200];
+
+figure;
+set(gcf, 'OuterPosition', [300, 150, 940, 770]);
+subplot(3,2,1);
+plot(t,phi_d,'--', t, phi);
+ylabel('$\phi [{}^{\circ}]$');
+legend(dict.desired_leg, dict.actual_leg);
+th = title(dict.quad_orientation_title, 'Interpreter','tex','FontSize',12,'FontAngle','Italic','FontWeight','normal');
+set(th,'Unit','normalized','Position',[.5, 1.1, 0]);
+ylim(ylim_phitheta);
+xlim([t(1) t(end)]);
+
+subplot(3,2,2);
+plot(t,phidot_d,'--', t, phidot);
+ylabel('$\dot{\phi} [{}^{\circ}/s]$');
+legend(dict.desired_leg, dict.actual_leg);
+th = title(dict.quad_angular_velocity_euler_title, 'Interpreter','tex','FontSize',12,'FontAngle','Italic','FontWeight','normal');
+set(th,'Unit','normalized','Position',[.5, 1.1, 0]);
+ylim(ylim_rpy_dot);
+xlim([t(1) t(end)]);
+
+
+subplot(3,2,3);
+plot(t,theta_d,'--', t, theta);
+ylabel('$$\theta [{}^{\circ}]$$');
+legend(dict.desired_leg, dict.actual_leg);
+ylim(ylim_phitheta);
+xlim([t(1) t(end)]);
+
+subplot(3,2,4);
+plot(t,thetadot_d,'--', t, thetadot);
+ylabel('$$\dot{\theta} [{}^{\circ}/s]$$');
+legend(dict.desired_leg, dict.actual_leg);
+ylim(ylim_rpy_dot);
+xlim([t(1) t(end)]);
+
+subplot(3,2,5);
+plot(t,psi_d,'--', t, psi);
+ylabel('$$\psi [{}^{\circ}]$$');
+legend(dict.desired_leg, dict.actual_leg);
+xlabel(dict.time_label,'Interpreter','tex','FontSize',12);
+ylim(ylim_psi);
+xlim([t(1) t(end)]);
+
+subplot(3,2,6);
+plot(t,psidot_d,'--', t, psidot);
+ylabel('$$\dot{\psi} [{}^{\circ}/s]$$');
+legend(dict.desired_leg, dict.actual_leg);
+xlabel(dict.time_label,'Interpreter','tex','FontSize',12);
+ylim(ylim_rpy_dot);
+xlim([t(1) t(end)]);
+
+end
+
