@@ -5,3 +5,5 @@
 *.emf
 *.mp4
 *.svg
+.ipynb_checkpoints
+*.ipynb
