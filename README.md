@@ -6,6 +6,8 @@
 
 **DOI:** http://doi.org/10.14393/ufu.di.2019.2548 [Portuguese]
 
+### [Erratum](https://github.com/mateus-amarante/master_thesis/issues/2)
+
 ## Code Structure
 
 #### Modeling
@@ -13,6 +15,5 @@ Jupyter notebooks containing all the mathematical deductions of the kinematics, 
 
 #### Simulation
  MATLAB code to simulate the controlled system
-
 
 ### **Feel free to [contact me](https://github.com/mateus-amarante) for any further explanation or help!**
