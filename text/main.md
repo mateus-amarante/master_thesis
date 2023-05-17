@@ -1,42 +1,42 @@
 ---
+title: "Sliding Mode Control of a Quadrotor with a Suspended Load for Trajectories based on the Differential Flatness Property of the System and Input Shaping"
+subtitle: "English Version"
+author: "Mateus Amarante Araujo"
+date: "December 12th, 2019"
+lang: en
+abstract-title: "**Abstract**"
+description: "An informal translation of my master's dissertation"
+abstract: |
+  In the high demand for autonomous aircraft in cargo transport applications, this work presents a motion control and trajectory generation solution for a system composed of a quadrotor with a cable-suspended load to control the aircraft's position and reduce the load swing. First, the dynamic model of the system is derived using the Newton-Euler and Euler-Lagrange methods and divided into two parts: a fully actuated subsystem associated with the robot altitude and yaw angle and an underactuated subsystem associated with the other state variables of the quadrotor. Each subsystem is controlled by a sliding mode controller, which is proved to be stable in Lyapunov\'s sense for driving the system to the sliding surfaces and staying on them. It is demonstrated by the Routh-Hurwitz stability criterion that the sliding surfaces associated with the underactuated subsystem are locally stable, given some constraint rules obtained for the control parameters that make the tuning process more manageable. Finally, a new trajectory generation structure is proposed to suppress the load balance, which consists of building a polynomial trajectory for the load, applying input shaping on it, and computing the desired state of the aircraft by using the differential flatness property of the system. The controller is tested with the designed trajectory generator in simulation for a point-to-point trajectory and different durations. The controller effectively controls the aircraft state even when no filter is applied to the input reference, and the trajectory generator greatly reduces the load swing. However, the aircraft trajectory obtained by the differentially flat model becomes prohibitive for the controller when the reference speed and acceleration reach certain limits for which the alternative solution of only applying input shaping to the aircraft trajectory presents moderate performance.
+
+  Araujo, M. A. **Sliding Mode Control of a Quadrotor with a Suspended Load for Trajectories based on the Differential Flatness Property of the System and Input Shaping.** 105 p. M. Sc. Dissertation, Federal University of Uberlandia, Uberlandia.
+documentclass: article
+thanks: |
+  I would like to express my deepest gratitude to my supervisor, Roberto Finzi, for his confidence in my work, his commitment to distance communication, and his understanding and flexibility in allowing me to work in another state while working on my master’s degree.
+
+  I am also grateful to Professor Leonardo Sanches, who was my co-supervisor and teacher in the first stage of the course. I learned many concepts used in this work from him.
+
+  I would like to thank the Graduate Program of the School of Mechanical Engineering (Faculdade de Engenharia Mecânica - FEMEC) at the Federal University of Uberlândia (UFU) for providing a structure for study and research quality. This made me feel connected to the scientific universe.
+
+  My thanks also go to my Autonomous Aircraft Laboratory (LAA) colleagues, especially Ivan Tarifa, Felipe Machini, and Douglas Costa. I shared relevant practical experiences in aeronautical robotics and entrepreneurship with them.
+
+  I am grateful to CAPES for the scholarship offered during the first months of the program, enabling me to focus on academic studies.
+
+  I would like to thank the psychologist Vanda for providing me with psychological support when I was anxious about starting graduate school and deciding to work and do my master’s degree in parallel.
+
+  I am grateful to SENAI CIMATEC for providing me with a paid opportunity to work on research and development projects in robotics during my master’s degree. This served as an incentive to pursue post-graduation studies. This experience allowed me to work with competent professionals and state-of-the-art technology, contributing to my professional and academic growth.
+
+  Special thanks go to my friend Murilo Mendonça, who promptly reviewed my work in the final stage.
+
+  I would like to express my deepest gratitude to my parents Antonio and Cleide. They have always supported me unconditionally in all the challenging moments of life, which were many in the last two years.
+
+  My heartfelt thanks go to my wife Camilla. We have lived together for almost a year, and her support has pushed me to finish the work on time.
+
+  I am grateful to God for promoting circumstances of much learning, conquests, and joy in my life through sometimes tortuous lines but always right.
+
+  In memory of my brother Filipe, who inspired me to conclude this work with his remarkable energy and determination.
 bibliography: bibliography.bib
 ---
-
-# Master Thesis Translation
-
-Araujo, M. A. **Sliding Mode Control of a Quadrotor with a Suspended Load for Trajectories based on the Differential Flatness Property of the System and Input Shaping.** 105 p. M. Sc. Dissertation, Federal University of Uberlandia, Uberlandia.
-
-**ACKNOWLEDGMENTS**
-
-I would like to express my deepest gratitude to my supervisor, Roberto Finzi, for his confidence in my work, his commitment to distance communication, and his understanding and flexibility in allowing me to work in another state while working on my master’s degree.
-
-I am also grateful to Professor Leonardo Sanches, who was my co-supervisor and teacher in the first stage of the course. I learned many concepts used in this work from him.
-
-I would like to thank the Graduate Program of the School of Mechanical Engineering (Faculdade de Engenharia Mecânica - FEMEC) at the Federal University of Uberlândia (UFU) for providing a structure for study and research quality. This made me feel connected to the scientific universe.
-
-My thanks also go to my Autonomous Aircraft Laboratory (LAA) colleagues, especially Ivan Tarifa, Felipe Machini, and Douglas Costa. I shared relevant practical experiences in aeronautical robotics and entrepreneurship with them.
-
-I am grateful to CAPES for the scholarship offered during the first months of the program, enabling me to focus on academic studies.
-
-I would like to thank the psychologist Vanda for providing me with psychological support when I was anxious about starting graduate school and deciding to work and do my master’s degree in parallel.
-
-I am grateful to SENAI CIMATEC for providing me with a paid opportunity to work on research and development projects in robotics during my master’s degree. This served as an incentive to pursue post-graduation studies. This experience allowed me to work with competent professionals and state-of-the-art technology, contributing to my professional and academic growth.
-
-Special thanks go to my friend Murilo Mendonça, who promptly reviewed my work in the final stage.
-
-I would like to express my deepest gratitude to my parents Antonio and Cleide. They have always supported me unconditionally in all the challenging moments of life, which were many in the last two years.
-
-My heartfelt thanks go to my wife Camilla. We have lived together for almost a year, and her support has pushed me to finish the work on time.
-
-I am grateful to God for promoting circumstances of much learning, conquests, and joy in my life through sometimes tortuous lines but always right.
-
-In memory of my brother Filipe, who inspired me to conclude this work with his remarkable energy and determination.
-
-**Abstract**
-
-In the high demand for autonomous aircraft in cargo transport applications, this work presents a motion control and trajectory generation solution for a system composed of a quadrotor with a cable-suspended load to control the aircraft's position and reduce the load swing. First, the dynamic model of the system is derived using the Newton-Euler and Euler-Lagrange methods and divided into two parts: a fully actuated subsystem associated with the robot altitude and yaw angle and an underactuated subsystem associated with the other state variables of the quadrotor. Each subsystem is controlled by a sliding mode controller, which is proved to be stable in Lyapunov\'s sense for driving the system to the sliding surfaces and staying on them. It is demonstrated by the Routh-Hurwitz stability criterion that the sliding surfaces associated with the underactuated subsystem are locally stable, given some constraint rules obtained for the control parameters that make the tuning process more manageable. Finally, a new trajectory generation structure is proposed to suppress the load balance, which consists of building a polynomial trajectory for the load, applying input shaping on it, and computing the desired state of the aircraft by using the differential flatness property of the system. The controller is tested with the designed trajectory generator in simulation for a point-to-point trajectory and different durations. The controller effectively controls the aircraft state even when no filter is applied to the input reference, and the trajectory generator greatly reduces the load swing. However, the aircraft trajectory obtained by the differentially flat model becomes prohibitive for the controller when the reference speed and acceleration reach certain limits for which the alternative solution of only applying input shaping to the aircraft trajectory presents moderate performance.
-
-Araujo, M. A. **Sliding Mode Control of a Quadrotor with a Suspended Load for Trajectories based on the Differential Flatness Property of the System and Input Shaping.** 105 p. M. Sc. Dissertation, Federal University of Uberlandia, Uberlandia.
 
 **Symbols**
 
@@ -172,10 +172,7 @@ SUMÁRIO
 
 [APÊNDICE II -- INTERPOLAÇÃO POLINOMIAL POR PARTES [103](#apêndice-ii-interpolação-polinomial-por-partes)](#apêndice-ii-interpolação-polinomial-por-partes)
 
-I.
-
-Introduction
-==========
+# Introduction
 
 The development of Unmanned Aerial Vehicles (UAVs), also called drones, has been very prominent in academic and business research in recent years. Compared to manned aerial vehicles, UAVs eliminate the risk to the pilot, reduce size and cost, and have a wide range of applications. They are used for vehicle traffic monitoring, transmission line inspection, remote sensing, and agricultural spraying (VALAVANIS; VACHTSEVANOS, 2015).
 
@@ -183,8 +180,7 @@ However, more recent research has focused on performing increasingly complex tas
 
 In this context, in alignment with state-of-the-art in air control and robotics, the present work proposes to perform multi-rotor aircraft control in cable-suspended cargo transportation.
 
-Motivation and Applications
-----------------------
+## Motivation and Applications
 
 Currently, helicopters equipped with load-hoisting elements are used in many applications, such as to transport timber in regions with difficult land access (Figure 1.1-a), to collect and launch water in firefighting missions (Figure 1.1-b), and to manipulate large structures (Figure 1.1-c), such as transmission towers (VARGAS MORENO, 2017; PDG Aviation Services, 2018).
 
