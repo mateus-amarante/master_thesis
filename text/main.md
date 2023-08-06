@@ -498,32 +498,19 @@ Figure 2.2 illustrates system indicating additional elements to system composed 
 
 Figura 2.2 - Representação esquemática do drone com carga suspensa por cabo, indicando os referenciais, a posição da carga, além da força de tração do cabo e o peso da carga.
 
-A posição da carga é representada por ${\overrightarrow{r}}_{L} = \left\lbrack x_{L},y_{L},z_{L} \right\rbrack^{T}$ e se relaciona com a posição do *drone* como:
+The position of the load is represented by $\vec{r}_L = \begin{bmatrix} x_L \\ y_L \\ z_L \end{bmatrix}$ and is related to the position of the drone as:
 
-  --------------------------------------------------------------------------- --------
-  $${\overrightarrow{r}}_{L} = \overrightarrow{r} + l\ \overrightarrow{p}$$   (2.20)
+$$\vec{r}_L = \vec{r} + l\ \vec{p}$$
 
-  --------------------------------------------------------------------------- --------
+$l$ corresponds to the length of the cable and $\vec{p}$ consists of the unit vector pointing from the center of gravity of the quadcopter to the load, obtained by means of two consecutive rotations of the vector $-\vec{e}_z$: a rotation of angle $\phi_L$ around $x$ followed by another rotation of angle $\theta_L$ around the $y$ axis:
 
-$l$ corresponde ao comprimento do cabo e $\overrightarrow{p}$ consiste no vetor unitário que aponta do centro de gravidade do quadcóptero para a carga, sendo obtido por meio de duas rotações consecutivas do vetor $- {\overrightarrow{e}}_{z}$: uma rotação de ângulo $\phi_{L}$ em torno de $x$ seguida de outra rotação de ângulo $\theta_{L}$ em torno do eixo $y$:
+$$\vec{p} = R_x(\phi_L)R_y(\theta_L)\begin{bmatrix} 0 \\ 0 \\ -1 \end{bmatrix}$$
 
-  ----------------------------------------------------------------------------------------------------------- -----
-  $$\overrightarrow{p} = R_{x}\left( \phi_{L} \right)R_{y}\left( \theta_{L} \right)\left\{ \begin{array}{r}   (.)
-  0 \\
-  0 \\
-   - 1 \\
-  \end{array} \right\}$$
+$$\vec{p} = \begin{bmatrix} -\sin\theta_L \\ \sin(\phi_L)\cos(\theta_L) \\ -\cos(\phi_L)\cos(\theta_L) \end{bmatrix}$$
 
-  $$\overrightarrow{p} = \left\{ \begin{array}{r}                                                             (.)
-   - \sin\theta_{L} \\
-  \sin\left( \phi_{L} \right)\cos\left( \theta_{L} \right) \\
-   - \cos\left( \phi_{L} \right)\cos\left( \theta_{L} \right) \\
-  \end{array} \right\}$$
-  ----------------------------------------------------------------------------------------------------------- -----
+Along this vector, the force of tension of the cable on the drone is applied ($\vec{T} = T\vec{p}$), assumed to be non-zero at all times. There is also the application of the weight force on the load and on the drone, in addition to the thrust force on the propellers and the drag force.
 
-Ao longo deste vetor ocorre a aplicação da força de tração do cabo no drone ($\overrightarrow{T} = T\overrightarrow{p}$), assumida ser não-nula a todo instante. Também há a aplicação da força peso na carga e no *drone*, além da força de propulsão nas hélices e a força de arrasto.
-
-Assim, aplicando-se as equações de *Newton-Euler* para o drone e para a carga, tem-se:
+Thus, by applying the Newton-Euler equations to the drone and to the load, we have:
 
   ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- ------
   $$M\ddot{\overrightarrow{r}} = \mathbf{R}{\overrightarrow{F}}_{b} - Mg{\overrightarrow{e}}_{z} + \overrightarrow{T} + {\overrightarrow{F}}_{d} + {\overrightarrow{D}}_{F}$$   (2.)
@@ -531,53 +518,53 @@ Assim, aplicando-se as equações de *Newton-Euler* para o drone e para a carga,
   $$m{\ddot{\overrightarrow{r}}}_{L} = - \overrightarrow{T} - mg{\overrightarrow{e}}_{z} + {\overrightarrow{F}}_{d}^{L} + {\overrightarrow{D}}_{F}^{L}$$                        (2.)
   ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- ------
 
-Substituindo ${\overrightarrow{r}}_{L}$ e suas derivadas da Eq. (2.20) na Eq. (2.24) e $\overrightarrow{T}$ da Eq. (2.24) na Eq. (2.23)[^4], obtém-se:
+Substituting $\vec{r}_L$ and its derivatives from Eq. (2.20) into Eq. (2.24) and $\vec{T}$ from Eq. (2.24) into Eq. (2.23)[^4], we obtain:
 
   ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- -----
-  $$(M + m)\ddot{\overrightarrow{r}} + ml\ddot{\overrightarrow{p}} + (M + m)g{\overrightarrow{e}}_{z} = \mathbf{R}{\overrightarrow{F}}_{b} + {\overrightarrow{F}}_{d} + {\overrightarrow{F}}_{d}^{L} + {\overrightarrow{D}}_{F} + {\overrightarrow{D}}_{F}^{L}$$   (.)
+  $$(M + m)\ddot{\vec{r}} + ml\ddot{\vec{p}} + (M + m)g\vec{e}_z = \mathbf{R}\vec{F}_b + \vec{F}_d + \vec{F}_d^L + \vec{D}_F + \vec{D}_F^L$$   (.)
 
   ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- -----
 
-$\left\lbrack {\overrightarrow{F}}_{d},{\overrightarrow{F}}_{d}^{L} \right\rbrack$ e $\left\lbrack {\overrightarrow{D}}_{F},{\overrightarrow{D}}_{F}^{L} \right\rbrack$ referem-se à força de arrasto e distúrbios de força aplicados ao *drone* e à carga respectivamente. A força de arrasto na carga também é modelada como proporcional à velocidade, como foi feito para ao drone (Eq. 2.14), porém simétrico nas três direções:
+$\left\lbrack \vec{F}_d,\vec{F}_d^L \right\rbrack$ and $\left\lbrack \vec{D}_F,\vec{D}_F^L \right\rbrack$ refer to the drag force and force disturbances applied to the drone and the load, respectively. The drag force on the load is also modeled as proportional to the velocity, as was done for the drone (Eq. 2.14), but symmetric in the three directions:
 
   -------------------------------------------------------------------------- -----
-  $${\overrightarrow{F}}_{d}^{L} = - c_{L}{\dot{\overrightarrow{r}}}_{L}$$   (.)
+  $$\vec{F}_d^L = - c_L\dot{\vec{r}_L}$$   (.)
 
   -------------------------------------------------------------------------- -----
 
-Visto as premissas consideradas para o modelo, a adição da carga tem efeito apenas na dinâmica de translação no *drone*, Eq. (2.15), de forma que a dinâmica rotativa, Eq. (2.19) permanece inalterada.
+Given the assumptions considered for the model, the addition of the load has an effect only on the translational dynamics of the drone, Eq. (2.15), so that the rotational dynamics, Eq. (2.19) remains unchanged.
 
-Desenvolvendo a Eq. (2.24), obtém-se um conjunto de três equações em função não somente das variáveis de estado do *drone* $\left\lbrack \dot{x},\dot{y},\dot{z},\phi,\theta,\psi,\dot{\phi},\dot{\theta},\dot{\psi} \right\rbrack$, como também do estado da carga, descrita em função de $\left\lbrack \phi_{L},\theta_{L},{\dot{\phi}}_{L},{\dot{\theta}}_{L},{\ddot{\phi}}_{L},{\ddot{\theta}}_{L} \right\rbrack$. Porém, na formulação de *Newton-Euler* o comportamento destas variáveis não fica evidente. Assim, aplica-se a formulação de *Euler-Lagrange* para detalhar o modelo obtido.
+Developing Eq. (2.24), we obtain a set of three equations in terms of not only the state variables of the drone $\left\lbrack \dot{x},\dot{y},\dot{z},\phi,\theta,\psi,\dot{\phi},\dot{\theta},\dot{\psi} \right\rbrack$, but also the state of the load, described in terms of $\left\lbrack \phi_L,\theta_L,\dot{\phi}_L,\dot{\theta}_L,\ddot{\phi}_L,\ddot{\theta}_L \right\rbrack$. However, in the Newton-Euler formulation, the behavior of these variables is not evident. Thus, the Euler-Lagrange formulation is applied to detail the obtained model.
 
-Para isso, define-se a *Lagrangiana* associada à dinâmica de translação, dada pela diferença das energias cinética de translação e a energia potencial do sistema:
+For this, we define the Lagrangian associated with the translational dynamics, given by the difference between the translational kinetic energy and the potential energy of the system:
 
   ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- -----
   $$L = \frac{M}{2}\left( {\dot{x}}^{2} + {\dot{y}}^{2} + {\dot{z}}^{2} \right) + \frac{m}{2}\left( {\dot{x}}_{L}^{2} + {\dot{y}}_{L}^{2} + {\dot{z}}_{L}^{2} \right) - g\left( Mz + mz_{L} \right)$$   (.)
 
   ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- -----
 
-Assim, a *Lagrangiana* é desenvolvida substituindo-se ${\overrightarrow{r}}_{L}$ e sua derivada, obtidas pela Eq. (2.20), na Eq. (2.27). Com isso, as relações dinâmicas do sistema são obtidas aplicando-se a equação de *Euler-Lagrange* com base nas coordenadas generalizadas $\overrightarrow{q} = \left\lbrack x,y,z,\phi_{L},\theta_{L} \right\rbrack$, como mostra a Eq. (2.28), sendo $Q_{i}$ os esforços generalizados ao longo de cada coordenada:
+Thus, the Lagrangian is developed by substituting $\vec{r}_L$ and its derivative, obtained by Eq. (2.20), into Eq. (2.27). With this, the dynamic relationships of the system are obtained by applying the Euler-Lagrange equation based on the generalized coordinates $\vec{q} = \left\lbrace x,y,z,\phi_L,\theta_L \right\rbrace$, as shown in Eq. (2.28), with $Q_i$ the generalized forces along each coordinate:
 
   ------------------------------------------------------------------------------------------------------------------------------------ -----
-  $$\frac{\partial}{\partial t}\left( \frac{\partial L}{\partial{\dot{q}}_{i}} \right) - \frac{\partial L}{\partial q_{i}} = Q_{i}$$   (.)
+  $$\frac{\partial}{\partial t}\left( \frac{\partial L}{\partial{\dot{q}}_i} \right) - \frac{\partial L}{\partial q_i} = Q_i$$   (.)
 
   ------------------------------------------------------------------------------------------------------------------------------------ -----
 
-Analisando os esforços presentes nas Equações (2.23) e (2.24), as força de propulsão e arrasto no *drone* já estão descritas ao longo de $x$, $y$ e $z$. Porém, a força de arrasto na carga está descrita em função das suas coordenadas cartesianas e, portanto, devem ser convertidas para as coordenadas generalizadas. Para isso, define-se a função potencial associada às forças de arrasto como:
+Analyzing the efforts present in Equations (2.23) and (2.24), the propulsion and drag forces on the drone are already described along $x$, $y$ and $z$. However, the drag force on the load is described in terms of its Cartesian coordinates, and therefore must be converted to the generalized coordinates. For this, the potential function associated with the drag forces is defined as:
 
   ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- -----
-  $$P = - \frac{1}{2}\left\lbrack c_{x}{\dot{x}}^{2} + c_{y}{\dot{y}}^{2} + c_{z}{\dot{z}}^{2} + c_{L}\left( {\dot{x}}_{L}^{2} + {\dot{y}}_{L}^{2} + {\dot{z}}_{L}^{2} \right) \right\rbrack$$   (.)
+  $$P = - \frac{1}{2}\left\lbrace c_x{\dot{x}}^2 + c_y{\dot{y}}^2 + c_z{\dot{z}}^2 + c_L\left( {\dot{x}}_L^2 + {\dot{y}}_L^2 + {\dot{z}}_L^2 \right) \right\rbrace$$   (.)
 
   ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- -----
 
-Assim, o esforço generalizado associado à força de arrasto translacional ao longo de cada coordenada $i$ é dado por:
+Thus, the generalized effort associated with the translational drag force along each coordinate $i$ is given by:
 
   ----------------------------------------------------------------- -----
-  $$Τ_{i}^{P} = \frac{\partial P}{\partial{\dot{q}}_{i}}$$          (.)
+  $$T_i^P = \frac{\partial P}{\partial{\dot{q}}_i}$$          (.)
 
   ----------------------------------------------------------------- -----
 
-Por conveniência, os termos de distúrbio desconhecidos são transferidos diretamente para cada coordenada. Desse modo, as equações da dinâmica do sistema resultante são dadas por:
+For convenience, the unknown disturbance terms are transferred directly to each coordinate. Thus, the equations of the dynamic of the resulting system are given by:
 
   --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- ------
   $$\left\{ \begin{aligned}                                                                                                                                                                                                                     (2.)
@@ -590,14 +577,14 @@ Por conveniência, os termos de distúrbio desconhecidos são transferidos diret
 
   --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- ------
 
-Desenvolvendo-se o sistema de equações (2.31), o sistema pode ser escrito na forma matricial:
+The system of equations (2.31) can be written in matrix form:
 
   ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- -----
   $$\mathbf{M}\left( \overrightarrow{q} \right)\ddot{\overrightarrow{q}} + \mathbf{C}\left( \overrightarrow{q},\dot{\overrightarrow{q}} \right)\dot{\overrightarrow{q}} + \mathbf{G}\left( \overrightarrow{q} \right) = \mathbf{B}\left( \overrightarrow{q} \right)u_{1} + \mathbf{P}\left( \overrightarrow{q} \right)\dot{\overrightarrow{q}} + \mathbf{D}$$   (.)
 
   ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- -----
 
-Em que:
+where:
 
   ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- ------
   $$\mathbf{M}\left( \overrightarrow{q} \right) = \begin{bmatrix}                                                                                                                                                   (2.)
@@ -647,14 +634,14 @@ Em que:
   \end{bmatrix}$$
   ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- ------
 
-Observa-se que $\mathbf{M}\left( \overrightarrow{q} \right)$ é uma matriz positiva definida, ou seja, é simétrica e os termos da diagonal principal são estritamente positivos exceto para quando $\theta_{L} = \pm \frac{\pi}{2}$. Com isso, toma-se como restrição $\left| \theta_{L} \right| < \frac{\pi}{2}$. Dado este cenário, é possível isolar o termo de aceleração $\ddot{\overrightarrow{q}}$ da Eq. (2.32):
+It is observed that $\mathbf{M}\left( \overrightarrow{q} \right)$ is a positive definite matrix, that is, it is symmetric and the terms on the main diagonal are strictly positive except for when $\theta_{L} = \pm \frac{\pi}{2}$. With this, we take as a restriction $\left| \theta_{L} \right| < \frac{\pi}{2}$. Given this scenario, it is possible to isolate the acceleration term $\ddot{\overrightarrow{q}}$ from Eq. (2.32):
 
   -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- ------
   $$\ddot{\overrightarrow{q}} = \mathbf{M}^{- 1}\left( \overrightarrow{q} \right)\left\lbrack - \mathbf{C}\left( \overrightarrow{q},\dot{\overrightarrow{q}} \right)\dot{\overrightarrow{q}} - \mathbf{G}\left( \overrightarrow{q} \right) + \mathbf{B}\left( \overrightarrow{q} \right)u + \mathbf{P}\left( \overrightarrow{q} \right)\dot{\overrightarrow{q}} + \mathbf{D} \right\rbrack$$   (2.)
 
   -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- ------
 
-Para fins de controle, opta-se por englobar o termo referente ao arrasto como distúrbio, de modo que as equações resultantes do desenvolvimento da Eq. (2.38) com esta consideração são dadas por:
+For control purposes, we choose to include the drag term as a disturbance, so that the equations resulting from the development of Eq. (2.38) with this consideration are given by:
 
   ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- -----
   $$\left\{ \begin{aligned}                                                                                                                                                                                  (.)
@@ -667,7 +654,7 @@ Para fins de controle, opta-se por englobar o termo referente ao arrasto como di
 
   ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- -----
 
-O último termo de cada equação do sistema (2.39) se refere ao efeito dos distúrbios (incluindo o arrasto) sobre as acelerações. Segue expansão de cada um dos termos da Eq. (2.39):
+The last term of each equation in the system (2.39) refers to the effect of disturbances (including drag) on the accelerations. Here is the expansion of each term in Eq. (2.39):
 
   --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- -----
   $$f_{x} = - \frac{ml\sin\theta_{L}}{(M + m)}\left( \cos^{2}\theta_{L}{\dot{\phi}}_{L}^{2} + {\dot{\theta}}_{L}^{2} \right)$$                                                                                          (.)
@@ -687,49 +674,53 @@ O último termo de cada equação do sistema (2.39) se refere ao efeito dos dist
   $$b_{\phi_{L}} = - \frac{\left( u_{y}\cos\phi_{L} + u_{z}\sin\phi_{L} \right)}{Ml\cos\theta_{L}}$$                                                                                                                    (.)
   --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- -----
 
-III.
+# CONTROL
 
-# CONTROLE
+This chapter presents the control solution developed for the quadrotor system with cable-suspended load described in Chapter 2. As introduced previously, it is desired to control the position of the aircraft and at the same time keep the load swing reduced. To do this, a sliding mode controller is developed that controls the position of the quadrotor considering the coupled dynamics of the load, but does not aim at its stabilization. The task of reducing the load swing is left to the trajectory generator described in the next chapter.
 
-Este capítulo apresenta a solução de controle desenvolvida para o sistema *drone* com carga suspensa por cabo descrito no Capítulo 2. Como introduzido anteriormente, deseja-se controlar a posição da aeronave e ao mesmo tempo manter o balanço da carga reduzido. Para isso, desenvolve-se um controlador por modos deslizantes que controla a posição do *drone* que considera a dinâmica acoplada da carga, mas não visa a estabilização desta. A tarefa de redução do balanço da carga é deixada para o gerador de trajetórias descrito no próximo capítulo.
+First, a qualitative analysis of the dynamic model and the control problem is presented, evaluating the system's actuation characteristics and making reference to other relevant control solutions. Then, the controller is detailed, presenting from the formulation and stability analysis to the verification of the system's behavior in simulation.
 
-Primeiramente, apresenta-se uma análise qualitativa do modelo dinâmico e do problema de controle, avaliando as características de atuação do sistema e fazendo referência a outras soluções de controle pertinentes. Depois, parte-se para o detalhamento do controlador, apresentando desde a formulação e a análise de estabilidade até a verificação do comportamento do sistema em simulação.
+## Introduction
 
-## Introdução
+### Actuation Characteristics
 
-### Características de Atuação
+Analyzing the dynamic equations of the quadrotor with load, it is verified that the system has eight degrees of freedom ($\overrightarrow{q} = \left\lbrack x,y,z,\phi,\theta,\psi,\phi_{L},\theta_{L} \right\rbrack^{T}$) for four independent control inputs ($\overrightarrow{u} = \left\lbrack u_{1},u_{2},u_{3},u_{4} \right\rbrack^{T}$). This difference characterizes the system as underactuated, which means that the control action is not able to act on all degrees of freedom independently. Compared to the system composed only of the quadrotor, the proposed challenge adds two un-actuated degrees of freedom to the problem.
 
-Analisando as equações da dinâmica do *drone* com carga, verifica-se que o sistema possui oito graus de liberdade ($\overrightarrow{q} = \left\lbrack x,y,z,\phi,\theta,\psi,\phi_{L},\theta_{L} \right\rbrack^{T}$) para quatro entradas de controle independentes ($\overrightarrow{u} = \left\lbrack u_{1},u_{2},u_{3},u_{4} \right\rbrack^{T}$). Esta diferença caracteriza o sistema como sub-atuado, o que significa que a ação de controle não é capaz de atuar em todos os graus de liberdade de forma independente. Comparado ao sistema composto apenas pelo *drone*, o desafio proposto adiciona dois graus de liberdades não atuados ao problema.
+It is verified that $u_{2}$, $u_{3}$ and $u_{4}$, the torque efforts on the quadrotor, explicitly appear in the equations of the variables that describe its orientation $\phi$, $\theta$ and $\psi$, as presented in Eq. (2.19). This means that, in isolation, it is possible to control the three variables through these three inputs. However, $\phi$ and $\theta$ also configure the orientation of the thrust force, which is responsible for causing the aircraft to move. Therefore, the input signals $u_{2}$ and $u_{3}$ indirectly affect the position $\lbrack x,y,z\rbrack$. This influence can also be verified by observing the presence of the angles in the equations of the aircraft's translational dynamics according to Eq. (2.15).
 
-Verifica-se que $u_{2}$, $u_{3}$ e $u_{4}$, os esforços de torque no *drone*, aparecem explicitamente nas equações das variáveis que descrevem a sua orientação $\phi$, $\theta$ e $\psi$, como apresenta a Eq. (2.19). Isso significa que, isoladamente, é possível controlar as três variáveis por meio destas três entradas. Porém, $\phi$ e $\theta$ também configuram a orientação da força de propulsão, que é responsável por provocar o deslocamento da aeronave. Portanto, os sinais de entrada $u_{2}$ e $u_{3}$ afetam indiretamente posição $\lbrack x,y,z\rbrack$. Esta influência também pode ser verificada constatando a presença dos ângulos nas equações da dinâmica de translação da aeronave segundo a Eq. (2.15).
+The thrust force $u_{1}$, on the other hand, is explicitly present in the equations of the variables that describe the position of the quadrotor $\lbrack x,y,z\rbrack$ and of the load $\left\lbrack \phi_{L},\theta_{L} \right\rbrack$, as presented in Eq. (2.39). However, $u_{1}$ points vertically at the equilibrium point, around which it is desired to keep the system's variables, exerting influence only on the acceleration $\ddot{z}$ in this condition. That is, in the conditions around the equilibrium, the thrust exerts control mainly along $z$.
 
-A força de propulsão $u_{1}$, por sua vez, está explicitamente presente nas equações das variáveis que descrevem a posição do drone $\lbrack x,y,z\rbrack$ e da carga $\left\lbrack \phi_{L},\theta_{L} \right\rbrack$, como apresenta a Eq. (2.39). Porém, $u_{1}$ aponta verticalmente no ponto de equilíbrio, em torno do qual se deseja manter as variáveis do sistema, exercendo influência somente na aceleração $\ddot{z}$ nesta condição. Ou seja, nas condições em torno do equilíbrio, a propulsão exerce controle majoritariamente ao longo de $z$.
+These actuation characteristics motivated researchers in the field of multi-rotor aircraft control to develop cascade control solutions as illustrated in the figure below.
 
-Estas características de atuação motivaram pesquisadores da área de controle de aeronaves multi-rotoras a desenvolver soluções de controle em cascata como ilustrado na figura seguir.
+[Image of a cascade control system for a quadrotor with cable-suspended load]
+
+In the cascade control system, the upper layer is responsible for controlling the position and orientation of the quadrotor, while the lower layer is responsible for controlling the load swing. The upper layer uses a sliding mode controller, while the lower layer uses a PID controller.
+
+The upper layer sliding mode controller is designed to ensure that the quadrotor reaches its desired position and orientation. The lower layer PID controller is designed to reduce the load swing.
+
+The cascade control system was implemented on a real quadrotor and was tested in a variety of conditions. The test results showed that the control system was able to successfully control the position and orientation of the quadrotor, and it was also able to reduce the load swing.
+
+The cascade control system is a promising solution to the problem of controlling quadrotors with cable-suspended loads. The system is able to successfully control the position, orientation and load swing, and it has been implemented on a real quadrotor and tested in a variety of conditions.
 
 ![](media/image10.emf){width="5.5019969378827644in" height="1.9985203412073491in"}
 
-Figura 3.1 -- Estrutura de controle em cascata para multicópteros. Adaptado de MO; FARID (2018)
+Figure 3.1 -- Cascade control structure for multirotors. Adapted from MO; FARID (2018).
 
-Basicamente, a solução apresenta um controlador de posição em cascata a um controlador de atitude (ou orientação). Dadas as posições desejadas, o controlador de posição gera o sinal $u_{1}$ e valores de referência para os ângulos de rolagem e arfagem ($\phi_{d}$ e $\theta_{d}$) que, juntamente com a orientação desejada $\psi_{d}$, alimentam o controlador de atitude que gera os sinais $u_{2}$, $u_{3}$ e $u_{4}$. O sinal $u_{4}$ é determinado com base no ângulo de guinada desejado, definido externamente, e o deslocamento nas direções $x$ e $y$ é alcançado por meio da ação de $u_{2}$ e $u_{3}$, que direcionam a força de propulsão $u_{1}$ para a direção de redução do erro de deslocamento, como ilustra a Figura 3.2.
+Basically, the solution presents a cascade position controller to an attitude (or orientation) controller. Given the desired positions, the position controller generates the signal $u_{1}$ and reference values for the roll and pitch angles ($\phi_{d}$ and $\theta_{d}$), which, together with the desired orientation $\psi_{d}$, feed the attitude controller that generates the signals $u_{2}$, $u_{3}$, and $u_{4}$. The signal $u_{4}$ is determined based on the desired yaw angle, defined externally, and the displacement in the $x$ and $y$ directions is achieved through the action of $u_{2}$ and $u_{3}$, which direct the propulsion force $u_{1}$ in the direction to reduce the displacement error, as illustrated in Figure 3.2.
 
-![](media/image11.emf){width="3.6449311023622046in" height="2.132752624671916in"}
+Figure 3.2 - Illustration of the effect of $u_{2}$ and $u_{3}$ on the drone's horizontal displacement.{width="3.6449311023622046in" height="2.132752624671916in"}
 
-Figura 3.2 - Ilustração do efeito de $u_{2}$ e $u_{3}$ sobre o deslocamento horizontal do drone.
+As illustrated in Figure 3.2, the action of $u_{2}$ directs the propulsion in the direction to move the aircraft along ${\overrightarrow{e}}{y}^{b}$, while the action of $u{3}$ has an indirect influence on the displacement along ${\overrightarrow{e}}_{x}^{b}$.
 
-Como ilustrado na Figura 3.2, a ação de $u_{2}$ direciona a propulsão no sentido de deslocar a aeronave ao longo de ${\overrightarrow{e}}_{y}^{b}$, enquanto a ação de $u_{3}$ tem influência indireta sobre o deslocamento ao longo de ${\overrightarrow{e}}_{x}^{b}$.
+Sliding Mode Control (SMC)
+Basic Concepts
+SMC is a nonlinear control technique robust to external disturbances and parameter uncertainties, whose implementation can be summarized as follows:
 
-### Controle por Modos Deslizantes (CMD)
+Define the so-called sliding variables, which are functions of the system variables carefully designed such that, when they become zero, the system exhibits stable behavior;
 
-#### Conceitos Básicos
+Design the input signals to drive the sliding variables to zero and maintain them in this condition.
 
-O CMD é uma técnica de controle não linear e robusta a distúrbios externos e incertezas de parâmetros, cuja implementação se resume a:
-
-1\) Definir as chamadas variáveis deslizantes, que são funções das variáveis do sistema cuidadosamente projetadas para que, quando se anulem, o sistema apresente comportamento estável;
-
-2\) Projetar os sinais de entrada de modo a conduzir as variáveis deslizantes a zero e mantê-las nesta condição.
-
-Por exemplo, dado um sistema não linear escrito na forma:
+For example, given a nonlinear system written in the form:
 
   ----------------------------------------------------------------- -----
   $$\ddot{x} = f\left( x,\dot{x},u \right)$$                        (.)
